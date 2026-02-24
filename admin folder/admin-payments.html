@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revenue Management - Music School Delhi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            overflow-x: hidden;
+        }
+
+        .admin-dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h2 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
+
+        .sidebar-menu ul {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin: 0;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            transition: background-color 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left-color: #fff;
+        }
+
+        .sidebar-menu i {
+            margin-right: 0.5rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 0;
+        }
+
+        .topbar {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topbar h1 {
+            margin: 0;
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .btn-logout {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: #c0392b;
+        }
+
+        /* Dashboard Content */
+        .dashboard-content {
+            padding: 2rem;
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+
+        .section h2 {
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .recent-payments table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .recent-payments th,
+        .recent-payments td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .recent-payments th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .status-present {
+            color: #27ae60;
+        }
+
+        .status-absent {
+            color: #e74c3c;
+        }
+
+        .status-late {
+            color: #f39c12;
+        }
+
+        .status-completed {
+            color: #27ae60;
+        }
+
+        .status-pending {
+            color: #f39c12;
+        }
+
+        .status-failed {
+            color: #e74c3c;
+        }
+
+        .status-refunded {
+            color: #34495e;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-whatsapp {
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+            margin-left: 5px;
+        }
+
+        .btn-whatsapp:hover {
+            background: #128c7e;
+            transform: translateY(-2px);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Loading spinner */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-music"></i> Music School</h2>
+            </div>
+            <div class="sidebar-menu">
+                <ul>
+                    <li><a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="admin-students.html"><i class="fas fa-graduation-cap"></i> Enrolled Students</a></li>
+                    <li><a href="admin-registration.html"><i class="fas fa-user-plus"></i> Active Students</a></li>
+                    <li><a href="admin-payments.html" class="active"><i class="fas fa-rupee-sign"></i> Payments</a></li>
+                    <li><a href="admin-attendance.html"><i class="fas fa-calendar-check"></i> Pitampura Attendance</a>
+                    </li>
+                    <li><a href="admin-attendance-rohini.html"><i class="fas fa-calendar-check"></i> Rohini
+                            Attendance</a></li>
+                    <li><a href="admin-announcements.html"><i class="fas fa-bullhorn"></i> Announcements</a></li>
+                    <li><a href="admin-guitar-tabs.html"><i class="fas fa-guitar"></i> Guitar Tabs</a></li>
+                    <li><a href="admin-content.html"><i class="fas fa-video"></i> Content Management</a></li>
+                    <li><a href="admin-settings-batches.html"><i class="fas fa-clock"></i> Batch Settings</a></li>
+                    <li><a href="admin-settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Topbar -->
+            <div class="topbar">
+                <h1><i class="fas fa-chart-line"></i> Revenue Management</h1>
+                <div class="topbar-right">
+                    <div class="user-profile">
+                        <div class="user-avatar" id="userInitial">A</div>
+                        <span id="adminName">Admin User</span>
+                    </div>
+                    <button class="btn-logout" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Payments Section -->
+                <div id="payments-section" class="section">
+                    <h2><i class="fas fa-chart-line"></i> Revenue Overview</h2>
+                    <div id="paymentsList">
+                        <!-- Payments will be loaded here -->
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API Configuration
+        const API_BASE_URL = 'http://localhost:5000/api';
+
+        // JWT Token Helper Functions
+        function getAuthToken() {
+            return localStorage.getItem('token');
+        }
+
+        function removeAuthToken() {
+            localStorage.removeItem('token');
+        }
+
+        function decodeToken(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+
+                return JSON.parse(jsonPayload);
+            } catch (error) {
+                console.error('Error decoding token:', error);
+                return null;
+            }
+        }
+
+        // Check authentication
+        function checkAuth() {
+            const token = getAuthToken();
+            if (!token) {
+                window.location.href = 'login.html';
+                return false;
+            }
+
+            const decodedToken = decodeToken(token);
+            if (!decodedToken || (decodedToken.role !== 'admin' && decodedToken.role !== 'super_admin')) {
+                removeAuthToken();
+                window.location.href = 'login.html';
+                return false;
+            }
+
+            return true;
+        }
+
+        // API Call Helper
+        async function apiCall(url, options = {}) {
+            const token = getAuthToken();
+
+            const config = {
+                ...options,
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    ...options.headers,
+                },
+                credentials: 'include',
+            };
+
+            try {
+                const response = await fetch(url, config);
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'API call failed');
+                }
+
+                return data;
+            } catch (error) {
+                if (error.message.includes('Unauthorized')) {
+                    removeAuthToken();
+                    window.location.href = 'login.html';
+                }
+                throw error;
+            }
+        }
+
+        // Load revenue data
+        async function loadRevenue() {
+            if (!checkAuth()) return;
+
+            try {
+                const response = await apiCall(`${API_BASE_URL}/payments`);
+
+                if (response.success) {
+                    const paymentsList = document.getElementById('paymentsList');
+                    paymentsList.innerHTML = '<p>Loading revenue data...</p>';
+
+                    let html = '<table><thead><tr><th>Student</th><th>Course</th><th>Amount (₹)</th><th>Status</th><th>Date</th><th>Action</th></tr></thead><tbody>';
+                    response.data.forEach(payment => {
+                        html += `
+                            <tr>
+                                <td>${payment.student?.name || 'N/A'}</td>
+                                <td>${payment.course?.title || 'N/A'}</td>
+                                <td>₹${payment.amount}</td>
+                                <td class="status-${payment.status}">${payment.status}</td>
+                                <td>${new Date(payment.createdAt).toLocaleDateString()}</td>
+                                <td>
+                                    <button class="btn" onclick="viewPayment('${payment._id}')">View</button>
+                                    <button class="btn-whatsapp" onclick="sendPaymentReminder('${payment.student?.phone || (payment.student?.guardianDetails && payment.student?.guardianDetails.phone)}', '${payment.student?.name}', '${payment.amount}', '${payment.course?.title}')" title="Send WhatsApp Reminder">
+                                        <i class="fab fa-whatsapp"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    html += '</tbody></table>';
+
+                    paymentsList.innerHTML = html;
+                }
+            } catch (error) {
+                console.error('Error loading revenue data:', error);
+                document.getElementById('paymentsList').innerHTML = `<p>Error loading revenue data: ${error.message}</p>`;
+            }
+        }
+
+        // View payment function
+        function viewPayment(id) {
+            alert('Viewing payment details for ID: ' + id);
+        }
+
+        function sendPaymentReminder(phone, name, amount, course) {
+            if (!phone || phone === 'undefined') {
+                alert('No phone number found for this student.');
+                return;
+            }
+
+            const message = `Hello ${name}, this is a reminder from Music School of Delhi regarding your pending fee of ₹${amount} for the ${course} course. Please clear it at your earliest convenience. Thank you!`;
+
+            const cleanPhone = phone.replace(/\D/g, '');
+            const finalPhone = cleanPhone.startsWith('91') ? cleanPhone : '91' + cleanPhone;
+
+            const encodedMsg = encodeURIComponent(message);
+            const url = `https://wa.me/${finalPhone}?text=${encodedMsg}`;
+
+            window.open(url, '_blank');
+        }
+
+        // Logout function
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            removeAuthToken();
+            window.location.href = 'login.html';
+        });
+
+        // Setup navigation - allow all links to navigate normally
+        function setupNavigation() {
+            // Get all menu items
+            const menuItems = document.querySelectorAll('.sidebar-menu a');
+        }
+
+        // Initialize revenue page
+        document.addEventListener('DOMContentLoaded', () => {
+            if (checkAuth()) {
+                loadRevenue();
+                setupNavigation();
+
+                // Set user name/initial
+                const decodedToken = decodeToken(getAuthToken());
+                if (decodedToken) {
+                    const savedName = localStorage.getItem('adminName') || decodedToken.name || 'Admin User';
+                    document.getElementById('userInitial').textContent = savedName.charAt(0).toUpperCase();
+                    document.getElementById('adminName').textContent = savedName;
+                }
+            }
+        });
+
+        // Refresh data when page becomes visible or gains focus
+        window.addEventListener('focus', () => {
+            if (checkAuth()) {
+                loadRevenue();
+            }
+        });
+
+        // Load data when page becomes visible (handles tab switching)
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && checkAuth()) {
+                loadRevenue();
+            }
+        });
+
+        // Handle page show events
+        window.addEventListener('pageshow', () => {
+            if (checkAuth()) {
+                loadRevenue();
+            }
+        });
+    </script>
+</body>
+
+</html>

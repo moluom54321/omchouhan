@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Students - Music School Delhi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            overflow-x: hidden;
+        }
+
+        .admin-dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h2 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
+
+        .sidebar-menu ul {
+            list-style: none;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            transition: background-color 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left-color: #fff;
+        }
+
+        .sidebar-menu i {
+            margin-right: 0.5rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 0;
+        }
+
+        .topbar {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topbar h1 {
+            margin: 0;
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .btn-logout {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: #c0392b;
+        }
+
+        /* Dashboard Content */
+        .dashboard-content {
+            padding: 2rem;
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+
+        .section h2 {
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Search Section */
+        .search-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .search-bar-wrapper {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-bar-wrapper i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 10px 10px 40px;
+            border: 2px solid #eee;
+            border-radius: 25px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Simplified List */
+        .students-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .student-item {
+            background: #fff;
+            padding: 15px 20px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .student-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            background: #fcfcff;
+        }
+
+        .student-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .student-name i {
+            color: #667eea;
+        }
+
+        .view-btn {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 0;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            animation: modalSlide 0.3s ease-out;
+        }
+
+        @keyframes modalSlide {
+            from {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 2rem;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .modal-body p {
+            margin-bottom: 12px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .modal-body p strong {
+            color: #555;
+            min-width: 150px;
+        }
+
+        .modal-body p span {
+            text-align: right;
+            color: #333;
+        }
+
+        .close-modal {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-music"></i> Music School</h2>
+            </div>
+            <div class="sidebar-menu">
+                <ul>
+                    <li><a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="admin-students.html"><i class="fas fa-graduation-cap"></i> Enrolled Students</a></li>
+                    <li><a href="admin-registration.html" class="active"><i class="fas fa-user-plus"></i> Active
+                            Students</a></li>
+                    <li><a href="admin-payments.html"><i class="fas fa-rupee-sign"></i> Payments</a></li>
+                    <li><a href="admin-attendance.html"><i class="fas fa-calendar-check"></i> Pitampura Attendance</a>
+                    </li>
+                    <li><a href="admin-attendance-rohini.html"><i class="fas fa-calendar-check"></i> Rohini
+                            Attendance</a></li>
+                    <li><a href="admin-announcements.html"><i class="fas fa-bullhorn"></i> Announcements</a></li>
+                    <li><a href="admin-guitar-tabs.html"><i class="fas fa-guitar"></i> Guitar Tabs</a></li>
+                    <li><a href="admin-content.html"><i class="fas fa-video"></i> Content Management</a></li>
+                    <li><a href="admin-settings-batches.html"><i class="fas fa-clock"></i> Batch Settings</a></li>
+                    <li><a href="admin-settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Topbar -->
+            <div class="topbar">
+                <h1><i class="fas fa-users"></i> Active Students</h1>
+                <div class="topbar-right">
+                    <div class="user-profile">
+                        <div class="user-avatar" id="userInitial">A</div>
+                        <span id="adminName">Admin User</span>
+                    </div>
+                    <button class="btn-logout" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <div class="section">
+                    <div class="search-container">
+                        <h2><i class="fas fa-users"></i> All Registered Students</h2>
+                        <div class="search-bar-wrapper">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="studentSearch" class="search-input"
+                                placeholder="Search by student name..." onkeyup="filterStudents()">
+                        </div>
+                    </div>
+
+                    <div id="activeStudentsList">
+                        <p style="text-align: center; padding: 2rem;"><i class="fas fa-spinner fa-spin"></i> Loading
+                            students...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Details Modal -->
+    <div id="studentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalStudentName">Student Details</h3>
+                <span class="close-modal" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="modalStudentDetails">
+                <!-- Details injected here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API Configuration
+        const API_BASE_URL = 'http://localhost:5000/api';
+
+        // Auth Helpers
+        const getAuthToken = () => localStorage.getItem('token');
+        const removeAuthToken = () => localStorage.removeItem('token');
+
+        function decodeToken(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+                return JSON.parse(jsonPayload);
+            } catch (e) { return null; }
+        }
+
+        function checkAuth() {
+            const token = getAuthToken();
+            if (!token) { window.location.href = 'login.html'; return false; }
+            const decoded = decodeToken(token);
+            if (!decoded || (decoded.role !== 'admin' && decoded.role !== 'super_admin')) {
+                removeAuthToken();
+                window.location.href = 'login.html';
+                return false;
+            }
+            return true;
+        }
+
+        async function apiCall(url, options = {}) {
+            const token = getAuthToken();
+            const config = {
+                ...options,
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    ...options.headers,
+                }
+            };
+            try {
+                const response = await fetch(url, config);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.message || 'API Error');
+                return data;
+            } catch (error) {
+                if (error.message.includes('Unauthorized')) {
+                    removeAuthToken();
+                    window.location.href = 'login.html';
+                }
+                throw error;
+            }
+        }
+
+        let allStudents = [];
+
+        async function loadActiveStudents() {
+            if (!checkAuth()) return;
+            try {
+                const response = await apiCall(`${API_BASE_URL}/student`);
+                if (response.success) {
+                    allStudents = response.data.filter(s => s.isActive !== false);
+                    renderStudentList(allStudents);
+                }
+            } catch (error) {
+                document.getElementById('activeStudentsList').innerHTML = `<p style="color:red; text-align:center;">Error: ${error.message}</p>`;
+            }
+        }
+
+        function renderStudentList(students) {
+            const listElement = document.getElementById('activeStudentsList');
+            if (students.length === 0) {
+                listElement.innerHTML = '<p style="text-align:center; padding: 2rem;">No students found.</p>';
+                return;
+            }
+            let html = '<div class="students-list">';
+            students.forEach(student => {
+                html += `
+                    <div class="student-item" onclick="viewStudentDetails('${student._id}')">
+                        <div class="student-name">
+                            <i class="fas fa-user-circle"></i> ${student.name || 'Unknown Student'}
+                        </div>
+                        <div class="view-btn">
+                            View Profile <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            listElement.innerHTML = html;
+        }
+
+        function filterStudents() {
+            const query = document.getElementById('studentSearch').value.toLowerCase();
+            const filtered = allStudents.filter(s => (s.name || '').toLowerCase().includes(query));
+            renderStudentList(filtered);
+        }
+
+        function viewStudentDetails(id) {
+            const student = allStudents.find(s => s._id === id);
+            if (!student) return;
+
+            document.getElementById('modalStudentName').textContent = student.name || 'Student Profile';
+            const detailsHtml = `
+                <p><strong><i class="fas fa-user"></i> Parent Name:</strong> <span>${student.guardianDetails?.name || 'N/A'}</span></p>
+                <p><strong><i class="fas fa-phone"></i> Parent Phone:</strong> <span>${student.guardianDetails?.phone || 'N/A'}</span></p>
+                <p><strong><i class="fas fa-envelope"></i> Email:</strong> <span>${student.email || 'N/A'}</span></p>
+                <p><strong><i class="fas fa-mobile-alt"></i> Mobile:</strong> <span>${student.phone || 'N/A'}</span></p>
+                <p><strong><i class="fas fa-music"></i> Course:</strong> <span>${student.selectedCourse || student.course || 'N/A'}</span></p>
+                <p><strong><i class="fas fa-calendar-check"></i> Schedule:</strong> <span>${student.preferredSchedule || 'N/A'}</span></p>
+                <p><strong><i class="fas fa-birthday-cake"></i> DOB:</strong> <span>${student.dateOfBirth ? new Date(student.dateOfBirth).toLocaleDateString() : 'N/A'}</span></p>
+                <p><strong><i class="fas fa-history"></i> Status:</strong> <span>${student.admissionStatus || 'Active'}</span></p>
+                <p><strong><i class="fas fa-calendar-plus"></i> Joined:</strong> <span>${student.createdAt ? new Date(student.createdAt).toLocaleDateString() : 'N/A'}</span></p>
+                <div style="margin-top:20px; padding-top:15px; border-top:1px solid #eee;">
+                    <p style="border:none; margin-bottom:5px;"><strong><i class="fas fa-map-marker-alt"></i> Home Address:</strong></p>
+                    <p style="color:#666; font-size:0.95rem; border:none; text-align:left; display:block;">
+                        ${student.address?.street || ''}, ${student.address?.city || ''}, ${student.address?.state || ''} ${student.address?.zipCode || ''}
+                    </p>
+                </div>
+            `;
+            document.getElementById('modalStudentDetails').innerHTML = detailsHtml;
+            document.getElementById('studentModal').style.display = 'block';
+        }
+
+
+        const closeModal = () => document.getElementById('studentModal').style.display = 'none';
+        window.onclick = (e) => { if (e.target.className === 'modal') closeModal(); };
+
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            removeAuthToken();
+            window.location.href = 'login.html';
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (checkAuth()) {
+                loadActiveStudents();
+                const decoded = decodeToken(getAuthToken());
+                if (decoded) {
+                    const name = localStorage.getItem('adminName') || decoded.name || 'Admin';
+                    document.getElementById('userInitial').textContent = name.charAt(0).toUpperCase();
+                    document.getElementById('adminName').textContent = name;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1925 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Music School Delhi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        .student-dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h2 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
+
+        .sidebar-menu ul {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin: 0;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            transition: background-color 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left-color: #fff;
+        }
+
+        .sidebar-menu i {
+            margin-right: 0.5rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 0;
+        }
+
+        .topbar {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topbar h1 {
+            margin: 0;
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            margin-left: 10px;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-email {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .btn-logout {
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-logout:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+        }
+
+        /* Dashboard Content */
+        .dashboard-content {
+            padding: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .blue {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        }
+
+        .green {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .orange {
+            background: linear-gradient(135deg, var(--warning-color) 0%, #ff9800 100%);
+        }
+
+        .purple {
+            background: linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%);
+        }
+
+        .stat-info h3 {
+            font-size: 2rem;
+            margin: 0 0 0.5rem 0;
+            color: #333;
+        }
+
+        .stat-info p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+
+        .section h2 {
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .course-card {
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: transform 0.3s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .course-card h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .course-card p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .course-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-paid {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-unpaid {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-badge.active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-badge.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        /* Announcement Styles */
+        .announcements-container {
+            margin-bottom: 2rem;
+        }
+
+        .announcement-item {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid #667eea;
+            display: flex;
+            align-items: flex-start;
+            gap: 1.2rem;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .announcement-item.fees {
+            border-left-color: #ef4444;
+            background: #fff5f5;
+        }
+
+        .announcement-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            background: #f0f4ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #667eea;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .announcement-item.fees .announcement-icon {
+            background: #fee2e2;
+            color: #ef4444;
+        }
+
+        .announcement-content h3 {
+            font-size: 1.1rem;
+            color: #1f2937;
+            margin-bottom: 0.4rem;
+        }
+
+        .announcement-content p {
+            font-size: 0.95rem;
+            color: #4b5563;
+            line-height: 1.5;
+        }
+
+        .announcement-date {
+            font-size: 0.8rem;
+            color: #9ca3af;
+            margin-top: 0.8rem;
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating Notification Container (LEFT SIDE) */
+        .notification-toast-container {
+            position: fixed;
+            top: 80px;
+            /* Moved down a bit to not cover topbar */
+            left: 270px;
+            /* Positioned after the sidebar */
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 400px;
+            width: 90%;
+            pointer-events: none;
+            /* Allows clicking through the container */
+        }
+
+        .toast-item {
+            background: white;
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border-left: 6px solid #667eea;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            animation: toastInLeft 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            pointer-events: auto;
+            /* Re-enable clicks for the toasts themselves */
+        }
+
+        .toast-item.fees {
+            border-left-color: #ef4444;
+        }
+
+        .toast-item.holiday {
+            border-left-color: #10b981;
+        }
+
+        .toast-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            color: #9ca3af;
+            font-size: 0.8rem;
+        }
+
+        @keyframes toastInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes toastOutLeft {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateX(-100px);
+            }
+        }
+
+        .toast-exit {
+            animation: toastOutLeft 0.5s ease-in forwards;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-fee-due {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-blocked {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .attendance-calendar {
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
+        .attendance-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .attendance-table th,
+        .attendance-table td {
+            padding: 0.75rem;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .attendance-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .attendance-present {
+            background: #d4edda;
+            color: #155724;
+            font-weight: 600;
+        }
+
+        .attendance-absent {
+            background: #f8d7da;
+            color: #721c24;
+            font-weight: 600;
+        }
+
+        .attendance-late {
+            background: #fff3cd;
+            color: #856404;
+            font-weight: 600;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Loading spinner */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .modal-footer {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .btn-cancel {
+            background: #6c757d;
+        }
+
+        .btn-cancel:hover {
+            background: #5a6268;
+        }
+
+        .btn-save {
+            background: var(--success-color);
+        }
+
+        .btn-save:hover {
+            background: #218838;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        /* Profile Card Styles */
+        .profile-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid white;
+            margin: 0 auto 1rem;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .profile-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+        }
+
+        .info-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .info-value.readonly {
+            color: #6c757d;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        /* Alert Styles */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* Image Upload Styles */
+        .image-upload {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 auto;
+        }
+
+        .image-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 2px dashed #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-preview:hover {
+            border-color: var(--primary-color);
+        }
+
+        .help-text {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            margin-top: 8px;
+            margin-bottom: 0;
+        }
+
+        .upload-text {
+            text-align: center;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .upload-text i {
+            color: white;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .image-actions {
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .btn-remove-image {
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .btn-remove-image:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .btn-save-image {
+            background: var(--success-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-save-image:hover {
+            background: #218838;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+                overflow: hidden;
+            }
+
+            .sidebar:hover {
+                width: 250px;
+                overflow: visible;
+            }
+
+            .main-content {
+                margin-left: 70px;
+            }
+
+            .profile-info {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Batch Display Enhancements */
+        .batch-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .batch-tag {
+            background: #f0f4ff;
+            color: #4b5563;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            border: 1px solid #e2e8f0;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s;
+        }
+
+        .batch-tag:hover {
+            border-color: var(--primary-color);
+            background: #fff;
+            transform: translateY(-1px);
+        }
+
+        .batch-tag i {
+            color: var(--primary-color);
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="student-dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-music"></i> Music School</h2>
+            </div>
+            <div class="sidebar-menu">
+                <ul>
+                    <li><a href="#" class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i>
+                            Dashboard</a></li>
+                    <li><a href="#" data-section="profile"><i class="fas fa-user"></i> My Profile</a></li>
+                    <li><a href="#" data-section="reminders"><i class="fas fa-bullhorn"></i> Reminders &
+                            Announcements</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Topbar -->
+            <div class="topbar">
+                <h1><i class="fas fa-tachometer-alt"></i> Student Dashboard</h1>
+                <div class="topbar-right">
+                    <div class="user-profile">
+                        <div class="user-avatar" id="userInitial">S</div>
+                        <div class="user-info">
+                            <div class="user-name" id="studentName">Student Name</div>
+                            <div class="user-email" id="studentEmail">student@email.com</div>
+                        </div>
+                    </div>
+                    <button class="btn-logout" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+
+            <!-- Floating Notification Container for temporary alerts -->
+            <div id="toastContainer" class="notification-toast-container"></div>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Dashboard Section -->
+                <div id="dashboard-section">
+                    <div id="statusAlert"></div>
+
+
+                    <div class="profile-card">
+                        <div class="profile-header">
+                            <div class="profile-avatar" id="profileAvatar">S</div>
+                            <h2 id="profileName">Student Name</h2>
+                            <p id="profileEmail">student@email.com</p>
+                            <span class="status-badge" id="profileStatus">Active</span>
+                        </div>
+
+                        <div class="profile-info">
+                            <div class="info-group">
+                                <div class="info-label">Student ID</div>
+                                <div class="info-value readonly" id="studentId">-</div>
+                            </div>
+
+                            <div class="info-group">
+                                <div class="info-label">Course / Instrument</div>
+                                <div class="info-value readonly" id="course">-</div>
+                            </div>
+
+                            <div class="info-group">
+                                <div class="info-label">Batch / Time Slot</div>
+                                <div class="info-value readonly" id="batch">-</div>
+                            </div>
+
+                            <div class="info-group">
+                                <div class="info-label">Branch</div>
+                                <div class="info-value readonly" id="branch">-</div>
+                            </div>
+
+                            <div class="info-group">
+                                <div class="info-label">Date of Birth</div>
+                                <div class="info-value readonly" id="dob">-</div>
+                            </div>
+
+                            <div class="info-group">
+                                <div class="info-label">Parent's Name</div>
+                                <div class="info-value readonly" id="parentName">-</div>
+                            </div>
+
+                            <div class="info-group">
+                                <div class="info-label">Parent's Phone</div>
+                                <div class="info-value readonly" id="parentPhone">-</div>
+                            </div>
+
+                            <div class="info-group">
+                                <div class="info-label">Joined Date</div>
+                                <div class="info-value readonly" id="joinedDate">-</div>
+                            </div>
+
+                            <div class="info-group">
+                                <div class="info-label">Status</div>
+                                <div class="info-value readonly" id="studentStatus">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Section -->
+                <div id="profile-section" class="section hidden">
+                    <h2><i class="fas fa-user"></i> My Profile</h2>
+                    <div id="profileAlert"></div>
+                    <form id="profileForm">
+                        <div class="profile-card">
+                            <div class="profile-header">
+                                <div class="image-upload">
+                                    <div class="image-preview" id="imagePreview">
+                                        <div class="upload-text">
+                                            <i class="fas fa-camera"></i>
+                                            <div>Upload Photo</div>
+                                        </div>
+                                    </div>
+                                    <input type="file" class="file-input" id="profilePhoto" accept="image/*">
+                                    <div class="image-actions">
+                                        <button type="button" class="btn-remove-image" id="removeImageButton"
+                                            style="display: none;">
+                                            <i class="fas fa-trash"></i> Remove Photo
+                                        </button>
+                                    </div>
+                                    <p class="help-text" style="color: white;">Click on the camera icon above to select
+                                        a new profile photo</p>
+                                    <button type="button" class="btn-save-image" id="saveImageButton"
+                                        style="display: none; margin-top: 10px;">
+                                        <i class="fas fa-save"></i> Save Image
+                                    </button>
+                                </div>
+                                <h3 id="profilePhotoName">Profile Photo</h3>
+                            </div>
+
+                            <div class="profile-info">
+                                <div class="info-group">
+                                    <div class="info-label">Full Name</div>
+                                    <div class="info-value readonly" id="readonlyName">-</div>
+                                </div>
+
+                                <div class="info-group">
+                                    <div class="info-label">Student ID</div>
+                                    <div class="info-value readonly" id="readonlyStudentId">-</div>
+                                </div>
+
+                                <div class="info-group">
+                                    <div class="info-label">Course</div>
+                                    <div class="info-value readonly" id="readonlyCourse">-</div>
+                                </div>
+
+                                <div class="info-group">
+                                    <div class="info-label">Batch</div>
+                                    <div class="info-value readonly" id="readonlyBatch">-</div>
+                                </div>
+
+                                <div class="info-group">
+                                    <div class="info-label">Branch</div>
+                                    <div class="info-value readonly" id="readonlyBranch">-</div>
+                                </div>
+
+                                <div class="info-group">
+                                    <div class="info-label">Date of Birth</div>
+                                    <div class="info-value readonly" id="readonlyDob">-</div>
+                                </div>
+
+                                <div class="info-group">
+                                    <div class="info-label">Parent's Name</div>
+                                    <div class="info-value readonly" id="readonlyParentName">-</div>
+                                </div>
+
+                                <div class="info-group">
+                                    <div class="info-label">Parent's Phone</div>
+                                    <div class="info-value readonly" id="readonlyParentPhone">-</div>
+                                </div>
+
+                                <div class="info-group">
+                                    <div class="info-label">Joined Date</div>
+                                    <div class="info-value readonly" id="readonlyJoinedDate">-</div>
+                                </div>
+
+                                <div class="info-group">
+                                    <div class="info-label">Status</div>
+                                    <div class="info-value readonly" id="readonlyStatus">-</div>
+                                </div>
+                            </div>
+                            <div style="padding: 0 2rem 2rem; text-align: center;">
+                                <button type="button" class="btn btn-primary" onclick="openEditProfileModal()">
+                                    <i class="fas fa-edit"></i> Edit Profile Details
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Reminders & Announcements Section -->
+                <div id="reminders-section" class="section hidden">
+                    <h2><i class="fas fa-bullhorn"></i> Reminders & Announcements</h2>
+                    <div id="fullAnnouncementsList">
+                        <!-- Full announcement list will load here -->
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    </div>
+
+    <!-- View Payment Modal -->
+    <div id="viewPaymentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-receipt"></i> Payment Details</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div id="paymentDetails">
+                <!-- Payment details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-edit"></i> Edit Profile</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="editProfileForm">
+                <div class="form-group">
+                    <label for="editName">Full Name</label>
+                    <input type="text" id="editName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="editEmail">Email</label>
+                    <input type="email" id="editEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="editPhone">Phone</label>
+                    <input type="tel" id="editPhone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="editDateOfBirth">Date of Birth</label>
+                    <input type="date" id="editDateOfBirth" name="dateOfBirth" required>
+                </div>
+                <div class="form-group">
+                    <label for="editGender">Gender</label>
+                    <select id="editGender" name="gender" required>
+                        <option value="">Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-cancel"
+                        onclick="closeModal('editProfileModal')">Cancel</button>
+                    <button type="submit" class="btn btn-save">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Version Check
+        console.log('--- STUDENT DASHBOARD VERSION 1.3 ---');
+        // alert('DASHBOARD VERSION 1.3 LOADED'); // Uncomment if needed
+
+        // API Configuration
+        const API_BASE_URL = 'http://localhost:5000/api';
+
+        // JWT Token Helper Functions
+        function getAuthToken() {
+            return localStorage.getItem('token');
+        }
+
+        function removeAuthToken() {
+            localStorage.removeItem('token');
+        }
+
+        function decodeToken(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+
+                return JSON.parse(jsonPayload);
+            } catch (error) {
+                console.error('Error decoding token:', error);
+                return null;
+            }
+        }
+
+        // Check authentication
+        function checkAuth() {
+            const token = getAuthToken();
+            if (!token) {
+                window.location.href = 'login.html';
+                return false;
+            }
+
+            const decodedToken = decodeToken(token);
+            if (!decodedToken || decodedToken.role !== 'student') {
+                removeAuthToken();
+                window.location.href = 'login.html';
+                return false;
+            }
+
+            return true;
+        }
+
+        // API Call Helper
+        async function apiCall(url, options = {}) {
+            const token = getAuthToken();
+
+            const config = {
+                ...options,
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    ...options.headers,
+                },
+                credentials: 'include',
+            };
+
+            try {
+                const response = await fetch(url, config);
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'API call failed');
+                }
+
+                return data;
+            } catch (error) {
+                if (error.message.includes('Unauthorized')) {
+                    removeAuthToken();
+                    window.location.href = 'login.html';
+                }
+                throw error;
+            }
+        }
+
+        // Fetch and display announcements
+        async function loadAnnouncements() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/announcement`, {
+                    headers: { 'Authorization': `Bearer ${getAuthToken()}` }
+                });
+                const result = await response.json();
+
+                if (result.success && result.data.length > 0) {
+                    const fullListContainer = document.getElementById('fullAnnouncementsList');
+                    const toastContainer = document.getElementById('toastContainer');
+
+                    // 1. Always update the Full Reminders Section
+                    if (fullListContainer) {
+                        fullListContainer.innerHTML = result.data.map(item => `
+                            <div class="announcement-item ${item.type}">
+                                <div class="announcement-icon">
+                                    <i class="fas ${item.type === 'fees' ? 'fa-file-invoice-dollar' : 'fa-info-circle'}"></i>
+                                </div>
+                                <div class="announcement-content">
+                                    <h3>${item.title}</h3>
+                                    <p>${item.message}</p>
+                                    <span class="announcement-date"><i class="far fa-clock"></i> ${new Date(item.createdAt).toLocaleDateString()}</span>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+
+                    // 2. Show floating notifications only for latest announcements (LEFT SIDE)
+                    if (toastContainer) {
+                        toastContainer.innerHTML = '';
+
+                        // Add a temporary header if there are fresh items
+                        const header = document.createElement('div');
+                        header.style.pointerEvents = 'auto';
+                        header.innerHTML = '<h3 style="color: #1f2937; margin-bottom: 10px; font-size: 1rem; border-bottom: 2px solid #667eea; display: inline-block; background: rgba(255,255,255,0.8); padding: 5px 10px; border-radius: 5px;"><i class="fas fa-bullhorn"></i> Latest Announcements</h3>';
+                        toastContainer.appendChild(header);
+
+                        result.data.slice(0, 3).forEach((item, index) => {
+                            const toast = document.createElement('div');
+                            toast.className = `toast-item ${item.type}`;
+                            toast.style.animationDelay = `${index * 0.1}s`;
+                            toast.innerHTML = `
+                                <i class="fas fa-times toast-close"></i>
+                                <div class="announcement-icon" style="width: 35px; height: 35px; font-size: 1rem; background: #f0f4ff; color: #667eea; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <i class="fas ${item.type === 'fees' ? 'fa-hand-holding-usd' : 'fa-bell'}"></i>
+                                </div>
+                                <div class="announcement-content">
+                                    <h4 style="margin: 0; font-size: 0.95rem; color: #1f2937;">${item.title}</h4>
+                                    <p style="margin: 5px 0 0; font-size: 0.85rem; color: #4b5563; line-height: 1.4;">${item.message}</p>
+                                </div>
+                            `;
+
+                            toast.querySelector('.toast-close').onclick = () => {
+                                toast.classList.add('toast-exit');
+                                setTimeout(() => toast.remove(), 500);
+                            };
+
+                            toastContainer.appendChild(toast);
+
+                            // Auto-remove after 10 seconds
+                            setTimeout(() => {
+                                if (toast.parentNode) {
+                                    toast.classList.add('toast-exit');
+                                    setTimeout(() => {
+                                        toast.remove();
+                                        // If no more items, remove header too
+                                        if (toastContainer.querySelectorAll('.toast-item').length === 0) {
+                                            toastContainer.innerHTML = '';
+                                        }
+                                    }, 500);
+                                }
+                            }, 10000);
+                        });
+                    }
+                } else {
+                    const fullListContainer = document.getElementById('fullAnnouncementsList');
+                    if (fullListContainer) {
+                        fullListContainer.innerHTML = '<p style="text-align: center; color: #718096; padding: 2rem;">No announcements or reminders at this time.</p>';
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading announcements:', error);
+            }
+        }
+
+        // Helper function to format dates
+        function formatDate(dateStr) {
+            if (!dateStr || dateStr === '-') return '-';
+            const date = new Date(dateStr);
+            return isNaN(date.getTime()) ? '-' : date.toLocaleDateString();
+        }
+
+        // Helper function to get full image URL
+        function getImageUrl(photoPath) {
+            if (!photoPath) return null;
+            // If it's already a full URL, return as is
+            if (photoPath.startsWith('http://') || photoPath.startsWith('https://')) {
+                return photoPath;
+            }
+            // If it's a relative path, prepend the server URL
+            return `http://localhost:5000${photoPath}`;
+        }
+
+        // Load student profile data
+        async function loadStudentProfile() {
+            if (!checkAuth()) return;
+
+            try {
+                const response = await apiCall(`${API_BASE_URL}/student/profile`);
+
+                if (response.success) {
+                    const student = response.data;
+
+                    // Update UI with student data
+                    updateProfileDisplay(student);
+                    updateTopbarInfo(student);
+                    checkStudentStatus(student.status);
+
+                    // Load announcements
+                    loadAnnouncements();
+
+                    console.log('Student profile loaded:', student);
+                } else {
+                    throw new Error(response.message || 'Failed to load profile');
+                }
+            } catch (error) {
+                console.error('Error loading student profile:', error);
+                showStatusAlert('danger', 'Error loading profile: ' + error.message);
+            }
+        }
+
+        // Helper function to format batch strings for display
+        function formatBatch(batchData) {
+            console.log('Formatting batch data:', batchData); // Version 1.2 Diagnostic Log
+
+            if (!batchData || batchData === '-' || (Array.isArray(batchData) && batchData.length === 0)) {
+                return '<div class="batch-tag"><i class="fas fa-info-circle"></i> Not assigned</div>';
+            }
+
+            // Ensure we are working with an array
+            let batches = [];
+            if (Array.isArray(batchData)) {
+                batches = batchData;
+            } else if (typeof batchData === 'string') {
+                batches = batchData.split(',').map(s => s.trim());
+            } else if (batchData && typeof batchData === 'object') {
+                // If it's an object but not an array, try to use its values or stringify
+                batches = [JSON.stringify(batchData)];
+            } else {
+                batches = [String(batchData)];
+            }
+
+            return batches.map(b => {
+                const bStr = String(b || '');
+                // If it follows the Branch_Course_Days_Time pattern
+                if (bStr.includes('_')) {
+                    const parts = bStr.split('_');
+                    if (parts.length >= 4) {
+                        const branch = parts[0];
+                        const course = parts[1];
+                        // Transform days: SatandSun -> Sat & Sun
+                        const days = (parts[2] || '').replace(/and/g, ' & ');
+                        // Transform time: 1to2pm -> 1 - 2 PM
+                        const time = (parts[3] || '').replace(/to/g, ' - ').replace(/am/g, ' AM').replace(/pm/g, ' PM');
+
+                        return `<div class="batch-tag"><i class="fas fa-clock"></i> ${branch} • ${course} • ${days} • ${time}</div>`;
+                    }
+                }
+                // Fallback for non-standard strings or other types
+                return `<div class="batch-tag"><i class="fas fa-clock"></i> ${bStr}</div>`;
+            }).join('');
+        }
+
+        // Update profile display
+        function updateProfileDisplay(student) {
+            // Dashboard section
+            document.getElementById('studentId').textContent = student.studentId || '-';
+
+            // Handle array or string for course
+            const courseVal = Array.isArray(student.course) ? student.course.join(', ') : (student.course || '-');
+            document.getElementById('course').textContent = courseVal;
+
+            // Use innerHTML for batch tags
+            const batchContainer = document.getElementById('batch');
+            batchContainer.innerHTML = `<div class="batch-container">${formatBatch(student.batch)}</div>`;
+
+            document.getElementById('branch').textContent = student.branch || '-';
+
+            document.getElementById('dob').textContent = formatDate(student.dateOfBirth);
+            document.getElementById('parentName').textContent = student.guardianDetails?.name || '-';
+            document.getElementById('parentPhone').textContent = student.guardianDetails?.phone || '-';
+            document.getElementById('joinedDate').textContent = student.joinedDate ? formatDate(student.joinedDate) : formatDate(student.admissionDate);
+            document.getElementById('studentStatus').textContent = student.status || '-';
+
+            // Profile header
+            document.getElementById('profileName').textContent = student.name || 'Student Name';
+            document.getElementById('profileEmail').textContent = student.email || '-';
+            document.getElementById('profileStatus').textContent = student.status || 'Active';
+            document.getElementById('profileStatus').className = 'status-badge status-' + (student.status || 'active').toLowerCase().replace(' ', '-');
+
+            // Profile avatar - show photo if exists, otherwise show initials
+            const profileAvatarElement = document.getElementById('profileAvatar');
+            if (student.profilePhoto) {
+                const imageUrl = getImageUrl(student.profilePhoto);
+                profileAvatarElement.innerHTML = `<img src="${imageUrl}" alt="Profile Photo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+            } else {
+                const initials = student.name ? student.name.charAt(0).toUpperCase() : 'S';
+                profileAvatarElement.textContent = initials;
+                profileAvatarElement.style.background = 'white';
+                profileAvatarElement.style.color = 'var(--primary-color)';
+            }
+        }
+
+        // Update topbar information
+        function updateTopbarInfo(student) {
+            document.getElementById('studentName').textContent = student.name || 'Student Name';
+            document.getElementById('studentEmail').textContent = student.email || 'student@email.com';
+
+            const userInitialElement = document.getElementById('userInitial');
+            if (student.profilePhoto) {
+                const imageUrl = getImageUrl(student.profilePhoto);
+                userInitialElement.innerHTML = `<img src="${imageUrl}" alt="Profile" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+            } else {
+                const initials = student.name ? student.name.charAt(0).toUpperCase() : 'S';
+                userInitialElement.textContent = initials;
+            }
+        }
+
+        // Check student status and show alerts
+        function checkStudentStatus(status) {
+            const alertContainer = document.getElementById('statusAlert');
+            alertContainer.innerHTML = '';
+
+            if (status === 'Blocked') {
+                showStatusAlert('danger', 'Your account is currently blocked. Please contact admin.');
+            } else if (status === 'Fee Due') {
+                showStatusAlert('warning', 'You have pending fees. Some features may be limited.');
+            }
+        }
+
+        // Show status alert
+        function showStatusAlert(type, message) {
+            const alertContainer = document.getElementById('statusAlert');
+            alertContainer.innerHTML = `
+                <div class="alert alert-${type}">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+        }
+
+        // Show section alert
+        function showSectionAlert(section, type, message) {
+            const alertContainer = document.getElementById(`${section}Alert`);
+            if (alertContainer) {
+                alertContainer.innerHTML = `
+                    <div class="alert alert-${type}">
+                        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                        <span>${message}</span>
+                    </div>
+                `;
+
+                // Auto-hide success messages after 5 seconds
+                if (type === 'success') {
+                    setTimeout(() => {
+                        alertContainer.innerHTML = '';
+                    }, 5000);
+                }
+            }
+        }
+
+        // Modal Helper Functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function (event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+
+
+
+
+        // Load profile section data
+        async function loadProfile() {
+            try {
+                const response = await apiCall(`${API_BASE_URL}/student/profile`);
+
+                if (response.success) {
+                    const student = response.data;
+
+                    // Populate readonly fields
+                    document.getElementById('readonlyName').textContent = student.name || '-';
+                    document.getElementById('readonlyStudentId').textContent = student.studentId || '-';
+
+                    // Handle array or string for course
+                    const courseVal = Array.isArray(student.course) ? student.course.join(', ') : (student.course || '-');
+                    document.getElementById('readonlyCourse').textContent = courseVal;
+
+                    document.getElementById('readonlyBatch').innerHTML = `<div class="batch-container">${formatBatch(student.batch)}</div>`;
+                    document.getElementById('readonlyBranch').textContent = student.branch || '-';
+                    document.getElementById('readonlyDob').textContent = formatDate(student.dateOfBirth);
+                    document.getElementById('readonlyParentName').textContent = student.guardianDetails?.name || '-';
+                    document.getElementById('readonlyParentPhone').textContent = student.guardianDetails?.phone || '-';
+                    document.getElementById('readonlyJoinedDate').textContent = student.joinedDate ? formatDate(student.joinedDate) : formatDate(student.admissionDate);
+                    document.getElementById('readonlyStatus').textContent = student.status || '-';
+
+                    // Populate editable fields
+                    document.getElementById('editName').value = student.name || '';
+                    document.getElementById('editPhone').value = student.phone || '';
+                    document.getElementById('editEmail').value = student.email || '';
+
+                    if (student.dateOfBirth) {
+                        const dob = new Date(student.dateOfBirth);
+                        const formattedDob = dob.toISOString().split('T')[0];
+                        document.getElementById('editDateOfBirth').value = formattedDob;
+                    }
+
+                    document.getElementById('editGender').value = student.gender || '';
+
+                    // Update profile photo preview if exists
+                    console.log('Profile photo data:', student.profilePhoto); // Debug log
+                    if (student.profilePhoto) {
+                        const imageUrl = getImageUrl(student.profilePhoto);
+                        document.getElementById('imagePreview').innerHTML =
+                            `<img src="${imageUrl}" alt="Profile Photo">`;
+                        // Show remove button when there's an existing photo
+                        document.getElementById('removeImageButton').style.display = 'inline-block';
+                        console.log('Showing remove button for existing photo'); // Debug log
+                    } else {
+                        // Hide remove button when there's no photo
+                        document.getElementById('removeImageButton').style.display = 'none';
+                        console.log('Hiding remove button - no photo'); // Debug log
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                showSectionAlert('profile', 'danger', 'Failed to load profile data');
+            }
+        }
+
+        // Handle profile photo upload
+        document.getElementById('imagePreview').addEventListener('click', () => {
+            console.log('Image preview clicked'); // Debug log
+            document.getElementById('profilePhoto').click();
+        });
+
+        document.getElementById('profilePhoto').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            console.log('File selected:', file); // Debug log
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('imagePreview').innerHTML =
+                        `<img src="${e.target.result}" alt="Profile Photo">`;
+                    // Show remove and save buttons
+                    document.getElementById('removeImageButton').style.display = 'inline-block';
+                    document.getElementById('saveImageButton').style.display = 'inline-block';
+                    console.log('Showing remove and save buttons'); // Debug log
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Handle remove image
+        document.getElementById('removeImageButton').addEventListener('click', async function () {
+            try {
+                const response = await apiCall(`${API_BASE_URL}/student/profile/photo`, {
+                    method: 'DELETE'
+                });
+
+                if (response.success) {
+                    // Reset to upload placeholder
+                    document.getElementById('imagePreview').innerHTML = `
+                        <div class="upload-text">
+                            <i class="fas fa-camera"></i>
+                            <div>Upload Photo</div>
+                        </div>
+                    `;
+                    // Clear file input
+                    document.getElementById('profilePhoto').value = '';
+                    // Hide buttons
+                    this.style.display = 'none';
+                    document.getElementById('saveImageButton').style.display = 'none';
+
+                    showSectionAlert('profile', 'success', '🗑️ Profile photo removed successfully!');
+                    // Reload profile data
+                    loadStudentProfile();
+                    loadProfile();
+                } else {
+                    throw new Error(response.message || 'Failed to remove profile photo');
+                }
+            } catch (error) {
+                console.error('Error removing profile photo:', error);
+                showSectionAlert('profile', 'danger', 'Failed to remove profile photo: ' + error.message);
+            }
+        });
+
+        // Handle save image
+        document.getElementById('saveImageButton').addEventListener('click', async function () {
+            const photoFile = document.getElementById('profilePhoto').files[0];
+            if (!photoFile) return;
+
+            const formData = new FormData();
+            formData.append('profilePhoto', photoFile);
+
+            try {
+                const token = getAuthToken();
+
+                // Use fetch directly for FormData to avoid Content-Type override
+                const response = await fetch(`${API_BASE_URL}/student/profile/photo`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData,
+                    credentials: 'include'
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Failed to update profile photo');
+                }
+
+                if (data.success) {
+                    showSectionAlert('profile', 'success', '✅ Success! Your image has been saved successfully!');
+                    // Reload profile data to show updated photo
+                    loadStudentProfile();
+                    loadProfile();
+                    // Keep remove button visible after successful save (since photo now exists)
+                    document.getElementById('removeImageButton').style.display = 'inline-block';
+                    // Hide save button after successful save
+                    this.style.display = 'none';
+                } else {
+                    throw new Error(data.message || 'Failed to update profile photo');
+                }
+            } catch (error) {
+                console.error('Error updating profile photo:', error);
+                showSectionAlert('profile', 'danger', 'Failed to update profile photo: ' + error.message);
+            }
+        });
+
+        // Handle profile form submission
+        document.getElementById('profileForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const formData = new FormData();
+
+            const photoFile = document.getElementById('profilePhoto').files[0];
+            if (photoFile) {
+                formData.append('profilePhoto', photoFile);
+            }
+
+            try {
+                const token = getAuthToken();
+
+                // Use fetch directly for FormData
+                const response = await fetch(`${API_BASE_URL}/student/profile`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData,
+                    credentials: 'include'
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Failed to update profile');
+                }
+
+                if (data.success) {
+                    showSectionAlert('profile', 'success', 'Profile updated successfully!');
+                    // Reload profile data
+                    loadStudentProfile();
+                    loadProfile();
+                } else {
+                    throw new Error(data.message || 'Failed to update profile');
+                }
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                showSectionAlert('profile', 'danger', 'Failed to update profile: ' + error.message);
+            }
+        });
+
+        // Handle Edit Profile Form submission
+        document.getElementById('editProfileForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const updateData = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                dateOfBirth: formData.get('dateOfBirth'),
+                gender: formData.get('gender')
+            };
+
+            try {
+                const response = await apiCall(`${API_BASE_URL}/student/profile`, {
+                    method: 'PUT',
+                    body: JSON.stringify(updateData)
+                });
+
+                if (response.success) {
+                    showSectionAlert('profile', 'success', '✅ Profile updated successfully!');
+                    closeModal('editProfileModal');
+                    // Reload profile data
+                    loadStudentProfile();
+                    loadProfile();
+                } else {
+                    throw new Error(response.message || 'Failed to update profile');
+                }
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                alert('Failed to update profile: ' + error.message);
+            }
+        });
+
+        // Cancel edit function
+        function cancelEdit() {
+            document.querySelector('[data-section="dashboard"]').click();
+        }
+
+        // Modal functions
+        function openEditProfileModal() {
+            openModal('editProfileModal');
+        }
+
+        // Add close button listeners
+        document.querySelectorAll('.close').forEach(closeBtn => {
+            closeBtn.onclick = function () {
+                this.closest('.modal').style.display = 'none';
+            }
+        });
+
+        // Navigation
+        function setupNavigation() {
+            const menuItems = document.querySelectorAll('.sidebar-menu a');
+            const sections = document.querySelectorAll('[id$="-section"]');
+
+            menuItems.forEach(item => {
+                item.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    // Remove active class from all items
+                    menuItems.forEach(menuItem => menuItem.classList.remove('active'));
+
+                    // Add active class to clicked item
+                    this.classList.add('active');
+
+                    // Hide all sections
+                    sections.forEach(section => {
+                        section.classList.add('hidden');
+                    });
+
+                    // Show selected section
+                    const sectionId = this.getAttribute('data-section');
+                    document.getElementById(`${sectionId}-section`).classList.remove('hidden');
+
+                    // Load section data
+                    loadSectionData(sectionId);
+                });
+            });
+        }
+
+        // Load section data
+        async function loadSectionData(section) {
+            switch (section) {
+                case 'dashboard':
+                    loadStudentProfile();
+                    break;
+                case 'profile':
+                    loadProfile();
+                    break;
+                case 'reminders':
+                    loadAnnouncements();
+                    break;
+            }
+        }
+
+
+
+        // Logout function
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            removeAuthToken();
+            window.location.href = 'login.html';
+        });
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            if (checkAuth()) {
+                // Load initial student profile
+                loadStudentProfile();
+                setupNavigation();
+
+                // Ensure buttons are properly hidden initially
+                document.getElementById('removeImageButton').style.display = 'none';
+                document.getElementById('saveImageButton').style.display = 'none';
+            } else {
+                // If not authenticated, redirect to login
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Also load dashboard when page gains focus
+        window.addEventListener('focus', () => {
+            if (checkAuth()) {
+                loadStudentProfile();
+            }
+        });
+
+        // Load data when page becomes visible
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && checkAuth()) {
+                loadStudentProfile();
+            }
+        });
+
+        // Handle browser navigation
+        window.addEventListener('pageshow', () => {
+            if (checkAuth()) {
+                loadStudentProfile();
+            }
+        });
+    </script>
+</body>
+
+</html>

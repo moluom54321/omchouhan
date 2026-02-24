@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rohini Attendance - Music School Delhi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg: #f8fafc;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+        }
+
+        .admin-dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 1rem 0;
+        }
+
+        .sidebar-menu li a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 0.85rem 1.5rem;
+            gap: 12px;
+            transition: all 0.2s;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar-menu li a:hover,
+        .sidebar-menu li a.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: white;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding-bottom: 3rem;
+        }
+
+        .topbar {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 900;
+        }
+
+        .topbar h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background: #f5f3ff;
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .btn-logout {
+            color: var(--danger);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .content-container {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .content-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .calendar-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            align-self: start;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .calendar-header select {
+            border: 1px solid var(--border);
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            text-align: center;
+        }
+
+        .day-name {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            padding: 8px 0;
+        }
+
+        .calendar-day {
+            padding: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .calendar-day:hover:not(.empty) {
+            background: #f1f5f9;
+        }
+
+        .calendar-day.today {
+            background: #f5f3ff;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .calendar-day.selected {
+            background: var(--primary) !important;
+            color: white !important;
+            box-shadow: 0 4px 10px rgba(118, 75, 162, 0.4);
+        }
+
+        .calendar-day.weekend {
+            color: var(--danger);
+        }
+
+        .selection-panel {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+        }
+
+        .selected-date-info {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+
+        .slot-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .slot-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+
+        .slot-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+        }
+
+        .slot-btn {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .slot-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .slot-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .attendance-sheet-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: none;
+        }
+
+        .sheet-actions {
+            padding: 1rem 1.5rem;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+        }
+
+        .attendance-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .attendance-table th {
+            text-align: left;
+            padding: 12px 1.5rem;
+            background: #f1f5f9;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            border-bottom: 2px solid var(--border);
+        }
+
+        .attendance-table td {
+            padding: 12px 1.5rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
+        }
+
+        .toggle-cell {
+            cursor: pointer;
+            user-select: none;
+            font-weight: 700;
+            width: 120px;
+        }
+
+        .status-pill {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .status-present {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-absent {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .empty-sheet {
+            padding: 4rem 2rem;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, .3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-music"></i> Music School</h2>
+            </div>
+            <div class="sidebar-menu">
+                <ul>
+                    <li><a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="admin-students.html"><i class="fas fa-graduation-cap"></i> Enrolled Students</a></li>
+                    <li><a href="admin-registration.html"><i class="fas fa-user-plus"></i> Active Students</a></li>
+                    <li><a href="admin-payments.html"><i class="fas fa-rupee-sign"></i> Payments</a></li>
+                    <li><a href="admin-attendance.html"><i class="fas fa-calendar-check"></i> Pitampura Attendance</a>
+                    </li>
+                    <li><a href="admin-attendance-rohini.html" class="active"><i class="fas fa-calendar-check"></i>
+                            Rohini Attendance</a></li>
+                    <li><a href="admin-announcements.html"><i class="fas fa-bullhorn"></i> Announcements</a></li>
+                    <li><a href="admin-guitar-tabs.html"><i class="fas fa-guitar"></i> Guitar Tabs</a></li>
+                    <li><a href="admin-content.html"><i class="fas fa-video"></i> Content Management</a></li>
+                    <li><a href="admin-settings-batches.html"><i class="fas fa-clock"></i> Batch Settings</a></li>
+                    <li><a href="admin-settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="topbar">
+                <h1><i class="fas fa-calendar-check"></i> Rohini Branch Attendance</h1>
+                <div class="topbar-right">
+                    <div class="user-profile">
+                        <div class="user-avatar" id="userInitial">A</div>
+                        <span id="adminName">Admin User</span>
+                    </div>
+                    <button class="btn-logout" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+
+            <div class="content-container">
+                <!-- Left: Calendar Selection -->
+                <div class="calendar-card">
+                    <div class="calendar-header">
+                        <button class="btn-outline" onclick="prevMonth()" style="padding: 4px 10px;"><i
+                                class="fas fa-chevron-left"></i></button>
+                        <div style="display: flex; gap: 5px;">
+                            <select id="monthSelect" onchange="renderCalendar()"></select>
+                            <select id="yearSelect" onchange="renderCalendar()"></select>
+                        </div>
+                        <button class="btn-outline" onclick="nextMonth()" style="padding: 4px 10px;"><i
+                                class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="calendar-grid" id="calendarGrid"></div>
+
+                    <!-- Rule Engine Output -->
+                    <div id="slotSelection" class="selection-panel hidden"
+                        style="margin-top: 20px; border: 1px solid var(--border); box-shadow: none;">
+                        <div class="status-header">
+                            <div class="selected-date-info" id="selectedDateText">Select a Date</div>
+                        </div>
+                        <div id="courseGroups"></div>
+                    </div>
+                </div>
+
+                <!-- Right: Attendance Sheet -->
+                <div class="attendance-sheet-container" id="attendanceSheet">
+                    <div class="sheet-actions">
+                        <div style="display: flex; flex-direction: column;">
+                            <span id="sheetCourseInfo" style="font-weight: 700; color: var(--text-main);">Course:
+                                None</span>
+                            <span id="sheetSlotInfo" style="font-size: 0.85rem; color: var(--text-muted);">Slot:
+                                None</span>
+                        </div>
+                        <div class="btn-group">
+                            <button class="btn btn-outline" onclick="markAllPresent()">
+                                <i class="fas fa-check-double"></i> Mark All
+                            </button>
+                            <button class="btn btn-outline" onclick="clearAttendance()">
+                                <i class="fas fa-eraser"></i> Clear
+                            </button>
+                            <button class="btn btn-success" id="pdfBtn" onclick="generatePDF()">
+                                <i class="fas fa-file-pdf"></i> Generate PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="studentTableContent">
+                        <table class="attendance-table">
+                            <thead>
+                                <tr>
+                                    <th>Roll / ID</th>
+                                    <th>Student Name</th>
+                                    <th>Status (Click to toggle)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentListBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div id="emptyListMessage" class="empty-sheet hidden">
+                        <i class="fas fa-users-slash"
+                            style="font-size: 3rem; opacity: 0.2; margin-bottom: 1rem; display: block;"></i>
+                        <p>No students found for this slot in Rohini branch.</p>
+                    </div>
+                </div>
+
+                <div id="initialMessage"
+                    style="background: white; border-radius: 12px; padding: 4rem; text-align: center; border: 2px dashed var(--border); color: var(--text-muted);">
+                    <i class="far fa-calendar-check"
+                        style="font-size: 4rem; margin-bottom: 2rem; display: block; opacity: 0.3;"></i>
+                    <h2>Rohini Branch</h2>
+                    <p>Select a date and a time slot to mark attendance for Rohini students.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:5000/api';
+        let currentDate = new Date();
+        let selectedDate = null;
+        let selectedCourse = null;
+        let selectedSlot = null;
+        let selectedBatchKey = null;
+        let selectedDays = null;
+        let activeStudents = [];
+
+        // --- CALENDAR SYSTEM ---
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+        function initCalendar() {
+            const mSelect = document.getElementById('monthSelect');
+            const ySelect = document.getElementById('yearSelect');
+            monthNames.forEach((m, i) => {
+                const opt = document.createElement('option');
+                opt.value = i; opt.textContent = m; mSelect.appendChild(opt);
+            });
+            for (let y = 2024; y <= 2030; y++) {
+                const opt = document.createElement('option');
+                opt.value = y; opt.textContent = y; ySelect.appendChild(opt);
+            }
+            mSelect.value = currentDate.getMonth();
+            ySelect.value = currentDate.getFullYear();
+            loadBatches().then(() => {
+                renderCalendar();
+            });
+        }
+
+        function renderCalendar() {
+            const m = parseInt(document.getElementById('monthSelect').value);
+            const y = parseInt(document.getElementById('yearSelect').value);
+            currentDate.setDate(1); currentDate.setMonth(m); currentDate.setFullYear(y);
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+            dayNames.forEach(d => {
+                const dn = document.createElement('div');
+                dn.className = 'day-name'; dn.textContent = d; grid.appendChild(dn);
+            });
+            const firstDay = new Date(y, m, 1).getDay();
+            const daysInMonth = new Date(y, m + 1, 0).getDate();
+            for (let i = 0; i < firstDay; i++) {
+                const empty = document.createElement('div');
+                empty.className = 'calendar-day empty'; grid.appendChild(empty);
+            }
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'calendar-day'; dayDiv.textContent = d;
+                const dayDate = new Date(y, m, d);
+                const dayOfWeek = dayDate.getDay();
+                if (dayOfWeek === 0 || dayOfWeek === 6) dayDiv.classList.add('weekend');
+                const today = new Date();
+                if (d === today.getDate() && m === today.getMonth() && y === today.getFullYear()) dayDiv.classList.add('today');
+                dayDiv.onclick = () => selectDate(dayDate, dayDiv);
+                grid.appendChild(dayDiv);
+            }
+        }
+
+        function prevMonth() {
+            let m = parseInt(document.getElementById('monthSelect').value) - 1;
+            let y = parseInt(document.getElementById('yearSelect').value);
+            if (m < 0) { m = 11; y--; }
+            document.getElementById('monthSelect').value = m;
+            document.getElementById('yearSelect').value = y;
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            let m = parseInt(document.getElementById('monthSelect').value) + 1;
+            let y = parseInt(document.getElementById('yearSelect').value);
+            if (m > 11) { m = 0; y++; }
+            document.getElementById('monthSelect').value = m;
+            document.getElementById('yearSelect').value = y;
+            renderCalendar();
+        }
+
+        // --- ROHINI RULE ENGINE ---
+        // --- DYNAMIC RULE ENGINE ---
+        let DYNAMIC_BATCHES = [];
+
+        async function loadBatches() {
+            try {
+                // Fetch both batches and students to filter slots based on enrollment
+                const [batchRes, studentRes] = await Promise.all([
+                    fetch(`${API_BASE_URL}/batches?branch=Rohini&status=active`),
+                    fetch(`${API_BASE_URL}/student`, {
+                        headers: { 'Authorization': `Bearer ${getAuthToken()}` }
+                    })
+                ]);
+
+                const batchResult = await batchRes.json();
+                if (batchResult.success) {
+                    // Show all active batches except Guitar batches on Mon/Fri as requested (Keep Piano)
+                    DYNAMIC_BATCHES = batchResult.data.filter(b => {
+                        const cleanDays = b.days.toLowerCase().replace(/[\s\u2013\u2014:\-_\/]|and|to|&/g, '');
+                        const isMonFri = cleanDays.includes('mon') && cleanDays.includes('fri');
+                        const isGuitar = b.courseName === 'Guitar';
+
+                        if (isMonFri && isGuitar) {
+                            return false; // Remove Guitar slots on Mon/Fri
+                        }
+                        return true;
+                    });
+                    console.log('Dynamic Batches loaded from settings (Rohini filtered):', DYNAMIC_BATCHES);
+                }
+            } catch (error) {
+                console.error('Failed to load batches or students:', error);
+            }
+        }
+
+        function selectDate(date, element) {
+            selectedDate = date;
+            document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
+            element.classList.add('selected');
+            document.getElementById('selectedDateText').textContent = date.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' });
+            document.getElementById('slotSelection').classList.remove('hidden');
+
+            const container = document.getElementById('courseGroups');
+            container.innerHTML = '';
+
+            // Group batches by courseName
+            const courseGroups = {};
+            DYNAMIC_BATCHES.forEach(b => {
+                const bDays = b.days.toLowerCase();
+                let applies = false;
+
+                const dayNames = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+                const currentDayName = dayNames[selectedDate.getDay()]; // Use selectedDate here
+                const day = selectedDate.getDay(); // Numeric day of week
+                const isWeekend = (day === 0 || day === 6);
+
+                if (isWeekend) {
+                    if (bDays.includes('sat') || bDays.includes('sun') || bDays.includes('weekend') || bDays.includes('daily')) {
+                        applies = true;
+                    }
+                } else {
+                    // 1. Handle "Daily" or "Everyday"
+                    if (bDays.includes('daily') || bDays.includes('everyday')) {
+                        applies = true;
+                    }
+                    // 2. Handle ranges like "Mon-Fri", "Mon to Fri"
+                    else if ((bDays.includes('mon') && bDays.includes('fri')) && (bDays.includes('-') || bDays.includes('to'))) {
+                        if (day >= 1 && day <= 5) applies = true;
+                    }
+                    // 3. Handle specific day lists like "Mon and Fri", "Mon & Fri", "Mon, Wed, Fri"
+                    else {
+                        const dayNamesShort = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+                        const dayNamesFull = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+                        // Check if the specific day is mentioned
+                        if (bDays.includes(dayNamesShort[day]) || bDays.includes(dayNamesFull[day])) {
+                            applies = true;
+                        }
+                    }
+                }
+
+                if (applies) {
+                    if (!courseGroups[b.courseName]) courseGroups[b.courseName] = [];
+                    courseGroups[b.courseName].push(b);
+                }
+            });
+
+            Object.keys(courseGroups).forEach(courseName => {
+                const group = document.createElement('div');
+                group.className = 'slot-group';
+                group.innerHTML = `<div class="slot-title">${courseName} Batches</div>`;
+                const opt = document.createElement('div');
+                opt.className = 'slot-options';
+                courseGroups[courseName].forEach(b => {
+                    const btn = document.createElement('div');
+                    btn.className = 'slot-btn'; btn.textContent = b.timeSlot;
+
+                    const cleanCourse = b.courseName.replace(/\s+/g, '');
+                    const cleanDays = b.days.replace(/\s*[&/]\s*/g, '').replace(/\s+/g, '');
+                    const batchKey = `${b.branch}_${cleanCourse}_${cleanDays}_${b.timeSlot.replace(/\s+/g, '')}`;
+
+                    btn.onclick = () => selectSlot(courseName, b.timeSlot, b.days, batchKey, btn);
+                    opt.appendChild(btn);
+                });
+                group.appendChild(opt); container.appendChild(group);
+            });
+
+            if (container.innerHTML === '') {
+                container.innerHTML = '<p style="color: var(--danger); font-size: 0.85rem;">No active batches found for this day in Rohini.</p>';
+            }
+        }
+
+        async function selectSlot(course, slot, days, key, element) {
+            selectedCourse = course; selectedSlot = slot;
+            selectedDays = days;
+            selectedBatchKey = key;
+            document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('active'));
+            element.classList.add('active');
+            document.getElementById('initialMessage').classList.add('hidden');
+            document.getElementById('attendanceSheet').style.display = 'block';
+            document.getElementById('sheetCourseInfo').textContent = `Course: ${course}`;
+            document.getElementById('sheetSlotInfo').textContent = `Slot: ${slot}`;
+            fetchStudentsForSlot();
+        }
+
+        async function fetchStudentsForSlot() {
+            const tbody = document.getElementById('studentListBody');
+            tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:2rem;"><div class="loader" style="border-top-color:var(--primary);"></div><br>Searching Rohini Students...</td></tr>';
+            try {
+                const response = await fetch(`${API_BASE_URL}/student`, {
+                    headers: { 'Authorization': `Bearer ${getAuthToken()}` }
+                });
+                const result = await response.json();
+                if (result.success) {
+                    const allStudents = result.data.students || result.data;
+
+                    // PRIMARY FILTER: branch === 'Rohini' (DB field) OR fallback name-based checks
+                    activeStudents = allStudents.filter(s => {
+                        const courses = Array.isArray(s.selectedCourse) ? s.selectedCourse : [s.selectedCourse || ''];
+                        const schedules = Array.isArray(s.preferredSchedule) ? s.preferredSchedule : [s.preferredSchedule || ''];
+
+                        return schedules.some(sc => {
+                            if (!sc) return false;
+
+                            // 1. Exact batch key match
+                            if (sc === selectedBatchKey) return true;
+
+                            // 2. Strict Fuzzy match for legacy/legacy-like data
+                            const cleanSc = sc.toLowerCase().replace(/[\s\u2013\u2014:\-_\/]|and|to|&/g, '');
+                            const cleanSlot = selectedSlot.toLowerCase().replace(/[\s\u2013\u2014:\-_\/]|and|to|&/g, '');
+
+                            // Check if branch matches
+                            const branchMatch = sc.toLowerCase().includes('rohini');
+                            if (!branchMatch) return false;
+
+                            // Check if course matches (handling name variations)
+                            const courseMatch = sc.toLowerCase().includes(selectedCourse.toLowerCase()) ||
+                                (selectedCourse.toLowerCase() === 'guitar' && sc.toLowerCase().includes('guitar')) ||
+                                (selectedCourse === 'Guitar' && sc.toLowerCase().includes('guitar'));
+                            if (!courseMatch) return false;
+
+                            // NEW: Strict Day Match
+                            const dayWords = selectedDays.toLowerCase().match(/mon|tue|wed|thu|fri|sat|sun/g) || [];
+                            const studentDays = sc.toLowerCase().match(/mon|tue|wed|thu|fri|sat|sun/g) || [];
+                            const dayMatch = dayWords.some(dw => studentDays.includes(dw));
+                            if (!dayMatch) return false;
+
+                            // Strict Time Match: Must match the enrolled time slot
+                            const timeMatch = cleanSc.includes(cleanSlot) || cleanSlot.includes(cleanSc);
+
+                            return timeMatch;
+                        });
+                    });
+
+                    console.log('Strict Matched Students (Rohini):', activeStudents.length);
+
+                    renderStudentTable();
+                }
+            } catch (error) {
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--danger);">Error loading students.</td></tr>';
+            }
+        }
+
+        function renderStudentTable() {
+            const tbody = document.getElementById('studentListBody');
+            const tableCont = document.getElementById('studentTableContent');
+            const emptyMsg = document.getElementById('emptyListMessage');
+            if (activeStudents.length === 0) {
+                tableCont.classList.add('hidden'); emptyMsg.classList.remove('hidden'); return;
+            }
+            tableCont.classList.remove('hidden'); emptyMsg.classList.add('hidden');
+            tbody.innerHTML = activeStudents.map(s => `
+                <tr>
+                    <td style="font-family: monospace; font-weight: 600;">${s.studentId || s._id.slice(-6).toUpperCase()}</td>
+                    <td>${s.name}</td>
+                    <td class="toggle-cell" onclick="toggleStatus('${s._id}')">
+                        <span id="status-${s._id}" class="status-pill status-absent">Absent</span>
+                    </td>
+                </tr>
+            `).join('');
+            activeStudents.forEach(s => s.currentStatus = 'absent');
+        }
+
+        function toggleStatus(id) {
+            const student = activeStudents.find(s => s._id === id);
+            const span = document.getElementById(`status-${id}`);
+            student.currentStatus = (student.currentStatus === 'absent' ? 'present' : 'absent');
+            span.textContent = student.currentStatus.charAt(0).toUpperCase() + student.currentStatus.slice(1);
+            span.className = `status-pill status-${student.currentStatus}`;
+        }
+
+        function markAllPresent() {
+            activeStudents.forEach(s => {
+                s.currentStatus = 'present';
+                const sp = document.getElementById(`status-${s._id}`);
+                if (sp) { sp.textContent = 'Present'; sp.className = 'status-pill status-present'; }
+            });
+        }
+
+        function clearAttendance() {
+            activeStudents.forEach(s => {
+                s.currentStatus = 'absent';
+                const sp = document.getElementById(`status-${s._id}`);
+                if (sp) { sp.textContent = 'Absent'; sp.className = 'status-pill status-absent'; }
+            });
+        }
+
+        async function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = jsPDF();
+            doc.setFontSize(20);
+            doc.setTextColor(102, 126, 234);
+            doc.text("Rohini Branch - Attendance Report", 105, 15, { align: "center" });
+            doc.setFontSize(12);
+            doc.setTextColor(30, 41, 59);
+            doc.text(`Course: ${selectedCourse}`, 14, 25);
+            doc.text(`Slot: ${selectedSlot}`, 14, 32);
+            doc.text(`Date: ${selectedDate.toLocaleDateString('en-IN')}`, 14, 39);
+            const tableData = activeStudents.map(s => [
+                s.studentId || s._id.slice(-6).toUpperCase(),
+                s.name,
+                s.currentStatus.toUpperCase()
+            ]);
+            doc.autoTable({
+                startY: 45,
+                head: [['Roll / ID', 'Student Name', 'Status']],
+                body: tableData,
+                theme: 'striped',
+                headStyles: { fillColor: [102, 126, 234] },
+                alternateRowStyles: { fillColor: [248, 250, 252] }
+            });
+
+            // Save to DB
+            fetch(`${API_BASE_URL}/attendance`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${getAuthToken()}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    date: selectedDate,
+                    courseType: selectedCourse,
+                    timeSlot: selectedSlot,
+                    branch: 'Rohini',
+                    records: activeStudents.map(s => ({ studentId: s._id, status: s.currentStatus }))
+                })
+            }).catch(e => console.error(e));
+
+            doc.save(`Rohini_Attendance_${selectedCourse}_${selectedDate.toISOString().split('T')[0]}.pdf`);
+        }
+
+        function getAuthToken() { return localStorage.getItem('token'); }
+        function decodeToken(t) { try { return JSON.parse(atob(t.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))); } catch (e) { return null; } }
+        function checkAuth() { if (!getAuthToken()) { window.location.href = 'login.html'; return false; } return true; }
+
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('token');
+            window.location.href = 'login.html';
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (checkAuth()) {
+                const decoded = decodeToken(getAuthToken());
+                if (decoded) {
+                    const name = localStorage.getItem('adminName') || decoded.name || 'Admin';
+                    document.getElementById('adminName').textContent = name;
+                    document.getElementById('userInitial').textContent = name.charAt(0).toUpperCase();
+                }
+                initCalendar();
+            }
+        });
+    </script>
+</body>
+
+</html>

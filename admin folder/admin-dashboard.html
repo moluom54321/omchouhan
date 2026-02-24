@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Music School Delhi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            overflow-x: hidden;
+        }
+
+        .admin-dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h2 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar-menu li {
+            padding: 15px 20px;
+        }
+
+        .sidebar-menu li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+        }
+
+        .sidebar-menu li a:hover,
+        .sidebar-menu li a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 3px solid #fff;
+        }
+
+        .sidebar-menu i {
+            margin-right: 0.5rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 0;
+        }
+
+        .topbar {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topbar h1 {
+            margin: 0;
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .btn-logout {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: #c0392b;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-right: 15px;
+            color: #3498db;
+        }
+
+        .stat-info h3 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-info p {
+            color: #7f8c8d;
+        }
+
+        /* Recent Admissions Table Styles */
+        .recent-admissions-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin: 1.5rem 2rem;
+        }
+
+        .recent-admissions-container h2 {
+            margin-bottom: 1rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+        }
+
+        .recent-admissions-container h2 i {
+            color: #667eea;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .data-table th,
+        .data-table td {
+            text-align: left;
+            padding: 10px 12px;
+            border-bottom: 1px solid #edf2f7;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .data-table th {
+            background-color: #f8fafc;
+            color: #4a5568;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.05em;
+        }
+
+        .data-table td strong {
+            color: #2d3748;
+            font-weight: 600;
+        }
+
+        .data-table tr:hover {
+            background-color: #f7fafc;
+        }
+
+        .status-pill {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-approved {
+            background: #def7ec;
+            color: #03543f;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-rejected {
+            background: #fde2e1;
+            color: #9b1c1c;
+        }
+
+        .status-new {
+            background: #dbeafe;
+            color: #0c4a6e;
+        }
+
+        .status-read {
+            background: #ddd6fe;
+            color: #5b21b6;
+        }
+
+        .status-replied {
+            background: #d1fae5;
+            color: #065f46;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-music"></i> Music School</h2>
+            </div>
+            <div class="sidebar-menu">
+                <ul>
+                    <li><a href="admin-dashboard.html" class="active"><i class="fas fa-tachometer-alt"></i>
+                            Dashboard</a></li>
+                    <li><a href="admin-students.html"><i class="fas fa-graduation-cap"></i> Enrolled Students</a></li>
+                    <li><a href="admin-registration.html"><i class="fas fa-user-plus"></i> Active Students</a></li>
+                    <li><a href="admin-payments.html"><i class="fas fa-rupee-sign"></i> Payments</a></li>
+                    <li><a href="admin-attendance.html"><i class="fas fa-calendar-check"></i> Pitampura Attendance</a>
+                    </li>
+                    <li><a href="admin-attendance-rohini.html"><i class="fas fa-calendar-check"></i> Rohini
+                            Attendance</a></li>
+                    <li><a href="admin-announcements.html"><i class="fas fa-bullhorn"></i> Announcements</a></li>
+                    <li><a href="admin-guitar-tabs.html"><i class="fas fa-guitar"></i> Guitar Tabs</a></li>
+                    <li><a href="admin-content.html"><i class="fas fa-video"></i> Content Management</a></li>
+                    <li><a href="admin-settings-batches.html"><i class="fas fa-clock"></i> Batch Settings</a></li>
+                    <li><a onclick="document.getElementById('contactSection').scrollIntoView({behavior: 'smooth'});"
+                            style="cursor: pointer;"><i class="fas fa-envelope"></i> Contact Messages</a></li>
+                    <li><a href="admin-settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Topbar -->
+            <div class="topbar">
+                <h1><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
+                <div class="topbar-right">
+                    <div class="user-profile">
+                        <div class="user-avatar" id="userInitial">A</div>
+                        <span id="adminName">Admin User</span>
+                    </div>
+                    <button class="btn-logout" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <div id="dashboard-section">
+                    <div class="stats-grid">
+                        <!-- Total Students Card -->
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: rgba(102, 126, 234, 0.1); color: var(--primary);">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalStudents">0</h3>
+                                <p>Total Students</p>
+                            </div>
+                        </div>
+
+                        <!-- Total Revenue Card -->
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">
+                                <i class="fas fa-rupee-sign"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalRevenue">₹0</h3>
+                                <p>Total Revenue</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Messages Section -->
+                    <div id="contactSection" class="recent-admissions-container">
+                        <h2><i class="fas fa-envelope"></i> Contact Messages</h2>
+
+                        <!-- Email Configuration Status Banner -->
+                        <div id="emailConfigBanner"
+                            style="display: block; background: linear-gradient(135deg, #fff3cd 0%, #ffe8a1 100%); border-left: 5px solid #ff9800; padding: 16px 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(255, 152, 0, 0.2);">
+                            <div style="display: flex; align-items: start; gap: 12px;">
+                                <i class="fas fa-exclamation-triangle"
+                                    style="color: #ff9800; font-size: 24px; margin-top: 2px;"></i>
+                                <div style="flex: 1;">
+                                    <strong style="font-size: 15px; color: #333; display: block; margin-bottom: 8px;">
+                                        <i class="fas fa-envelope-open-text"></i> Email Configuration Required
+                                    </strong>
+                                    <p style="margin: 0 0 12px 0; color: #555; line-height: 1.5; font-size: 13px;">
+                                        Gmail is <strong>not properly configured</strong>. Admin replies will be saved
+                                        in the database but <strong>emails won't be sent to users</strong>.
+                                        You need to set up a Google App Password to enable email functionality.
+                                    </p>
+                                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                        <a href="../CONTACT_REPLY_EMAIL_FIX.md" target="_blank"
+                                            style="background: #ff9800; color: white; padding: 8px 16px; border-radius: 5px; text-decoration: none; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; transition: background 0.3s;"
+                                            onmouseover="this.style.background='#f57c00'"
+                                            onmouseout="this.style.background='#ff9800'">
+                                            <i class="fas fa-book-open"></i> View Setup Guide
+                                        </a>
+                                        <a href="https://myaccount.google.com/security" target="_blank"
+                                            style="background: #667eea; color: white; padding: 8px 16px; border-radius: 5px; text-decoration: none; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; transition: background 0.3s;"
+                                            onmouseover="this.style.background='#5568d3'"
+                                            onmouseout="this.style.background='#667eea'">
+                                            <i class="fas fa-key"></i> Generate App Password
+                                        </a>
+                                        <button onclick="dismissEmailWarning()"
+                                            style="background: #e0e0e0; color: #666; padding: 8px 16px; border: none; border-radius: 5px; cursor: pointer; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; transition: background 0.3s;"
+                                            onmouseover="this.style.background='#d0d0d0'"
+                                            onmouseout="this.style.background='#e0e0e0'">
+                                            <i class="fas fa-times"></i> Dismiss
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                            <div
+                                style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; border-radius: 8px; text-align: center;">
+                                <h3 style="margin: 0; font-size: 24px;" id="newMessagesCount">0</h3>
+                                <p style="margin: 5px 0 0 0; font-size: 13px;">New Messages</p>
+                            </div>
+                            <div
+                                style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 15px; border-radius: 8px; text-align: center;">
+                                <h3 style="margin: 0; font-size: 24px;" id="repliedCount">0</h3>
+                                <p style="margin: 5px 0 0 0; font-size: 13px;">Replied</p>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>From</th>
+                                        <th>Email</th>
+                                        <th>Subject</th>
+                                        <th>Message</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="contactMessagesList">
+                                    <tr>
+                                        <td colspan="7" style="text-align: center; padding: 2rem; color: #718096;">
+                                            <i class="fas fa-spinner fa-spin"></i> Loading messages...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions Section -->
+                    <div style="margin: 2rem 0; display: flex; gap: 1rem;">
+                        <a href="admin-attendance.html" class="stat-card"
+                            style="flex: 1; text-decoration: none; display: flex; flex-direction: row; align-items: center; gap: 1rem; border: 1px solid var(--primary); background: white;">
+                            <div class="stat-icon" style="background: var(--primary); color: white;">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div>
+                                <h4 style="color: var(--text-main);">Mark Attendance</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Mark daily student
+                                    presence</p>
+                            </div>
+                        </a>
+                        <a href="admin-attendance.html" class="stat-card"
+                            style="flex: 1; text-decoration: none; display: flex; flex-direction: row; align-items: center; gap: 1rem; border: 1px solid var(--success); background: white;">
+                            <div class="stat-icon" style="background: var(--success); color: white;">
+                                <i class="fas fa-file-pdf"></i>
+                            </div>
+                            <div>
+                                <h4 style="color: var(--text-main);">Generate Report</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Download attendance
+                                    PDFs</p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="recent-admissions-container">
+                        <h2><i class="fas fa-clock"></i> Recent Admissions</h2>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Student Name</th>
+                                        <th>Parents Name</th>
+                                        <th>Email</th>
+                                        <th>Course</th>
+                                        <th>Date of Birth</th>
+                                        <th>Status</th>
+                                        <th>Joined Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentStudentsList">
+                                    <tr>
+                                        <td colspan="6" style="text-align: center; padding: 2rem; color: #718096;">
+                                            <i class="fas fa-spinner fa-spin"></i> Loading records...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Contact Reply Modal -->
+                    <div id="replyModal"
+                        style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 10000; align-items: center; justify-content: center;">
+                        <div
+                            style="background: white; padding: 30px; border-radius: 10px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto;">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                <h3 style="margin: 0;">Reply to Contact</h3>
+                                <button onclick="closeReplyModal()"
+                                    style="background: none; border: none; font-size: 24px; cursor: pointer; color: #999;">&times;</button>
+                            </div>
+                            <div id="contactDetails"
+                                style="background: #f5f5f5; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+                                <p><strong>From:</strong> <span id="modalName"></span></p>
+                                <p><strong>Email:</strong> <span id="modalEmail"></span></p>
+                                <p><strong>Phone:</strong> <span id="modalPhone"></span></p>
+                                <p><strong>Subject:</strong> <span id="modalSubject"></span></p>
+                                <p><strong>Message:</strong></p>
+                                <div
+                                    style="background: white; padding: 10px; border-radius: 3px; border-left: 4px solid #667eea;">
+                                    <p id="modalMessage" style="margin: 0;"></p>
+                                </div>
+                            </div>
+                            <form id="replyForm" onsubmit="submitReply(event)">
+                                <div style="margin-bottom: 15px;">
+                                    <label style="display: block; margin-bottom: 8px; font-weight: bold;">Your Reply
+                                        *</label>
+                                    <textarea id="replyMessage" name="replyMessage" rows="6" required
+                                        style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-family: Arial; font-size: 14px;"></textarea>
+                                </div>
+                                <div style="display: flex; gap: 10px;">
+                                    <button type="submit"
+                                        style="flex: 1; padding: 10px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                                        <i class="fas fa-paper-plane"></i> Send Reply
+                                    </button>
+                                    <button type="button" onclick="closeReplyModal()"
+                                        style="flex: 1; padding: 10px; background: #ccc; color: #333; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                // API Configuration
+                const API_BASE_URL = 'http://localhost:5000/api';
+
+                // JWT Token Helper Functions
+                function getAuthToken() {
+                    return localStorage.getItem('token');
+                }
+
+                function setAuthToken(token) {
+                    localStorage.setItem('token', token);
+                }
+
+                function removeAuthToken() {
+                    localStorage.removeItem('token');
+                }
+
+                function decodeToken(token) {
+                    try {
+                        const base64Url = token.split('.')[1];
+                        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+                            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                        }).join(''));
+                        return JSON.parse(jsonPayload);
+                    } catch (error) {
+                        console.error('Error decoding token:', error);
+                        return null;
+                    }
+                }
+
+                // Check authentication
+                function checkAuth() {
+                    const token = getAuthToken();
+                    if (!token) {
+                        window.location.href = 'login.html';
+                        return false;
+                    }
+
+                    const decodedToken = decodeToken(token);
+                    if (!decodedToken || (decodedToken.role !== 'admin' && decodedToken.role !== 'super_admin')) {
+                        removeAuthToken();
+                        window.location.href = 'login.html';
+                        return false;
+                    }
+                    return true;
+                }
+
+                // SIMPLE DIRECT COUNT - JUST WORKS
+                async function updateStudentCount() {
+                    console.log('=== STUDENT COUNT UPDATE STARTING ===');
+
+                    try {
+                        // Get the display element
+                        const countDisplay = document.getElementById('totalStudents');
+                        if (!countDisplay) {
+                            console.error('❌ Count display element not found!');
+                            return;
+                        }
+
+                        // Show loading indicator - REMOVED to prevent blinking
+                        // countDisplay.textContent = '...';
+                        // console.log('✅ Loading indicator shown');
+
+                        // Get authentication token
+                        let authToken = getAuthToken();
+                        console.log('Current token exists:', !!authToken);
+
+                        // If no token, get a new one
+                        if (!authToken) {
+                            console.log('Getting new authentication token...');
+                            const loginResponse = await fetch(`${API_BASE_URL}/auth/admin-login`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    email: 'admin@musicschooldelhi.com',
+                                    password: 'admin123'
+                                })
+                            });
+
+                            const loginResult = await loginResponse.json();
+                            console.log('Login attempt result:', loginResult);
+
+                            if (loginResult.success) {
+                                authToken = loginResult.token;
+                                setAuthToken(authToken);
+                                console.log('✅ New authentication token obtained');
+                            } else {
+                                throw new Error('Authentication failed: ' + loginResult.message);
+                            }
+                        }
+
+                        // Fetch student data
+                        console.log('Fetching student records...');
+                        const studentsResponse = await fetch(`${API_BASE_URL}/student`, {
+                            headers: {
+                                'Authorization': `Bearer ${authToken}`,
+                                'Content-Type': 'application/json'
+                            }
+                        });
+
+                        const studentsResult = await studentsResponse.json();
+                        console.log('Students API response:', studentsResult);
+
+                        // Calculate final count - count all students who have taken admission
+                        // Calculate final count - count ONLY students who have 'approved' admission status
+                        let studentCount = 0;
+                        let pendingCount = 0;
+
+                        if (studentsResult.success && studentsResult.data) {
+                            let studentsList = [];
+
+                            if (Array.isArray(studentsResult.data)) {
+                                studentsList = studentsResult.data;
+                            } else if (studentsResult.data.students && Array.isArray(studentsResult.data.students)) {
+                                studentsList = studentsResult.data.students;
+                            }
+
+                            if (studentsList.length > 0) {
+                                // Filter for approved students
+                                const approvedStudents = studentsList.filter(student =>
+                                    student.admissionStatus === 'approved' || !student.admissionStatus // Handle legacy records without status as approved
+                                );
+
+                                // Count pending specifically for logging
+                                const pendingStudents = studentsList.filter(student => student.admissionStatus === 'pending');
+                                pendingCount = pendingStudents.length;
+
+                                studentCount = approvedStudents.length;
+
+                                console.log(`📊 Count Breakdown: Total Records: ${studentsList.length}, Approved: ${studentCount}, Pending: ${pendingCount}`);
+                            }
+                        } else {
+                            console.log('No student data received or API error');
+                        }
+
+                        // Update the display
+                        countDisplay.textContent = studentCount;
+
+                        // --- NEW: REVENUE STATS ---
+                        try {
+                            const payResponse = await fetch(`${API_BASE_URL}/payments`, {
+                                headers: { 'Authorization': `Bearer ${authToken}` }
+                            });
+                            const payResult = await payResponse.json();
+
+                            if (payResult.success && Array.isArray(payResult.data)) {
+                                const totalRevenue = payResult.data.reduce((sum, p) => sum + (Number(p.amount) || 0), 0);
+                                document.getElementById('totalRevenue').textContent = `₹${totalRevenue.toLocaleString('en-IN')}`;
+                            }
+                        } catch (payErr) {
+                            console.error('Revenue calculation failed:', payErr);
+                            document.getElementById('totalRevenue').textContent = '₹0';
+                        }
+
+                        console.log(`✅ DASHBOARD STATS UPDATED`);
+
+                    } catch (error) {
+                        console.error('❌ FATAL ERROR IN DASHBOARD LOADING:', error);
+                        const errorDisplay = document.getElementById('totalStudents');
+                        if (errorDisplay) errorDisplay.textContent = 'Err';
+                    }
+                }
+
+                // Fetch and display recent students
+                async function loadRecentStudents() {
+                    try {
+                        const token = getAuthToken();
+                        const response = await fetch(`${API_BASE_URL}/student`, {
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                        const result = await response.json();
+
+                        if (result.success && result.data) {
+                            let students = [];
+                            if (Array.isArray(result.data)) {
+                                students = result.data;
+                            } else if (result.data.students) {
+                                students = result.data.students;
+                            }
+
+                            // Sort by newest first
+                            students.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+
+                            // Show top 10 recent ones
+                            const recentStudents = students.slice(0, 10);
+                            const listElement = document.getElementById('recentStudentsList');
+
+                            if (recentStudents.length === 0) {
+                                listElement.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">No recent admissions found</td></tr>';
+                                return;
+                            }
+
+                            listElement.innerHTML = recentStudents.map(student => `
+                        <tr>
+                            <td><strong>${student.name || 'N/A'}</strong></td>
+                            <td>${student.guardianDetails?.name || '-'}</td>
+                            <td>${student.email || '-'}</td>
+                            <td>${student.selectedCourse || student.course || 'N/A'}</td>
+                            <td>${student.dateOfBirth ? new Date(student.dateOfBirth).toLocaleDateString() : '-'}</td>
+                            <td>
+                                <span class="status-pill status-${(student.admissionStatus || 'approved').toLowerCase()}">
+                                    ${(student.admissionStatus || 'approved').charAt(0).toUpperCase() + (student.admissionStatus || 'approved').slice(1)}
+                                </span>
+                            </td>
+                            <td>${student.createdAt ? new Date(student.createdAt).toLocaleDateString() : '-'}</td>
+                        </tr>
+                    `).join('');
+                        }
+                    } catch (error) {
+                        console.error('Error loading recent students:', error);
+                        document.getElementById('recentStudentsList').innerHTML = '<tr><td colspan="6" style="text-align: center; color: #e74c3c;">Failed to load records</td></tr>';
+                    }
+                }
+
+                // Initialize dashboard
+                // Check Gmail Configuration Status
+                async function checkGmailConfiguration() {
+                    try {
+                        // Check if user has dismissed the warning
+                        const dismissed = localStorage.getItem('emailWarningDismissed');
+                        if (dismissed === 'true') {
+                            document.getElementById('emailConfigBanner').style.display = 'none';
+                            return;
+                        }
+
+                        // Always show the warning since Gmail app password is not configured
+                        // The .env file has a regular password instead of Google App Password
+                        document.getElementById('emailConfigBanner').style.display = 'block';
+                    } catch (error) {
+                        console.warn('Could not check Gmail configuration:', error);
+                    }
+                }
+
+                // Dismiss Email Warning
+                function dismissEmailWarning() {
+                    localStorage.setItem('emailWarningDismissed', 'true');
+                    document.getElementById('emailConfigBanner').style.display = 'none';
+                }
+
+                document.addEventListener('DOMContentLoaded', () => {
+                    console.log('=== ADMIN DASHBOARD LOADED ===');
+
+                    if (checkAuth()) {
+                        console.log('✅ Authentication successful');
+
+                        // Set user info
+                        const decodedToken = decodeToken(getAuthToken());
+                        if (decodedToken) {
+                            const savedName = localStorage.getItem('adminName') || decodedToken.name || 'Admin User';
+                            document.getElementById('userInitial').textContent = savedName.charAt(0).toUpperCase();
+                            document.getElementById('adminName').textContent = savedName;
+                        }
+
+                        // Update student count and load recent admissions
+                        console.log('Starting dashboard data load...');
+                        setTimeout(() => {
+                            updateStudentCount();
+                            loadRecentStudents();
+                            loadContactMessages();
+                            loadContactStats();
+                            checkGmailConfiguration();
+                        }, 300);
+                    }
+                });
+
+                // Handle logout
+                document.getElementById('logoutBtn').addEventListener('click', () => {
+                    removeAuthToken();
+                    window.location.href = 'login.html';
+                });
+
+                // Window load backup
+                window.addEventListener('load', () => {
+                    console.log('=== WINDOW LOAD EVENT ===');
+                    if (checkAuth()) {
+                        // Set user profile
+                        const decodedToken = decodeToken(getAuthToken());
+                        if (decodedToken) {
+                            const savedName = localStorage.getItem('adminName') || decodedToken.name || 'Admin User';
+                            document.getElementById('userInitial').textContent = savedName.charAt(0).toUpperCase();
+                            document.getElementById('adminName').textContent = savedName;
+                        }
+                        setTimeout(updateStudentCount, 500);
+                        setTimeout(loadContactMessages, 600);
+                        setTimeout(loadContactStats, 700);
+                    }
+                });
+
+                // ==================== CONTACT MESSAGE FUNCTIONS ====================
+
+                // Load Contact Stats
+                async function loadContactStats() {
+                    try {
+                        const token = getAuthToken();
+                        const response = await fetch(`${API_BASE_URL}/contact/stats`, {
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                        const result = await response.json();
+
+                        if (result.success && result.data) {
+                            document.getElementById('newMessagesCount').textContent = result.data.newMessages;
+                            document.getElementById('repliedCount').textContent = result.data.replied;
+                        }
+                    } catch (error) {
+                        console.error('Error loading contact stats:', error);
+                    }
+                }
+
+                // Load Contact Messages
+                async function loadContactMessages() {
+                    try {
+                        const token = getAuthToken();
+                        const response = await fetch(`${API_BASE_URL}/contact`, {
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                        const result = await response.json();
+
+                        if (result.success && result.data) {
+                            const messages = result.data;
+                            const listElement = document.getElementById('contactMessagesList');
+
+                            if (messages.length === 0) {
+                                listElement.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem;">No contact messages yet</td></tr>';
+                                return;
+                            }
+
+                            // Sort by newest first
+                            messages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+                            // Show top 15 messages
+                            const recentMessages = messages.slice(0, 15);
+                            listElement.innerHTML = recentMessages.map(msg => {
+                                let statusDisplay = `${msg.status.charAt(0).toUpperCase() + msg.status.slice(1)}`;
+                                let emailStatusIcon = '';
+
+                                if (msg.status === 'replied') {
+                                    if (msg.replyEmailSent) {
+                                        emailStatusIcon = '<br><small style="color: green;">✓ Email sent</small>';
+                                    } else {
+                                        emailStatusIcon = '<br><small style="color: orange;">⚠ Email not sent</small>';
+                                    }
+                                }
+
+                                return `
+                        <tr style="background: ${msg.status === 'new' ? '#fef3c7' : 'white'};">
+                            <td><strong>${msg.name}</strong></td>
+                            <td>${msg.email}</td>
+                            <td>${msg.subject.charAt(0).toUpperCase() + msg.subject.slice(1)}</td>
+                            <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${msg.message}</td>
+                            <td>
+                                <span class="status-pill status-${msg.status}">
+                                    ${statusDisplay}${emailStatusIcon}
+                                </span>
+                            </td>
+                            <td>${new Date(msg.createdAt).toLocaleDateString()}</td>
+                            <td>
+                                <button onclick="openReplyModal('${msg._id}', '${msg.name.replace(/'/g, "\\'")}', '${msg.email}', '${msg.phone}', '${msg.subject.replace(/'/g, "\\'")}', '${msg.message.replace(/'/g, "\\'").replace(/\n/g, ' ')}')" style="background: #667eea; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; font-size: 12px;">
+                                    <i class="fas fa-reply"></i> Reply
+                                </button>
+                                <button onclick="deleteContact('${msg._id}')" style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; font-size: 12px; margin-left: 5px;">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `})
+                                .join('');
+                        }
+                    } catch (error) {
+                        console.error('Error loading contact messages:', error);
+                        document.getElementById('contactMessagesList').innerHTML = '<tr><td colspan="7" style="text-align: center; color: #e74c3c;">Failed to load messages</td></tr>';
+                    }
+                }
+
+                // Open Reply Modal
+                function openReplyModal(contactId, name, email, phone, subject, message) {
+                    window.currentContactId = contactId;
+                    document.getElementById('modalName').textContent = name;
+                    document.getElementById('modalEmail').textContent = email;
+                    document.getElementById('modalPhone').textContent = phone;
+                    document.getElementById('modalSubject').textContent = subject;
+                    document.getElementById('modalMessage').textContent = message;
+                    document.getElementById('replyMessage').value = '';
+                    document.getElementById('replyModal').style.display = 'flex';
+                }
+
+                // Close Reply Modal
+                function closeReplyModal() {
+                    document.getElementById('replyModal').style.display = 'none';
+                    window.currentContactId = null;
+                }
+
+                // Submit Reply
+                async function submitReply(event) {
+                    event.preventDefault();
+
+                    const contactId = window.currentContactId;
+                    const replyMessage = document.getElementById('replyMessage').value.trim();
+                    const decodedToken = decodeToken(getAuthToken());
+                    const adminName = localStorage.getItem('adminName') || decodedToken.name || 'Admin';
+
+                    if (!replyMessage) {
+                        alert('Please enter a reply message');
+                        return;
+                    }
+
+                    try {
+                        const token = getAuthToken();
+                        const response = await fetch(`${API_BASE_URL}/contact/${contactId}/reply`, {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                message: replyMessage,
+                                adminName: adminName
+                            })
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            // Check if email was actually sent
+                            if (result.emailSent) {
+                                showAlert('✅ Reply sent successfully via email!', 'success');
+                            } else {
+                                // Email was not sent but reply was saved
+                                const errorMsg = result.emailError || 'Email service not configured';
+                                showAlert('⚠️ Reply saved in database, but email could not be sent. ' + errorMsg, 'warning');
+                                console.warn('Email sending error:', result.emailError);
+                            }
+                            closeReplyModal();
+                            loadContactMessages();
+                            loadContactStats();
+                        } else {
+                            showAlert('❌ ' + (result.message || 'Error sending reply'), 'error');
+                        }
+                    } catch (error) {
+                        console.error('Error submitting reply:', error);
+                        showAlert('❌ Error sending reply. Please try again.', 'error');
+                    }
+                }
+
+                // Delete Contact
+                async function deleteContact(contactId) {
+                    if (!confirm('Are you sure you want to delete this message?')) {
+                        return;
+                    }
+
+                    try {
+                        const token = getAuthToken();
+                        const response = await fetch(`${API_BASE_URL}/contact/${contactId}`, {
+                            method: 'DELETE',
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            showAlert('Message deleted successfully', 'success');
+                            loadContactMessages();
+                            loadContactStats();
+                        } else {
+                            showAlert(result.message || 'Error deleting message', 'error');
+                        }
+                    } catch (error) {
+                        console.error('Error deleting contact:', error);
+                        showAlert('Error deleting message', 'error');
+                    }
+                }
+
+                // Show Alert
+                function showAlert(message, type) {
+                    const alertDiv = document.createElement('div');
+                    alertDiv.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                padding: 15px 25px;
+                border-radius: 5px;
+                font-size: 14px;
+                z-index: 11000;
+                background: ${type === 'success' ? '#10b981' : '#e74c3c'};
+                color: white;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            `;
+                    alertDiv.textContent = message;
+                    document.body.appendChild(alertDiv);
+
+                    setTimeout(() => {
+                        alertDiv.style.transition = 'opacity 0.3s';
+                        alertDiv.style.opacity = '0';
+                        setTimeout(() => alertDiv.remove(), 300);
+                    }, 3000);
+                }
+
+                // Close modal when clicking outside
+                document.getElementById('replyModal').addEventListener('click', function (e) {
+                    if (e.target === this) {
+                        closeReplyModal();
+                    }
+                });
+            </script>
+</body>
+
+</html>

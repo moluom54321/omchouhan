@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Login - Music School Delhi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #00bcd4 0%, #00838f 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h1 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e1e1;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #00bcd4;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #00bcd4 0%, #00838f 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .loading-spinner {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #00bcd4;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1><i class="fas fa-music"></i> Music School Delhi</h1>
+            <p>Student Login</p>
+        </div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Student Email</label>
+                <input type="email" id="email" name="email" required placeholder="Enter student email">
+                <div class="error-message" id="emailError"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Student Password</label>
+                <input type="password" id="password" name="password" required placeholder="Enter student password">
+                <div class="error-message" id="passwordError"></div>
+            </div>
+            
+            <button type="submit" class="btn-login" id="loginBtn">
+                <span id="loginText">Login as Student</span>
+                <div class="loading" id="loading">
+                    <div class="loading-spinner"></div>
+                </div>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // API Configuration
+        const API_BASE_URL = 'http://localhost:5000/api';
+        
+        // Test API connection
+        async function testConnection() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/health`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                return response.ok;
+            } catch (error) {
+                console.error('Connection test failed:', error);
+                return false;
+            }
+        }
+        
+        // JWT Token Helper Functions
+        function setAuthToken(token) {
+            localStorage.setItem('token', token);
+        }
+        
+        function getAuthToken() {
+            return localStorage.getItem('token');
+        }
+        
+        function removeAuthToken() {
+            localStorage.removeItem('token');
+        }
+        
+        function decodeToken(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+                
+                return JSON.parse(jsonPayload);
+            } catch (error) {
+                console.error('Error decoding token:', error);
+                return null;
+            }
+        }
+        
+        // Login Form Handler
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const loginText = document.getElementById('loginText');
+            const loading = document.getElementById('loading');
+            const emailError = document.getElementById('emailError');
+            const passwordError = document.getElementById('passwordError');
+            
+            // Clear previous errors
+            emailError.style.display = 'none';
+            passwordError.style.display = 'none';
+            
+            // Show loading state
+            loginBtn.disabled = true;
+            loginText.style.display = 'none';
+            loading.style.display = 'block';
+            
+            // Clear any existing token before attempting new login
+            removeAuthToken();
+            
+            try {
+                // Use the specific student login endpoint
+                const response = await fetch(`${API_BASE_URL}/student/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password }),
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Store token
+                    setAuthToken(data.token);
+                    
+                    // Decode token to get role
+                    const decodedToken = decodeToken(data.token);
+                    const role = decodedToken.role;
+                    
+                    // Student-only login - redirect based on role
+                    if (role === 'student') {
+                        window.location.href = 'student-dashboard.html';
+                    } else if (role === 'admin') {
+                        // Show error for admins trying to access student login
+                        passwordError.textContent = 'Admin login not allowed on student page. Please use the admin login.';
+                        passwordError.style.display = 'block';
+                        removeAuthToken(); // Remove the token
+                    } else {
+                        throw new Error('Unknown role');
+                    }
+                } else {
+                    throw new Error(data.message || 'Login failed');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                
+                // Show error message based on error type
+                if (error.message.includes('Failed to fetch') || error.name === 'TypeError' && error.message.includes('fetch')) {
+                    passwordError.textContent = 'Network error: Cannot connect to server. Please make sure the backend server is running.';
+                    passwordError.style.display = 'block';
+                } else if (error.message.includes('email')) {
+                    emailError.textContent = error.message;
+                    emailError.style.display = 'block';
+                } else if (error.message.includes('password')) {
+                    passwordError.textContent = error.message;
+                    passwordError.style.display = 'block';
+                } else {
+                    passwordError.textContent = error.message;
+                    passwordError.style.display = 'block';
+                }
+
+            } finally {
+                // Reset button state
+                loginBtn.disabled = false;
+                loginText.style.display = 'inline';
+                loading.style.display = 'none';
+            }
+        });
+        
+        // Check if already logged in as student and redirect
+        function checkAuth() {
+            const token = getAuthToken();
+            if (token) {
+                try {
+                    const decodedToken = decodeToken(token);
+                    if (decodedToken) {
+                        const role = decodedToken.role;
+                        if (role === 'student') {
+                            // Student user is already logged in, redirect to student dashboard
+                            window.location.href = 'student-dashboard.html';
+                        }
+                        // For admins, we allow them to stay on student login page to switch accounts
+                    }
+                } catch (error) {
+                    removeAuthToken();
+                }
+            }
+        }
+        
+        // Check auth on page load
+        checkAuth();
+    </script>
+</body>
+</html>

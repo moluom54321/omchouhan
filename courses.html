@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Explore our Piano, Guitar, and Vocal courses at Music School of Delhi. Professional training for all skill levels.">
+    <title>Our Courses - Music School of Delhi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom Guitar Tabs Icon */
+        .guitar-tabs-icon {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            position: relative;
+            vertical-align: middle;
+        }
+
+        .guitar-tabs-icon::before,
+        .guitar-tabs-icon::after {
+            content: '';
+            position: absolute;
+            background: #00bcd4;
+            /* Primary color matching the theme */
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Vertical lines (strings) */
+        .guitar-tabs-icon::before {
+            width: 2px;
+            height: 20px;
+            left: 3px;
+            top: 2px;
+            box-shadow: 4px 0 0 #00bcd4, 8px 0 0 #00bcd4, 12px 0 0 #00bcd4, 16px 0 0 #00bcd4, 20px 0 0 #00bcd4;
+        }
+
+        /* Horizontal lines (frets) */
+        .guitar-tabs-icon::after {
+            width: 20px;
+            height: 2px;
+            left: 2px;
+            top: 6px;
+            box-shadow: 0 4px 0 #00bcd4, 0 8px 0 #00bcd4, 0 12px 0 #00bcd4;
+        }
+
+        /* Hover effect matching the enrollment theme */
+        .guitar-tabs-icon:hover::before,
+        .guitar-tabs-icon:hover::after {
+            background: #0097a7;
+            /* Darker primary color on hover */
+            box-shadow: 4px 0 0 #0097a7, 8px 0 0 #0097a7, 12px 0 0 #0097a7, 16px 0 0 #0097a7, 20px 0 0 #0097a7,
+                0 4px 0 #0097a7, 0 8px 0 #0097a7, 0 12px 0 #0097a7;
+            transform: scale(1.1);
+        }
+
+        /* Enroll button styles to match the theme */
+        .btn-enroll {
+            display: inline-block;
+            background: #00bcd4;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 188, 212, 0.3);
+        }
+
+        .btn-enroll:hover {
+            background: #0097a7;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 188, 212, 0.4);
+        }
+
+        .btn-enroll:active {
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-container">
+            <div class="logo">
+                <i class="fas fa-music"></i>
+                <span>Music School of Delhi</span>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="courses.html" class="active">Courses</a></li>
+                <li><a href="admission.html">Admission Form</a></li>
+                <li><a href="reviews.html">Location</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li><a href="student-login.html" class="btn-login">Student Login</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="page-header-overlay"></div>
+        <div class="container">
+            <h1>Our Courses</h1>
+            <p>Transform Your Musical Journey</p>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section class="courses-section">
+        <div class="container">
+            <!-- Piano Course -->
+            <div class="course-detail" id="piano">
+                <div class="course-detail-grid">
+                    <div class="course-detail-image">
+                        <img src="images/piano-course.jpg" alt="Piano Course"
+                            onerror="this.src='https://via.placeholder.com/600x400/00bcd4/ffffff?text=Piano+Course'">
+                    </div>
+                    <div class="course-detail-content">
+                        <div class="course-badge">Piano</div>
+                        <h2>Piano Classes</h2>
+                        <p class="course-description">Master the art of piano with our comprehensive program designed
+                            for beginners to advanced players. Learn classical, jazz, and contemporary styles from
+                            certified instructors.</p>
+
+                        <div class="course-features">
+                            <h3>What You'll Learn:</h3>
+                            <ul>
+                                <li><i class="fas fa-check"></i> Music theory and sight-reading</li>
+                                <li><i class="fas fa-check"></i> Classical piano techniques</li>
+                                <li><i class="fas fa-check"></i> Contemporary and jazz styles</li>
+                                <li><i class="fas fa-check"></i> Performance skills and stage presence</li>
+                                <li><i class="fas fa-check"></i> Improvisation and composition</li>
+                            </ul>
+                        </div>
+
+                        <div class="course-info-grid">
+                            <div class="info-box">
+                                <i class="fas fa-clock"></i>
+                                <div>
+                                    <strong>Duration</strong>
+                                    <p>1 hour/session</p>
+                                </div>
+                            </div>
+                            <div class="info-box">
+                                <i class="fas fa-calendar-week"></i>
+                                <div>
+                                    <strong>Frequency</strong>
+                                    <p>2 times/week</p>
+                                </div>
+                            </div>
+                            <div class="info-box">
+                                <i class="fas fa-rupee-sign"></i>
+                                <div>
+                                    <strong>Fee</strong>
+                                    <p>₹3,000/month</p>
+                                </div>
+                            </div>
+                            <div class="info-box">
+                                <i class="fas fa-users"></i>
+                                <div>
+                                    <strong>Class Size</strong>
+                                    <p>1 to 10 students</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a href="admission.html?course=piano" class="btn-enroll"><i class="guitar-tabs-icon"></i> Enroll
+                            Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guitar Course -->
+            <div class="course-detail" id="guitar">
+                <div class="course-detail-grid reverse">
+                    <div class="course-detail-image">
+                        <img src="images/guitar-course.jpg" alt="Guitar Course"
+                            onerror="this.src='https://via.placeholder.com/600x400/00bcd4/ffffff?text=Guitar+Course'">
+                    </div>
+                    <div class="course-detail-content">
+                        <div class="course-badge">Guitar</div>
+                        <h2>Guitar Classes</h2>
+                        <p class="course-description">Learn acoustic and electric guitar from beginner chords to
+                            advanced techniques. Perfect for aspiring rock stars, classical musicians, and everything in
+                            between.</p>
+
+                        <div class="course-features">
+                            <h3>What You'll Learn:</h3>
+                            <ul>
+                                <li><i class="fas fa-check"></i> Chord progressions and rhythm</li>
+                                <li><i class="fas fa-check"></i> Fingerstyle and strumming patterns</li>
+                                <li><i class="fas fa-check"></i> Lead guitar and solos</li>
+                                <li><i class="fas fa-check"></i> Music theory for guitarists</li>
+                                <li><i class="fas fa-check"></i> Rock, blues, and classical styles</li>
+                            </ul>
+                        </div>
+
+                        <div class="course-info-grid">
+                            <div class="info-box">
+                                <i class="fas fa-clock"></i>
+                                <div>
+                                    <strong>Duration</strong>
+                                    <p>1 hour/session</p>
+                                </div>
+                            </div>
+                            <div class="info-box">
+                                <i class="fas fa-calendar-week"></i>
+                                <div>
+                                    <strong>Frequency</strong>
+                                    <p>2 times/week</p>
+                                </div>
+                            </div>
+                            <div class="info-box">
+                                <i class="fas fa-rupee-sign"></i>
+                                <div>
+                                    <strong>Fee</strong>
+                                    <p>₹3,000/month</p>
+                                </div>
+                            </div>
+                            <div class="info-box">
+                                <i class="fas fa-users"></i>
+                                <div>
+                                    <strong>Class Size</strong>
+                                    <p>5 to 10 students</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a href="admission.html?course=guitar" class="btn-enroll"><i class="guitar-tabs-icon"></i>
+                            Enroll Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vocal Course -->
+            <div class="course-detail" id="vocal">
+                <div class="course-detail-grid">
+                    <div class="course-detail-image">
+                        <img src="images/vocal-course.jpg" alt="Vocal Course"
+                            onerror="this.src='https://via.placeholder.com/600x400/00bcd4/ffffff?text=Vocal+Course'">
+                    </div>
+                    <div class="course-detail-content">
+                        <div class="course-badge">Vocal</div>
+                        <h2>Vocal Training</h2>
+                        <p class="course-description">Develop your voice with professional vocal training. From breath
+                            control to performance techniques, we'll help you find and refine your unique sound.</p>
+
+                        <div class="course-features">
+                            <h3>What You'll Learn:</h3>
+                            <ul>
+                                <li><i class="fas fa-check"></i> Breathing techniques and vocal exercises</li>
+                                <li><i class="fas fa-check"></i> Pitch control and range expansion</li>
+                                <li><i class="fas fa-check"></i> Classical and contemporary singing</li>
+                                <li><i class="fas fa-check"></i> Stage performance and confidence</li>
+                                <li><i class="fas fa-check"></i> Microphone techniques and recording</li>
+                            </ul>
+                        </div>
+
+                        <div class="course-info-grid">
+                            <div class="info-box">
+                                <i class="fas fa-clock"></i>
+                                <div>
+                                    <strong>Duration</strong>
+                                    <p>1 hour/session</p>
+                                </div>
+                            </div>
+                            <div class="info-box">
+                                <i class="fas fa-calendar-week"></i>
+                                <div>
+                                    <strong>Frequency</strong>
+                                    <p>2 times/week</p>
+                                </div>
+                            </div>
+                            <div class="info-box">
+                                <i class="fas fa-rupee-sign"></i>
+                                <div>
+                                    <strong>Fee</strong>
+                                    <p>₹3,000/month</p>
+                                </div>
+                            </div>
+                            <div class="info-box">
+                                <i class="fas fa-users"></i>
+                                <div>
+                                    <strong>Class Size</strong>
+                                    <p>10 to 20 students</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a href="admission.html?course=vocal" class="btn-enroll"><i class="guitar-tabs-icon"></i> Enroll
+                            Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Our Courses -->
+    <section class="why-our-courses">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Why Choose Our Courses</h2>
+                <p class="section-subtitle">Excellence in Every Note</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <h3>Certified Instructors</h3>
+                    <p>Learn from highly qualified and experienced music professionals</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <h3>Personalized Learning</h3>
+                    <p>Tailored curriculum based on your skill level and goals</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <h3>Regular Performances</h3>
+                    <p>Showcase your skills in our annual concerts and events</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3>Online & Offline</h3>
+                    <p>Flexible learning options to suit your schedule</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>Music School of Delhi</h3>
+                    <p>Transforming passion into mastery since 2010</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="courses.html">Courses</a></li>
+                        <li><a href="admission.html">Admission</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Courses</h4>
+                    <ul>
+                        <li><a href="courses.html#piano">Piano Classes</a></li>
+                        <li><a href="courses.html#guitar">Guitar Classes</a></li>
+                        <li><a href="courses.html#vocal">Vocal Training</a></li>
+                        <li><a href="reviews.html">Location</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Info</h4>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-map-marker-alt"></i> Music School of Delhi, Pitampura, New Delhi</li>
+                        <li><i class="fas fa-phone"></i> +91 98765 43210</li>
+                        <li><i class="fas fa-envelope"></i> info@musicschooldelhi.com</li>
+                        <li><i class="fas fa-clock"></i> Mon-Sat: 9AM - 8PM</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Music School of Delhi. All Rights Reserved. | Designed with <i class="fas fa-heart"></i>
+                    for Music</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/pages.js"></script>
+</body>
+
+</html>

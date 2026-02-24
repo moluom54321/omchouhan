@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guitar Tabs Management - Music School Delhi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            overflow-x: hidden;
+        }
+
+        .admin-dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h2 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
+
+        .sidebar-menu ul {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin: 0;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            transition: background-color 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left-color: #fff;
+        }
+
+        .sidebar-menu i {
+            margin-right: 0.5rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 0;
+        }
+
+        .topbar {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topbar h1 {
+            margin: 0;
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .btn-logout {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: #c0392b;
+        }
+
+        /* Dashboard Content */
+        .dashboard-content {
+            padding: 2rem;
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+
+        .section h2 {
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .recent-payments table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .recent-payments th,
+        .recent-payments td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .recent-payments th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .status-present {
+            color: #27ae60;
+        }
+
+        .status-absent {
+            color: #e74c3c;
+        }
+
+        .status-late {
+            color: #f39c12;
+        }
+
+        .status-completed {
+            color: #27ae60;
+        }
+
+        .status-pending {
+            color: #f39c12;
+        }
+
+        .status-failed {
+            color: #e74c3c;
+        }
+
+        .status-refunded {
+            color: #34495e;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .upload-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .upload-option {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px dashed #dee2e6;
+        }
+
+        .upload-option h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.hidden {
+            display: none;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        .file-hint {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+        }
+
+        .btn.btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn.btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .guitar-tabs-table {
+            margin-top: 2rem;
+        }
+
+        .guitar-tabs-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .guitar-tabs-table th,
+        .guitar-tabs-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .guitar-tabs-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .guitar-tabs-table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        .status-present {
+            color: #27ae60;
+        }
+
+        .status-absent {
+            color: #e74c3c;
+        }
+
+        .status-late {
+            color: #f39c12;
+        }
+
+        .status-completed {
+            color: #27ae60;
+        }
+
+        .status-pending {
+            color: #f39c12;
+        }
+
+        .status-failed {
+            color: #e74c3c;
+        }
+
+        .status-refunded {
+            color: #34495e;
+        }
+
+        #guitarTabsLoading {
+            display: block;
+        }
+
+        #guitarTabsEmpty {
+            display: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Loading spinner */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-music"></i> Music School</h2>
+            </div>
+            <div class="sidebar-menu">
+                <ul>
+                    <li><a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="admin-students.html"><i class="fas fa-graduation-cap"></i> Enrolled Students</a></li>
+                    <li><a href="admin-registration.html"><i class="fas fa-user-plus"></i> Active Students</a></li>
+                    <li><a href="admin-payments.html"><i class="fas fa-rupee-sign"></i> Payments</a></li>
+                    <li><a href="admin-attendance.html"><i class="fas fa-calendar-check"></i> Pitampura Attendance</a>
+                    </li>
+                    <li><a href="admin-attendance-rohini.html"><i class="fas fa-calendar-check"></i> Rohini
+                            Attendance</a></li>
+                    <li><a href="admin-announcements.html"><i class="fas fa-bullhorn"></i> Announcements</a></li>
+                    <li><a href="admin-guitar-tabs.html" class="active"><i class="fas fa-guitar"></i> Guitar Tabs</a>
+                    </li>
+                    <li><a href="admin-content.html"><i class="fas fa-video"></i> Content Management</a></li>
+                    <li><a href="admin-settings-batches.html"><i class="fas fa-clock"></i> Batch Settings</a></li>
+                    <li><a href="admin-settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Topbar -->
+            <div class="topbar">
+                <h1><i class="fas fa-guitar"></i> Guitar Tabs Management</h1>
+                <div class="topbar-right">
+                    <div class="user-profile">
+                        <div class="user-avatar" id="userInitial">A</div>
+                        <span id="adminName">Admin User</span>
+                    </div>
+                    <button class="btn-logout" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Guitar Tabs Section -->
+                <div id="guitar-tabs-section" class="section">
+                    <h2><i class="fas fa-guitar"></i> Guitar Tabs Management</h2>
+
+                    <!-- Upload Options -->
+                    <div class="upload-options">
+                        <div class="upload-option">
+                            <h3><i class="fas fa-music"></i> Latest Songs</h3>
+                            <button class="btn" onclick="openUploadModal('latest')">
+                                <i class="fas fa-upload"></i> Upload Guitar Tab
+                            </button>
+                        </div>
+                        <div class="upload-option">
+                            <h3><i class="fas fa-fire"></i> Popular Songs</h3>
+                            <button class="btn" onclick="openUploadModal('popular')">
+                                <i class="fas fa-upload"></i> Upload Popular Tab
+                            </button>
+                        </div>
+                        <div class="upload-option">
+                            <h3><i class="fas fa-file-pdf"></i> Guitar Tabs</h3>
+                            <button class="btn" onclick="openUploadModal('tabs')">
+                                <i class="fas fa-upload"></i> Upload Guitar Tab/PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Guitar Tabs Table -->
+                    <div class="guitar-tabs-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Song</th>
+                                    <th>Artist</th>
+                                    <th>Category</th>
+                                    <th>Creator</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="guitarTabsTableBody">
+                                <!-- Guitar Tabs will be loaded here -->
+                            </tbody>
+                        </table>
+                        <div id="guitarTabsLoading" class="loading">
+                            <div class="loading-spinner"></div>
+                        </div>
+                        <div id="guitarTabsEmpty" class="empty-state">
+                            <p>No guitar tabs found. Upload some tabs to get started.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upload Modal -->
+                <div id="uploadModal" class="modal hidden">
+                    <div class="modal-content">
+                        <span class="close" onclick="closeUploadModal()">&times;</span>
+                        <h3 id="modalTitle">Upload Content</h3>
+                        <form id="uploadForm" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="songName">Song Name:</label>
+                                <input type="text" id="songName" name="songName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="artist">Artist:</label>
+                                <input type="text" id="artist" name="artist" required>
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <label for="defaultKey">Default Key:</label>
+                                <select id="defaultKey" name="defaultKey">
+                                    <optgroup label="Major Keys">
+                                        <option value="C Major">C Major</option>
+                                        <option value="C# Major">C# / Db Major</option>
+                                        <option value="D Major">D Major</option>
+                                        <option value="D# Major">D# / Eb Major</option>
+                                        <option value="E Major">E Major</option>
+                                        <option value="F Major">F Major</option>
+                                        <option value="F# Major">F# / Gb Major</option>
+                                        <option value="G Major">G Major</option>
+                                        <option value="G# Major">G# / Ab Major</option>
+                                        <option value="A Major">A Major</option>
+                                        <option value="A# Major">A# / Bb Major</option>
+                                        <option value="B Major">B Major</option>
+                                    </optgroup>
+                                    <optgroup label="Minor Keys">
+                                        <option value="C Minor">C Minor</option>
+                                        <option value="C# Minor">C# / Db Minor</option>
+                                        <option value="D Minor">D Minor</option>
+                                        <option value="D# Minor">D# / Eb Minor</option>
+                                        <option value="E Minor">E Minor</option>
+                                        <option value="F Minor">F Minor</option>
+                                        <option value="F# Minor">F# / Gb Minor</option>
+                                        <option value="G Minor">G Minor</option>
+                                        <option value="G# Minor">G# / Ab Minor</option>
+                                        <option value="A Minor">A Minor</option>
+                                        <option value="A# Minor">A# / Bb Minor</option>
+                                        <option value="B Minor">B Minor</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="chordsContent">Lyrics with Chords (use [C] format):</label>
+                                <textarea id="chordsContent" name="chordsContent" rows="10"
+                                    placeholder="Enter lyrics with chords in brackets... e.g. [C]Hello [G]world"></textarea>
+                                <small class="file-hint">Example: [C]Amazing [G]Grace, how [F]sweet the [C]sound</small>
+                            </div>
+
+                            <div class="form-group hidden">
+                                <label for="tabContent">Tab Content (if applicable):</label>
+                                <textarea id="tabContent" name="tabContent" rows="5"
+                                    placeholder="Enter guitar tab content here..."></textarea>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary"
+                                    onclick="closeUploadModal()">Cancel</button>
+                                <button type="submit" class="btn">Upload</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API Configuration
+        const API_BASE_URL = 'http://localhost:5000/api';
+
+        // JWT Token Helper Functions
+        function getAuthToken() {
+            return localStorage.getItem('token');
+        }
+
+        function removeAuthToken() {
+            localStorage.removeItem('token');
+        }
+
+        function decodeToken(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+
+                return JSON.parse(jsonPayload);
+            } catch (error) {
+                console.error('Error decoding token:', error);
+                return null;
+            }
+        }
+
+        // Check authentication
+        function checkAuth() {
+            const token = getAuthToken();
+            if (!token) {
+                window.location.href = 'login.html';
+                return false;
+            }
+
+            const decodedToken = decodeToken(token);
+            if (!decodedToken || (decodedToken.role !== 'admin' && decodedToken.role !== 'super_admin')) {
+                removeAuthToken();
+                window.location.href = 'login.html';
+                return false;
+            }
+
+            return true;
+        }
+
+        // API Call Helper
+        async function apiCall(url, options = {}) {
+            const token = getAuthToken();
+
+            const config = {
+                ...options,
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    ...options.headers,
+                },
+                credentials: 'include',
+            };
+
+            try {
+                const response = await fetch(url, config);
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'API call failed');
+                }
+
+                return data;
+            } catch (error) {
+                if (error.message.includes('Unauthorized')) {
+                    removeAuthToken();
+                    window.location.href = 'login.html';
+                }
+                throw error;
+            }
+        }
+
+        // Load guitar tabs
+        async function loadGuitarTabs() {
+            if (!checkAuth()) return;
+
+            try {
+                const response = await apiCall(`${API_BASE_URL}/guitar-tabs`);
+
+                // Show/hide loading, content, and empty states
+                document.getElementById('guitarTabsLoading').style.display = 'none';
+
+                if (response.success && response.data && response.data.length > 0) {
+                    const guitarTabsTableBody = document.getElementById('guitarTabsTableBody');
+                    guitarTabsTableBody.innerHTML = ''; // Clear existing content
+
+                    response.data.forEach(tab => {
+                        const row = document.createElement('tr');
+
+                        row.innerHTML = `
+                            <td>${tab.songName}</td>
+                            <td>${tab.artist}</td>
+                            <td>${tab.category || 'tabs'}</td>
+                            <td>${tab.creator?.name || 'N/A'}</td>
+                            <td>
+                                <button class="btn" onclick="viewGuitarTab('${tab._id}')">View</button>
+                                <button class="btn" onclick="editGuitarTab('${tab._id}')">Edit</button>
+                                <button class="btn" onclick="deleteGuitarTab('${tab._id}')">Delete</button>
+                            </td>
+                        `;
+
+                        guitarTabsTableBody.appendChild(row);
+                    });
+
+                    // Hide empty state and show table
+                    document.getElementById('guitarTabsEmpty').style.display = 'none';
+                } else {
+                    // Show empty state
+                    document.getElementById('guitarTabsTableBody').innerHTML = '';
+                    document.getElementById('guitarTabsEmpty').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error loading guitar tabs:', error);
+                document.getElementById('guitarTabsLoading').style.display = 'none';
+                document.getElementById('guitarTabsEmpty').style.display = 'block';
+                document.getElementById('guitarTabsEmpty').innerHTML = `<p>Error loading guitar tabs: ${error.message}</p>`;
+            }
+        }
+
+        // View guitar tab function
+        async function viewGuitarTab(id) {
+            try {
+                const response = await apiCall(`${API_BASE_URL}/guitar-tabs/${id}`);
+
+                if (response.success && response.data) {
+                    const tab = response.data;
+
+                    // Create a modal to display the tab content
+                    const modal = document.createElement('div');
+                    modal.className = 'modal';
+                    modal.innerHTML = `
+                        <div class="modal-content" style="max-width: 800px;">
+                            <span class="close" onclick="this.closest('.modal').remove()">&times;</span>
+                            <h3 style="margin-top: 0;">${tab.songName} - ${tab.artist}</h3>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                <p><strong>Category:</strong> ${tab.category || 'tabs'}</p>
+                                <p><strong>Creator:</strong> ${tab.creator?.name || 'N/A'}</p>
+                                <p><strong>Created:</strong> ${new Date(tab.createdAt).toLocaleDateString()}</p>
+                                ${tab.filePath ? `<p><strong>File:</strong> <a href="http://localhost:5000${tab.filePath}" target="_blank">${tab.filePath.split('/').pop()}</a></p>` : '<p><strong>File:</strong> None</p>'}
+                            </div>
+                            <div style="margin-top: 1rem;">
+                                <h4>Tab Content:</h4>
+                                <pre style="background: #f5f5f5; padding: 1rem; border-radius: 5px; max-height: 300px; overflow-y: auto; white-space: pre-wrap; word-wrap: break-word;">${tab.tabContent || 'No tab content available'}</pre>
+                            </div>
+                        </div>
+                    `;
+
+                    document.body.appendChild(modal);
+                }
+            } catch (error) {
+                console.error('Error viewing guitar tab:', error);
+                alert('Error loading guitar tab: ' + error.message);
+            }
+        }
+
+        // Edit guitar tab function
+        async function editGuitarTab(id) {
+            try {
+                // Fetch the current guitar tab data
+                const response = await apiCall(`${API_BASE_URL}/guitar-tabs/${id}`);
+
+                if (response.success && response.data) {
+                    const tab = response.data;
+
+                    // Populate the form with existing data
+                    document.getElementById('songName').value = tab.songName || '';
+                    document.getElementById('artist').value = tab.artist || '';
+                    document.getElementById('tabContent').value = tab.tabContent || '';
+                    // Lyrics field removed
+                    document.getElementById('chordsContent').value = tab.chordsContent || '';
+                    document.getElementById('defaultKey').value = tab.defaultKey || 'C';
+
+                    // Change modal title
+                    document.getElementById('modalTitle').textContent = 'Edit Guitar Tab';
+
+                    // Show the modal
+                    document.getElementById('uploadModal').classList.remove('hidden');
+
+                    // Store the ID for update
+                    document.getElementById('uploadForm').setAttribute('data-edit-id', id);
+
+                    // Change submit button text
+                    document.querySelector('#uploadForm button[type="submit"]').textContent = 'Update';
+
+                    // Show file input for optional file replacement
+                    document.getElementById('file').closest('.form-group').style.display = 'block';
+                    document.getElementById('fileLabel').textContent = 'Replace File (optional):';
+                    document.getElementById('file').removeAttribute('required');
+                }
+            } catch (error) {
+                console.error('Error fetching guitar tab for edit:', error);
+                alert('Error loading guitar tab data: ' + error.message);
+            }
+        }
+
+        // Delete guitar tab function
+        async function deleteGuitarTab(id) {
+            if (confirm('Are you sure you want to delete this guitar tab?')) {
+                try {
+                    await apiCall(`${API_BASE_URL}/guitar-tabs/${id}`, {
+                        method: 'DELETE'
+                    });
+                    loadGuitarTabs(); // Reload guitar tabs list
+                } catch (error) {
+                    console.error('Error deleting guitar tab:', error);
+                    alert('Error deleting guitar tab: ' + error.message);
+                }
+            }
+        }
+
+        // Modal functions
+        function openUploadModal(type) {
+            document.getElementById('uploadModal').classList.remove('hidden');
+
+            // Set title based on type
+            let title;
+            switch (type) {
+                case 'latest':
+                    title = 'Upload Latest Guitar Tab';
+                    break;
+                case 'popular':
+                    title = 'Upload Popular Tab';
+                    break;
+                case 'tabs':
+                    title = 'Upload Guitar Tab/PDF';
+                    break;
+                default:
+                    title = 'Upload Content';
+            }
+            document.getElementById('modalTitle').textContent = title;
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadModal').classList.add('hidden');
+            document.getElementById('uploadForm').reset();
+
+            // Clear textareas manually if reset doesn't hit them
+            // Lyrics field removed
+            document.getElementById('chordsContent').value = '';
+
+            // Reset modal to default state
+            document.getElementById('uploadForm').removeAttribute('data-edit-id');
+            document.querySelector('#uploadForm button[type="submit"]').textContent = 'Upload';
+
+            // Reset file input to required for new uploads
+            document.getElementById('file').closest('.form-group').style.display = 'block';
+            document.getElementById('fileLabel').textContent = 'Upload File:';
+            document.getElementById('file').setAttribute('required', 'required');
+        }
+
+
+
+        // Validate file before upload
+        function validateFile() {
+            const fileInput = document.getElementById('file');
+            if (!fileInput) {
+                // File input doesn't exist, skip validation
+                return true;
+            }
+
+            const file = fileInput.files[0];
+
+            if (file) {
+                // Check file size (10MB limit)
+                const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+                if (file.size > maxSize) {
+                    alert('File size exceeds 10MB limit. Please choose a smaller file.');
+                    fileInput.value = '';
+                    return false;
+                }
+
+                // Check file type (Allow audio too)
+                const allowedTypes = ['text/plain', 'application/pdf', 'audio/mpeg', 'audio/wav', 'audio/x-wav'];
+                if (!allowedTypes.includes(file.type) && !file.name.match(/\.(txt|pdf|mp3|wav)$/i)) {
+                    alert('Invalid file type. Please upload a TXT, PDF, MP3, or WAV file.');
+                    fileInput.value = '';
+                    return false;
+                }
+
+                console.log('File validation passed:', file.name, file.type, file.size);
+                return true;
+            }
+            return true; // Return true if no file selected (since it's optional)
+        }
+
+        document.getElementById('uploadForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const editId = this.getAttribute('data-edit-id');
+            const isEditing = !!editId;
+
+            // Validate file (optional now)
+            if (!validateFile()) {
+                return;
+            }
+
+            // Determine category
+            const title = document.getElementById('modalTitle').textContent;
+            let category = 'tabs';
+            if (title.includes('Latest')) category = 'latest';
+            else if (title.includes('Popular')) category = 'popular';
+
+            const formData = new FormData(this);
+            formData.append('category', category);
+
+            try {
+                const token = getAuthToken();
+                if (!token) {
+                    alert('⚠️ Authentication Error:\n\nYou must be logged in to upload.\n\nPlease log in first by going to the login page.');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                const submitButton = this.querySelector('button[type="submit"]');
+                if (!submitButton) {
+                    console.error('Submit button not found!');
+                    alert('❌ Error: Could not find submit button. Please refresh the page.');
+                    return;
+                }
+                const originalText = submitButton.textContent;
+
+                submitButton.textContent = isEditing ? 'Updating...' : 'Uploading...';
+                submitButton.disabled = true;
+
+                const url = isEditing ? `${API_BASE_URL}/guitar-tabs/${editId}` : `${API_BASE_URL}/guitar-tabs`;
+                const method = isEditing ? 'PUT' : 'POST';
+
+                console.log('=== Upload Debug Info ===');
+                console.log('URL:', url);
+                console.log('Method:', method);
+                console.log('Token exists:', !!token);
+                console.log('Token preview:', token ? token.substring(0, 20) + '...' : 'none');
+
+                // Log FormData contents
+                console.log('Form data being sent:');
+                for (let [key, value] of formData.entries()) {
+                    if (key === 'file' && value instanceof File) {
+                        console.log(`  ${key}: [File] ${value.name} (${value.size} bytes)`);
+                    } else if (typeof value === 'string' && value.length > 100) {
+                        console.log(`  ${key}: ${value.substring(0, 50)}...`);
+                    } else {
+                        console.log(`  ${key}:`, value);
+                    }
+                }
+
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                });
+
+                let result;
+                const responseText = await response.text();
+                console.log('Raw response:', responseText);
+
+                try {
+                    result = JSON.parse(responseText);
+                } catch (e) {
+                    console.error('Failed to parse response as JSON');
+                    result = {
+                        success: false,
+                        message: `Server error (${response.status}): ${response.statusText}`
+                    };
+                }
+
+                // Reset button state
+                if (submitButton) {
+                    submitButton.textContent = originalText;
+                    submitButton.disabled = false;
+                }
+
+                console.log('Response status:', response.status);
+                console.log('Response result:', result);
+
+                if (response.ok && result.success) {
+                    alert(isEditing ? 'Guitar tab updated successfully!' : 'Content uploaded successfully!');
+                    closeUploadModal();
+                    loadGuitarTabs();
+                } else {
+                    const errorMsg = result.message || result.error || 'Unknown error occurred';
+                    console.error('Upload failed:', errorMsg);
+                    alert('❌ Upload Failed:\n\n' + errorMsg);
+                }
+            } catch (error) {
+                console.error('Submission error:', error);
+                const submitButton = this.querySelector('button[type="submit"]');
+                if (submitButton) {
+                    submitButton.textContent = isEditing ? 'Update' : 'Upload';
+                    submitButton.disabled = false;
+                }
+                alert('❌ Connection Error:\n\n' + error.message + '\n\nPlease check the browser console (F12) for more details.');
+            }
+        });
+
+        // Add guitar tab function
+        function addGuitarTab() {
+            openUploadModal('tabs');
+        }
+
+        // Navigation
+        function setupNavigation() {
+            const menuItems = document.querySelectorAll('.sidebar-menu a');
+            const sections = document.querySelectorAll('.section');
+
+            menuItems.forEach(item => {
+                item.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    const sectionId = this.getAttribute('data-section');
+
+                    if (href && href !== '#' && !sectionId) {
+                        // Allow normal navigation for external links
+                        return;
+                    }
+
+                    e.preventDefault();
+
+                    // Hide all sections
+                    sections.forEach(section => {
+                        section.classList.add('hidden');
+                    });
+
+                    // Remove active class from all menu items
+                    menuItems.forEach(menuItem => {
+                        menuItem.classList.remove('active');
+                    });
+
+                    // Show selected section and mark menu item as active
+                    if (sectionId) {
+                        const targetSection = document.getElementById(`${sectionId}-section`);
+                        if (targetSection) {
+                            targetSection.classList.remove('hidden');
+                            this.classList.add('active');
+                        }
+                    }
+                });
+            });
+        }
+
+
+
+
+        // Initialize guitar tabs calendar
+        function initializeGuitarTabsCalendar() {
+            renderGuitarTabsCalendar(guitarTabsCurrentDate);
+            setupGuitarTabsEventListeners();
+        }
+
+        // Render guitar tabs calendar
+        function renderGuitarTabsCalendar(date) {
+            const year = date.getFullYear();
+            const month = date.getMonth();
+
+            // Set current month/year header
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'];
+            document.getElementById('guitarTabsCurrentMonthYear').textContent = `${monthNames[month]} ${year}`;
+
+            // Get first day of month and last day of month
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const startDate = new Date(firstDay);
+            startDate.setDate(startDate.getDate() - firstDay.getDay());
+
+            const calendarGrid = document.getElementById('guitarTabsCalendarGrid');
+            calendarGrid.innerHTML = '';
+
+            // Create header cells
+            const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            dayHeaders.forEach(day => {
+                const headerCell = document.createElement('div');
+                headerCell.className = 'calendar-header-cell';
+                headerCell.style = 'background-color: #f5f5f5; padding: 12px; text-align: center; font-weight: bold; border: 1px solid #e0e0e0;';
+                headerCell.textContent = day;
+                calendarGrid.appendChild(headerCell);
+            });
+
+            // Create calendar days
+            for (let i = 0; i < 42; i++) {
+                const day = new Date(startDate);
+                day.setDate(startDate.getDate() + i);
+
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.style = 'background: white; min-height: 100px; padding: 8px; cursor: pointer; transition: all 0.2s; position: relative;';
+
+                // Check if this day is in the current month
+                const isCurrentMonth = day.getMonth() === month;
+
+                // Add day number
+                const dayNumber = document.createElement('div');
+                dayNumber.className = 'day-number';
+                dayNumber.style = 'font-weight: bold; margin-bottom: 5px; font-size: 16px;';
+                dayNumber.textContent = day.getDate();
+
+                // Add classes for this day based on schedule
+                const dayClassesDiv = document.createElement('div');
+                dayClassesDiv.className = 'day-classes';
+                dayClassesDiv.style = 'font-size: 12px;';
+
+                // Determine which classes occur on this day
+                const dayOfWeek = day.getDay();
+                let classItems = [];
+
+                // Weekend (Saturday = 6, Sunday = 0)
+                if (dayOfWeek === 6 || dayOfWeek === 0) {
+                    // Guitar weekend
+                    guitarTabsClassRules.weekends.guitar.forEach(time => {
+                        classItems.push(`<div class="class-item guitar-class" style="padding: 3px 6px; margin: 2px 0; border-radius: 3px; color: white; font-weight: 500; background-color: #4CAF50;">G: ${time}</div>`);
+                    });
+
+                    // Piano weekend
+                    guitarTabsClassRules.weekends.piano.forEach(time => {
+                        classItems.push(`<div class="class-item piano-class" style="padding: 3px 6px; margin: 2px 0; border-radius: 3px; color: white; font-weight: 500; background-color: #2196F3;">P: ${time}</div>`);
+                    });
+
+                    // Vocal weekend
+                    guitarTabsClassRules.weekends.vocal.forEach(time => {
+                        classItems.push(`<div class="class-item vocal-class" style="padding: 3px 6px; margin: 2px 0; border-radius: 3px; color: white; font-weight: 500; background-color: #FF9800;">V: ${time}</div>`);
+                    });
+                } else {
+                    // Weekday logic
+                    if (dayOfWeek === 2 || dayOfWeek === 4) { // Tuesday, Thursday - ONLY PIANO
+                        guitarTabsClassRules.tuesday_thursday.piano.forEach(time => {
+                            classItems.push(`<div class="class-item piano-class" style="padding: 3px 6px; margin: 2px 0; border-radius: 3px; color: white; font-weight: 500; background-color: #2196F3;">P: ${time}</div>`);
+                        });
+                    } else if (dayOfWeek === 1 || dayOfWeek === 3 || dayOfWeek === 5) { // Mon, Wed, Fri - Guitar only
+                        guitarTabsClassRules.weekdays.guitar.forEach(time => {
+                            classItems.push(`<div class="class-item guitar-class" style="padding: 3px 6px; margin: 2px 0; border-radius: 3px; color: white; font-weight: 500; background-color: #4CAF50;">G: ${time}</div>`);
+                        });
+                    }
+                }
+
+                // Add class items to the day
+                dayClassesDiv.innerHTML = classItems.join('');
+
+                // Add to day element
+                dayElement.appendChild(dayNumber);
+                dayElement.appendChild(dayClassesDiv);
+
+                // Add highlight for today
+                const today = new Date();
+                if (day.toDateString() === today.toDateString()) {
+                    dayElement.style.backgroundColor = '#e3f2fd';
+                    dayElement.style.border = '2px solid #2196f3';
+                }
+
+                // Add click event to mark attendance
+                dayElement.addEventListener('click', () => {
+                    if (isCurrentMonth) {
+                        handleGuitarTabsDateClick(day);
+                    }
+                });
+
+                // Add empty class if not current month
+                if (!isCurrentMonth) {
+                    dayElement.classList.add('empty');
+                    dayElement.style.backgroundColor = '#f9f9f9';
+                    dayElement.style.color = '#ccc';
+                    dayElement.style.cursor = 'default';
+                }
+
+                calendarGrid.appendChild(dayElement);
+            }
+        }
+
+        // Handle guitar tabs date click
+        function handleGuitarTabsDateClick(date) {
+            guitarTabsSelectedDate = date;
+            document.getElementById('guitarTabsSelectedDateDisplay').textContent = date.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            // Highlight selected date
+            document.querySelectorAll('.calendar-day').forEach(day => {
+                day.classList.remove('selected');
+            });
+            event.target.closest('.calendar-day').classList.add('selected');
+            event.target.closest('.calendar-day').style.backgroundColor = '#e3f2fd';
+            event.target.closest('.calendar-day').style.border = '2px solid #2196f3';
+
+            // Show class selection
+            showGuitarTabsClassSelection(date);
+        }
+
+        // Show guitar tabs class selection based on date
+        function showGuitarTabsClassSelection(date) {
+            const dayOfWeek = date.getDay();
+            const attendancePanel = document.getElementById('guitarTabsAttendancePanel');
+            const classDisplay = document.getElementById('guitarTabsSelectedClassDisplay');
+
+            // Clear previous content
+            document.getElementById('guitarTabsAttendanceTableBody').innerHTML = '';
+
+            // Determine available classes based on the day
+            let availableClasses = [];
+
+            if (dayOfWeek === 6 || dayOfWeek === 0) { // Weekend
+                availableClasses = [
+                    { type: 'guitar', times: guitarTabsClassRules.weekends.guitar, label: 'Guitar' },
+                    { type: 'piano', times: guitarTabsClassRules.weekends.piano, label: 'Piano/Instruments' },
+                    { type: 'vocal', times: guitarTabsClassRules.weekends.vocal, label: 'Vocal' }
+                ];
+            } else if (dayOfWeek === 2 || dayOfWeek === 4) { // Tuesday, Thursday - ONLY PIANO
+                availableClasses = [
+                    { type: 'piano', times: guitarTabsClassRules.tuesday_thursday.piano, label: 'Piano/Instruments' }
+                ];
+            } else if (dayOfWeek === 1 || dayOfWeek === 3 || dayOfWeek === 5) { // Monday, Wednesday, Friday - Guitar only
+                availableClasses = [
+                    { type: 'guitar', times: guitarTabsClassRules.weekdays.guitar, label: 'Guitar' }
+                ];
+            }
+
+            if (availableClasses.length > 0) {
+                // For simplicity, auto-select first available class and time
+                const firstClass = availableClasses[0];
+                const firstTime = firstClass.times[0];
+
+                guitarTabsSelectedClass = firstClass.type;
+                guitarTabsSelectedTime = firstTime;
+                classDisplay.textContent = `${firstClass.label} - ${firstTime}`;
+
+                attendancePanel.style.display = 'block';
+                loadStudentsForClass(guitarTabsSelectedClass, guitarTabsSelectedTime);
+            } else {
+                // No classes on this day
+                attendancePanel.style.display = 'block';
+                classDisplay.textContent = 'No Classes Scheduled';
+                document.getElementById('guitarTabsAttendanceTableBody').innerHTML = `
+                    <tr>
+                        <td colspan="3" style="text-align: center; padding: 40px; color: #666; font-size: 18px;">
+                            No classes are scheduled for ${date.toLocaleDateString()}
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Load students for specific class and time
+        async function loadStudentsForClass(classType, time) {
+            try {
+                // Fetch students from backend API
+                const response = await apiCall(`${API_BASE_URL}/students?branch=pitampura&course=${classType}&time=${encodeURIComponent(time)}`);
+
+                if (response.success && response.data) {
+                    guitarTabsList = response.data;
+                    renderGuitarTabsAttendanceTable(guitarTabsList);
+                } else {
+                    guitarTabsList = [];
+                    renderGuitarTabsAttendanceTable([]);
+                }
+            } catch (error) {
+                console.error('Error loading students:', error);
+                guitarTabsList = [];
+                renderGuitarTabsAttendanceTable([]);
+            }
+        }
+
+        // Render guitar tabs attendance table
+        function renderGuitarTabsAttendanceTable(studentsList) {
+            const tableBody = document.getElementById('guitarTabsAttendanceTableBody');
+            tableBody.innerHTML = '';
+
+            if (studentsList.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="3" style="text-align: center; padding: 40px; color: #666; font-size: 18px;">
+                            No students enrolled for this class and time slot
+                        </td>
+                    </tr>
+                `;
+                updateGuitarTabsAttendanceSummary();
+                return;
+            }
+
+            studentsList.forEach((student, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="padding: 15px; border-bottom: 1px solid #dee2e6;">${index + 1}</td>
+                    <td style="padding: 15px; border-bottom: 1px solid #dee2e6; font-size: 16px; font-weight: 500;">${student.name}</td>
+                    <td style="padding: 15px; border-bottom: 1px solid #dee2e6; width: 120px;">
+                        <button class="toggle-btn absent" 
+                                data-student-id="${student.studentId}"
+                                style="width: 100%; padding: 10px; border: 2px solid #ddd; background: white; border-radius: 5px; cursor: pointer; font-weight: 500; transition: all 0.2s; color: #c62828; background-color: #ffcdd2; border-color: #f44336; "
+                                onclick="toggleGuitarTabsAttendance('${student.studentId}')">
+                            Absent
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+
+                // Initialize attendance data
+                const dateStr = guitarTabsSelectedDate.toISOString().split('T')[0];
+                if (!guitarTabsAttendanceData[dateStr]) {
+                    guitarTabsAttendanceData[dateStr] = {};
+                }
+                if (!guitarTabsAttendanceData[dateStr][guitarTabsSelectedClass]) {
+                    guitarTabsAttendanceData[dateStr][guitarTabsSelectedClass] = {};
+                }
+                guitarTabsAttendanceData[dateStr][guitarTabsSelectedClass][student.studentId] = {
+                    status: 'absent',
+                    time: guitarTabsSelectedTime,
+                    date: dateStr
+                };
+            });
+
+            updateGuitarTabsAttendanceSummary();
+        }
+
+        // Toggle guitar tabs attendance status
+        function toggleGuitarTabsAttendance(studentId) {
+            const button = event.target;
+            const dateStr = guitarTabsSelectedDate.toISOString().split('T')[0];
+
+            // Toggle status
+            if (button.classList.contains('absent')) {
+                button.classList.remove('absent');
+                button.classList.add('present');
+                button.textContent = 'Present';
+                button.style.backgroundColor = '#c8e6c9';
+                button.style.borderColor = '#4caf50';
+                button.style.color = '#2e7d32';
+                guitarTabsAttendanceData[dateStr][guitarTabsSelectedClass][studentId].status = 'present';
+            } else {
+                button.classList.remove('present');
+                button.classList.add('absent');
+                button.textContent = 'Absent';
+                button.style.backgroundColor = '#ffcdd2';
+                button.style.borderColor = '#f44336';
+                button.style.color = '#c62828';
+                guitarTabsAttendanceData[dateStr][guitarTabsSelectedClass][studentId].status = 'absent';
+            }
+
+            updateGuitarTabsAttendanceSummary();
+        }
+
+        // Update guitar tabs attendance summary
+        function updateGuitarTabsAttendanceSummary() {
+            let presentCount = 0;
+            let absentCount = 0;
+
+            const dateStr = guitarTabsSelectedDate ? guitarTabsSelectedDate.toISOString().split('T')[0] : null;
+            if (dateStr && guitarTabsAttendanceData[dateStr] && guitarTabsAttendanceData[dateStr][guitarTabsSelectedClass]) {
+                Object.values(guitarTabsAttendanceData[dateStr][guitarTabsSelectedClass]).forEach(record => {
+                    if (record.status === 'present') presentCount++;
+                    if (record.status === 'absent') absentCount++;
+                });
+            }
+
+            const totalCount = presentCount + absentCount;
+
+            document.getElementById('guitarTabsPresentCount').textContent = presentCount;
+            document.getElementById('guitarTabsAbsentCount').textContent = absentCount;
+            document.getElementById('guitarTabsTotalCount').textContent = totalCount;
+        }
+
+        // Mark all guitar tabs present
+        function markAllGuitarTabsPresent() {
+            const buttons = document.querySelectorAll('.toggle-btn.absent');
+            buttons.forEach(button => {
+                const studentId = button.dataset.studentId;
+                toggleGuitarTabsAttendance(studentId);
+            });
+        }
+
+        // Clear guitar tabs attendance
+        function clearGuitarTabsAttendance() {
+            const buttons = document.querySelectorAll('.toggle-btn.present');
+            buttons.forEach(button => {
+                const studentId = button.dataset.studentId;
+                toggleGuitarTabsAttendance(studentId);
+            });
+        }
+
+        // Save guitar tabs attendance
+        async function saveGuitarTabsAttendance() {
+            try {
+                if (!guitarTabsSelectedDate || !guitarTabsSelectedClass || !guitarTabsSelectedTime) {
+                    alert('Please select a date and class first.');
+                    return;
+                }
+
+                const dateStr = guitarTabsSelectedDate.toISOString().split('T')[0];
+                const classAttendance = guitarTabsAttendanceData[dateStr]?.[guitarTabsSelectedClass] || {};
+
+                if (Object.keys(classAttendance).length === 0) {
+                    alert('No attendance data to save.');
+                    return;
+                }
+
+                // Prepare attendance records for API
+                const attendanceRecords = Object.entries(classAttendance).map(([studentId, record]) => ({
+                    studentId,
+                    date: record.date,
+                    courseType: guitarTabsSelectedClass,
+                    timeSlot: record.time,
+                    status: record.status
+                }));
+
+                // Send to backend
+                const response = await apiCall(`${API_BASE_URL}/attendance`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        date: dateStr,
+                        courseType: guitarTabsSelectedClass,
+                        timeSlot: guitarTabsSelectedTime,
+                        records: attendanceRecords
+                    })
+                });
+
+                if (response.success) {
+                    alert(`Attendance saved successfully for ${guitarTabsSelectedClass.toUpperCase()} class.`);
+                } else {
+                    alert('Failed to save attendance: ' + response.message);
+                }
+            } catch (error) {
+                console.error('Error saving attendance:', error);
+                alert('Error saving attendance: ' + error.message);
+            }
+        }
+
+        // Close guitar tabs attendance panel
+        function closeGuitarTabsAttendancePanel() {
+            document.getElementById('guitarTabsAttendancePanel').style.display = 'none';
+            guitarTabsSelectedDate = null;
+            guitarTabsSelectedClass = null;
+            guitarTabsSelectedTime = null;
+
+            // Remove selection highlight
+            document.querySelectorAll('.calendar-day').forEach(day => {
+                day.classList.remove('selected');
+                day.style.backgroundColor = 'white';
+                day.style.border = '1px solid #e0e0e0';
+            });
+        }
+
+        // Guitar Tabs Navigation functions
+        function guitarTabsPrevMonth() {
+            guitarTabsCurrentDate.setMonth(guitarTabsCurrentDate.getMonth() - 1);
+            renderGuitarTabsCalendar(guitarTabsCurrentDate);
+        }
+
+        function guitarTabsNextMonth() {
+            guitarTabsCurrentDate.setMonth(guitarTabsCurrentDate.getMonth() + 1);
+            renderGuitarTabsCalendar(guitarTabsCurrentDate);
+        }
+
+        // Setup guitar tabs event listeners
+        function setupGuitarTabsEventListeners() {
+            document.getElementById('guitarTabsPrevMonth').addEventListener('click', guitarTabsPrevMonth);
+            document.getElementById('guitarTabsNextMonth').addEventListener('click', guitarTabsNextMonth);
+            document.getElementById('guitarTabsClosePanel').addEventListener('click', closeGuitarTabsAttendancePanel);
+            document.getElementById('guitarTabsMarkAllPresent').addEventListener('click', markAllGuitarTabsPresent);
+            document.getElementById('guitarTabsClearAttendance').addEventListener('click', clearGuitarTabsAttendance);
+            document.getElementById('guitarTabsSaveAttendance').addEventListener('click', saveGuitarTabsAttendance);
+        }
+
+        // Logout function
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            removeAuthToken();
+            window.location.href = 'login.html';
+        });
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            if (checkAuth()) {
+                console.log('✅ User authenticated. Guitar tabs upload is ready.');
+                const token = getAuthToken();
+                console.log('📌 Token present:', !!token);
+                console.log('📌 Browser console is ready for debugging. Press F12 if you encounter issues.');
+
+                loadGuitarTabs();
+                setupNavigation();
+
+                // Set user name/initial
+                const decodedToken = decodeToken(getAuthToken());
+                if (decodedToken) {
+                    const savedName = localStorage.getItem('adminName') || decodedToken.name || 'Admin User';
+                    document.getElementById('userInitial').textContent = savedName.charAt(0).toUpperCase();
+                    document.getElementById('adminName').textContent = savedName;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

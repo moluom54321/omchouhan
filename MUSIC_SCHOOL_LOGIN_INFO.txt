@@ -1,0 +1,27 @@
+MUSIC SCHOOL DELHI - LOGIN INFORMATION
+=====================================
+
+ADMIN LOGIN CREDENTIALS:
+- Email: admin@musicschooldelhi.com
+- Password: admin123
+
+STUDENT LOGIN:
+- You can create student accounts through the admin dashboard
+- Or use existing student credentials if already created
+
+HOW TO START THE APPLICATION:
+1. Make sure MongoDB is running on your system
+2. Run START_MUSIC_SCHOOL.bat file
+3. The server will start on http://localhost:5000
+
+ACCESS PAGES:
+- Login Page: http://localhost:5000/login.html
+- Admin Dashboard: http://localhost:5000/admin-dashboard.html
+- Student Dashboard: http://localhost:5000/student-dashboard.html
+
+TROUBLESHOOTING:
+- If MongoDB is not running, start it from Windows Services (services.msc)
+- Make sure port 5000 is not being used by another application
+- If login doesn't work, verify that the admin user was created in the database
+
+The admin user has been successfully created in the database with the credentials above.

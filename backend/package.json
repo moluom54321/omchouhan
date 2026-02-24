@@ -1,0 +1,42 @@
+{
+  "name": "music-school-backend",
+  "version": "1.0.0",
+  "description": "Backend for Music School Delhi",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "init-admin": "node init-admin.js",
+    "kill": "npx kill-port 3000 5000",
+    "quick-start": "npx kill-port 3000 5000 && npm run both",
+    "both": "concurrently \"npm run dev\" \"npx http-server .. -p 3000\""
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.10.0",
+    "express-validator": "^7.0.1",
+    "helmet": "^7.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^7.5.0",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.10.1"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "music",
+    "school",
+    "backend",
+    "nodejs",
+    "express",
+    "mongodb"
+  ],
+  "author": "Music School Delhi",
+  "license": "ISC"
+}
