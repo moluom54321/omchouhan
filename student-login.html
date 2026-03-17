@@ -71,6 +71,24 @@
             border-color: #00bcd4;
         }
 
+        .password-container {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s;
+        }
+
+        .password-toggle:hover {
+            color: #00bcd4;
+        }
+
         .btn-login {
             width: 100%;
             padding: 0.75rem;
@@ -132,7 +150,10 @@
             
             <div class="form-group">
                 <label for="password">Student Password</label>
-                <input type="password" id="password" name="password" required placeholder="Enter student password">
+                <div class="password-container">
+                    <input type="password" id="password" name="password" required placeholder="Enter student password" style="padding-right: 40px;">
+                    <i class="fas fa-eye password-toggle" id="togglePassword" title="Show/Hide Password"></i>
+                </div>
                 <div class="error-message" id="passwordError"></div>
             </div>
             
@@ -146,6 +167,19 @@
     </div>
 
     <script>
+        // Password Toggle Logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+
+            togglePassword.addEventListener('click', function () {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            });
+        });
+
         // API Configuration
         const API_BASE_URL = 'http://localhost:5000/api';
         

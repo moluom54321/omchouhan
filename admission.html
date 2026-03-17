@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -400,7 +400,7 @@
             <h3 style="color: #2c3e50; font-size: 26px; margin-bottom: 15px;">Thank You!</h3>
             <p style="font-size: 18px; color: #555; margin: 15px 0;">Thank you for enrolling in our school!</p>
             <p style="font-size: 14px; color: #888;">Redirecting to student login...</p>
-            <button class="ok-btn" onclick="document.getElementById('popup').style.display='none'">OK</button>
+            <button class="ok-btn" onclick="document.getElementById('popup').style.display='none'; window.location.href='student-login.html';">OK</button>
         </div>
     </div>
     </div>
@@ -592,9 +592,10 @@
                             popup.style.zIndex = '99999';
                         } else {
                             alert('Thank you for enrolling in our school!');
+                            window.location.href = 'student-login.html';
                         }
                         form.reset();
-                        window.location.href = 'student-login.html';
+                        // Removed direct redirect to let popup handle it
                     } else {
                         alert('Error: ' + (data.message || 'Unknown error. Please try again.'));
                     }

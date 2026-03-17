@@ -132,9 +132,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 setTimeout(() => form.reset(), 500);
 
                 // Redirect to student login after 5 seconds
-                setTimeout(() => {
-                    window.location.href = 'student-login.html';
-                }, 5000);
+                // Commented out to let the popup OK button handle the redirect
+                // setTimeout(() => {
+                //     window.location.href = 'student-login.html';
+                // }, 5000);
 
             } else {
                 // Server returned an error
