@@ -528,12 +528,19 @@
                 <p><strong><i class="fas fa-history"></i> Status:</strong> <span>${student.admissionStatus || 'Enrolled'}</span></p>
                 <p><strong><i class="fas fa-calendar-plus"></i> Joined:</strong> <span>${student.createdAt ? new Date(student.createdAt).toLocaleDateString() : 'N/A'}</span></p>
                 <div style="margin-top:20px; padding-top:15px; border-top:1px solid #eee;">
+                    <p style="border:none; margin-bottom:5px;"><strong><i class="fas fa-money-check-alt"></i> Payment Verification:</strong></p>
+                    <p style="color:#666; font-size:0.95rem; border:none; text-align:left; display:block;">
+                        <b>Transaction ID:</b> ${student.transactionId || 'Not Provided'}<br>
+                        <b>WhatsApp Confirmed:</b> ${student.whatsappScreenshotSent ? '<span style="color:green;"><i class="fas fa-check-circle"></i> Yes</span>' : '<span style="color:red;"><i class="fas fa-times-circle"></i> No</span>'}
+                    </p>
+                </div>
+                <div style="margin-top:20px; padding-top:15px; border-top:1px solid #eee;">
                     <p style="border:none; margin-bottom:5px;"><strong><i class="fas fa-map-marker-alt"></i> Home Address:</strong></p>
                     <p style="color:#666; font-size:0.95rem; border:none; text-align:left; display:block;">
                         ${student.address?.street || ''}, ${student.address?.city || ''}, ${student.address?.state || ''} ${student.address?.zipCode || ''}
                     </p>
                 </div>
-                <button class="btn btn-delete" onclick="deleteStudent('${student._id}')">
+                <button class="btn btn-delete" style="width: 100%;" onclick="deleteStudent('${student._id}')">
                     <i class="fas fa-trash"></i> Delete Student
                 </button>
             `;

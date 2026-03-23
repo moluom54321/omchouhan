@@ -154,6 +154,14 @@ const studentLogin = async (req, res) => {
         });
       }
 
+      // Check if admission is pending
+      if (student.admissionStatus === 'pending') {
+        return res.status(401).json({
+          success: false,
+          message: 'Your admission is still pending admin verification. Please wait until your payment is verified.',
+        });
+      }
+
       // Validate role exists before generating token
       if (!student.role) {
         console.error('Student role is undefined for student:', student._id);

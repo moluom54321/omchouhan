@@ -70,6 +70,7 @@ router.route('/dashboard')
 router.route('/:id')
   .get(adminAuth, getStudentById)
   .put(adminAuth, updateStudent)
+  .patch(adminAuth, updateStudent)
   .delete(adminAuth, deleteStudent);
 
 module.exports = router;

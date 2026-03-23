@@ -77,6 +77,18 @@ const admissionSchema = new mongoose.Schema({
         enum: ['not_enrolled', 'enrolled', 'completed'],
         default: 'not_enrolled'
     },
+    transactionId: {
+        type: String,
+        default: null
+    },
+    whatsappScreenshotSent: {
+        type: Boolean,
+        default: false
+    },
+    isCashPayment: {
+        type: Boolean,
+        default: false
+    },
     branch: {
         type: String,
         default: 'Pitampura'

@@ -24,11 +24,6 @@ app.options('*', corsMiddleware);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Serve the login page as the main entry point for the admin panel
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', '..', 'admin folder', 'login.html'));
-});
-
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.status(200).json({
@@ -38,24 +33,10 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Serve static files from project root directory
-app.use(express.static(path.join(__dirname, '..', '..')));
-// Also serve admin folder files
-app.use(express.static(path.join(__dirname, '..', '..', 'admin folder')));
-
-// Serve uploaded files from specific directories
-app.use('/uploads', express.static(path.join(__dirname, '..', '..', 'public', 'uploads')));
-
-// SATISFY MISSING SCRIPT REFERENCE: Redirect js/pages.js to a dummy response or script
-app.get('/js/pages.js', (req, res) => {
-  res.type('application/javascript').send('// Pages logic placeholder');
-});
-
 // API routes - mount all routes under /api
 app.use('/api/auth', require('./routes/auth.routes'));
 
 // Direct login routes to match standardized API route structure
-// These routes are for direct access without going through auth routes
 const { adminLogin, studentLogin } = require('./controllers/auth.controller');
 app.post('/api/admin/login', adminLogin);
 app.post('/api/student/login', studentLogin);
@@ -73,8 +54,28 @@ app.use('/api/contact', require('./routes/contact.routes'));
 app.use('/api/settings', require('./routes/settings.routes'));
 app.use('/api/batches', require('./routes/batch.routes'));
 
+// Serve the login page as the main entry point for the admin panel on port 5000
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', '..', 'admin folder', 'login.html'));
+});
+
+// Serve uploaded files from specific directories
+app.use('/uploads', express.static(path.join(__dirname, '..', '..', 'public', 'uploads')));
+
+// SATISFY MISSING SCRIPT REFERENCE: Redirect js/pages.js to a dummy response or script
+app.get('/js/pages.js', (req, res) => {
+  res.type('application/javascript').send('// Pages logic placeholder');
+});
+
+// Serve admin folder files first
+app.use(express.static(path.join(__dirname, '..', '..', 'admin folder')));
+
+// Serve static files from project root directory (main website)
+app.use(express.static(path.join(__dirname, '..', '..')));
+
 // 404 handler for undefined routes
 app.use('*', (req, res) => {
+  console.log(`Resource not found: ${req.method} ${req.originalUrl}`);
   res.status(404).json({
     success: false,
     message: `Route ${req.originalUrl} not found`

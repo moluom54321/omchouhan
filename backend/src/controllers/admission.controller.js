@@ -55,9 +55,12 @@ const submitAdmission = async (req, res) => {
             preferredSchedule,
             guardianDetails,
             branch: branch,
-            admissionStatus: req.body.admissionStatus || "approved",  // Use provided status or default to approved
-            paymentStatus: req.body.paymentStatus || "paid",        // Use provided status or default to paid
-            enrollmentStatus: req.body.enrollmentStatus || "enrolled" // Use provided status or default to enrolled
+            admissionStatus: req.body.admissionStatus || "pending",  // Changed default to pending for verification
+            paymentStatus: req.body.paymentStatus || "unpaid",        // Changed default to unpaid
+            enrollmentStatus: req.body.enrollmentStatus || "not_enrolled", // Changed default
+            transactionId: req.body.transactionId || null,
+            whatsappScreenshotSent: req.body.whatsappScreenshotSent === true,
+            isCashPayment: req.body.isCashPayment === true
         };
 
         let admission;
@@ -91,6 +94,9 @@ const submitAdmission = async (req, res) => {
                     preferredSchedule: req.body.preferredSchedule || null,
                     guardianDetails: guardianDetails,
                     branch: branch,
+                    transactionId: admissionData.transactionId,
+                    whatsappScreenshotSent: admissionData.whatsappScreenshotSent,
+                    isCashPayment: admissionData.isCashPayment,
                     $set: { updatedAt: new Date() }
                 }
             );
@@ -118,6 +124,9 @@ const submitAdmission = async (req, res) => {
                 paymentStatus: admissionData.paymentStatus,
                 enrollmentStatus: admissionData.enrollmentStatus,
                 branch: branch,
+                transactionId: admissionData.transactionId,
+                whatsappScreenshotSent: admissionData.whatsappScreenshotSent,
+                isCashPayment: admissionData.isCashPayment,
                 role: 'student',
                 isActive: true
             };

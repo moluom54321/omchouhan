@@ -102,6 +102,18 @@ const studentSchema = new mongoose.Schema({
     type: String,
     default: 'Pitampura'
   },
+  transactionId: {
+    type: String,
+    default: null
+  },
+  whatsappScreenshotSent: {
+    type: Boolean,
+    default: false
+  },
+  isCashPayment: {
+    type: Boolean,
+    default: false
+  },
 }, {
   timestamps: true,
 });
