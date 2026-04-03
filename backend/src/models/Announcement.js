@@ -12,7 +12,7 @@ const announcementSchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ['general', 'fees', 'exam', 'holiday'],
+        enum: ['general', 'fees', 'exam', 'holiday', 'attendance'],
         default: 'general'
     },
     targetRole: {

@@ -248,6 +248,16 @@
             color: #22543d;
         }
 
+        .announcement-card.attendance {
+            border-left-color: #ed8936;
+            background: #fffaf0;
+        }
+        
+        .badge-attendance {
+            background: #feebc8;
+            color: #c05621;
+        }
+
         /* Student Selection Styles */
         #studentSelection {
             margin-top: 1rem;
@@ -365,7 +375,6 @@
                     <li><a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                     <li><a href="admin-students.html"><i class="fas fa-graduation-cap"></i> Enrolled Students</a></li>
                     <li><a href="admin-registration.html"><i class="fas fa-user-plus"></i> Active Students</a></li>
-                    <li><a href="admin-payments.html"><i class="fas fa-rupee-sign"></i> Payments</a></li>
                     <li><a href="admin-attendance.html"><i class="fas fa-calendar-check"></i> Pitampura Attendance</a>
                     </li>
                     <li><a href="admin-attendance-rohini.html"><i class="fas fa-calendar-check"></i> Rohini
@@ -408,10 +417,11 @@
                             <select id="type">
                                 <option value="general">General Announcement</option>
                                 <option value="fees">Fees Reminder</option>
+                                <option value="attendance">Attendance Shortage</option>
                             </select>
                         </div>
                         <div id="studentSelection" class="form-group hidden">
-                            <label>Select Students (Targeted Fees Reminder)</label>
+                            <label id="studentSelectionLabel">Select Students (Targeted Fees Reminder)</label>
                             <p style="font-size: 0.8rem; color: #718096; margin-bottom: 5px;">This reminder will only be
                                 visible to selected students on their dashboard:</p>
                             <div class="student-list-container" id="studentList">
@@ -523,8 +533,8 @@
                 });
             });
 
-            if (type === 'fees' && targetStudents.length === 0) {
-                alert('Please select at least one student for fees reminder.');
+            if ((type === 'fees' || type === 'attendance') && targetStudents.length === 0) {
+                alert('Please select at least one student for this targeted announcement.');
                 return;
             }
 
@@ -610,19 +620,19 @@
         // Show/Hide Student Selection based on category
         document.getElementById('type').addEventListener('change', function () {
             const selection = document.getElementById('studentSelection');
-            if (this.value === 'fees') {
+            const label = document.getElementById('studentSelectionLabel');
+            
+            if (this.value === 'fees' || this.value === 'attendance') {
                 selection.classList.remove('hidden');
-                loadStudentsForSelection();
+                label.textContent = this.value === 'fees' ? 'Select Students (Targeted Fees Reminder)' : 'Select Students (Attendance Shortage)';
+                loadStudentsForSelection(this.value);
             } else {
                 selection.classList.add('hidden');
             }
         });
 
-        // Load students if needed (e.g. if fees is default, but general is default now)
-        // loadStudentsForSelection();
-
         // Fetch students for selection
-        async function loadStudentsForSelection() {
+        async function loadStudentsForSelection(announcementType = 'fees') {
             try {
                 const response = await fetch(`${API_BASE_URL}/student`, {
                     headers: { 'Authorization': `Bearer ${getAuthToken()}` }
@@ -650,7 +660,7 @@
                     }
 
                     listContainer.innerHTML = students.map(s => {
-                        const hasFeeDue = s.paymentStatus === 'unpaid';
+                        const hasFeeDue = announcementType === 'fees' && s.paymentStatus === 'unpaid';
                         const phone = s.phone || (s.guardianDetails && s.guardianDetails.phone) || '';
                         return `
                             <div class="student-item" onclick="this.querySelector('input').click(); event.stopPropagation();">
@@ -660,7 +670,7 @@
                                     data-phone="${phone}"
                                     onclick="event.stopPropagation();" ${hasFeeDue ? 'checked' : ''}>
                                 <div class="student-info">
-                                    <span class="student-name">${s.name} ${hasFeeDue ? '<span style="color: #e53e3e; font-size: 0.75rem; font-weight: bold; margin-left: 5px;">[FEE DUE]</span>' : ''}</span>
+                                    <span class="student-name">${s.name} ${s.paymentStatus === 'unpaid' ? '<span style="color: #e53e3e; font-size: 0.75rem; font-weight: bold; margin-left: 5px;">[FEE DUE]</span>' : ''}</span>
                                     <span class="student-id">${s.studentId || s.email || 'No ID'} | ${phone}</span>
                                 </div>
                             </div>
