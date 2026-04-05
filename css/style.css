@@ -26,9 +26,11 @@
 
 html {
     scroll-behavior: smooth;
+    font-size: 108%;
 }
 
 body {
+    font-size: 1.05rem;
     font-family: var(--font-primary), 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     color: var(--text-dark);
@@ -92,6 +94,7 @@ body {
     text-decoration: none;
     color: var(--text-dark);
     font-weight: 500;
+    font-size: 1.1rem;
     transition: var(--transition);
     position: relative;
     padding: 5px 0;
@@ -123,6 +126,7 @@ body {
     color: var(--accent-color) !important;
     padding: 10px 20px !important;
     border-radius: 25px;
+    font-size: 1.1rem;
     transition: var(--transition);
 }
 

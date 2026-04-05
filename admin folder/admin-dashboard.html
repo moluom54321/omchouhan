@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        html { font-size: 108%; /* Added by font resizer */ }
         * {
             margin: 0;
             padding: 0;
@@ -309,7 +310,6 @@
                             Dashboard</a></li>
                     <li><a href="admin-students.html"><i class="fas fa-graduation-cap"></i> Enrolled Students</a></li>
                     <li><a href="admin-registration.html"><i class="fas fa-user-plus"></i> Active Students</a></li>
-                    <li><a href="admin-payments.html"><i class="fas fa-rupee-sign"></i> Payments</a></li>
                     <li><a href="admin-attendance.html"><i class="fas fa-calendar-check"></i> Pitampura Attendance</a>
                     </li>
                     <li><a href="admin-attendance-rohini.html"><i class="fas fa-calendar-check"></i> Rohini
@@ -356,16 +356,7 @@
                             </div>
                         </div>
 
-                        <!-- Total Revenue Card -->
-                        <div class="stat-card">
-                            <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">
-                                <i class="fas fa-rupee-sign"></i>
-                            </div>
-                            <div class="stat-info">
-                                <h3 id="totalRevenue">₹0</h3>
-                                <p>Total Revenue</p>
-                            </div>
-                        </div>
+
                     </div>
 
                     <!-- Contact Messages Section -->
@@ -628,13 +619,13 @@
                         // Get the display element
                         const countDisplay = document.getElementById('totalStudents');
                         if (!countDisplay) {
-                            console.error('❌ Count display element not found!');
+                            console.error('âŒ Count display element not found!');
                             return;
                         }
 
                         // Show loading indicator - REMOVED to prevent blinking
                         // countDisplay.textContent = '...';
-                        // console.log('✅ Loading indicator shown');
+                        // console.log('âœ… Loading indicator shown');
 
                         // Get authentication token
                         let authToken = getAuthToken();
@@ -658,7 +649,7 @@
                             if (loginResult.success) {
                                 authToken = loginResult.token;
                                 setAuthToken(authToken);
-                                console.log('✅ New authentication token obtained');
+                                console.log('âœ… New authentication token obtained');
                             } else {
                                 throw new Error('Authentication failed: ' + loginResult.message);
                             }
@@ -702,7 +693,7 @@
 
                                 studentCount = approvedStudents.length;
 
-                                console.log(`📊 Count Breakdown: Total Records: ${studentsList.length}, Approved: ${studentCount}, Pending: ${pendingCount}`);
+                                console.log(`ðŸ“Š Count Breakdown: Total Records: ${studentsList.length}, Approved: ${studentCount}, Pending: ${pendingCount}`);
                             }
                         } else {
                             console.log('No student data received or API error');
@@ -711,26 +702,11 @@
                         // Update the display
                         countDisplay.textContent = studentCount;
 
-                        // --- NEW: REVENUE STATS ---
-                        try {
-                            const payResponse = await fetch(`${API_BASE_URL}/payments`, {
-                                headers: { 'Authorization': `Bearer ${authToken}` }
-                            });
-                            const payResult = await payResponse.json();
 
-                            if (payResult.success && Array.isArray(payResult.data)) {
-                                const totalRevenue = payResult.data.reduce((sum, p) => sum + (Number(p.amount) || 0), 0);
-                                document.getElementById('totalRevenue').textContent = `₹${totalRevenue.toLocaleString('en-IN')}`;
-                            }
-                        } catch (payErr) {
-                            console.error('Revenue calculation failed:', payErr);
-                            document.getElementById('totalRevenue').textContent = '₹0';
-                        }
-
-                        console.log(`✅ DASHBOARD STATS UPDATED`);
+                        console.log(`âœ… DASHBOARD STATS UPDATED`);
 
                     } catch (error) {
-                        console.error('❌ FATAL ERROR IN DASHBOARD LOADING:', error);
+                        console.error('âŒ FATAL ERROR IN DASHBOARD LOADING:', error);
                         const errorDisplay = document.getElementById('totalStudents');
                         if (errorDisplay) errorDisplay.textContent = 'Err';
                     }
@@ -862,15 +838,15 @@
 
                         const result = await response.json();
                         if (result.success) {
-                            showAlert(`✅ ${name} approved successfully!`, 'success');
+                            showAlert(`âœ… ${name} approved successfully!`, 'success');
                             loadPendingApprovals();
                             updateStudentCount();
                             loadRecentStudents();
                         } else {
-                            showAlert('❌ Error: ' + result.message, 'error');
+                            showAlert('âŒ Error: ' + result.message, 'error');
                         }
                     } catch (error) {
-                        showAlert('❌ Connection error during approval', 'error');
+                        showAlert('âŒ Connection error during approval', 'error');
                     }
                 }
 
@@ -886,15 +862,15 @@
 
                         const result = await response.json();
                         if (result.success) {
-                            showAlert(`✅ ${name} rejected and removed.`, 'success');
+                            showAlert(`âœ… ${name} rejected and removed.`, 'success');
                             loadPendingApprovals();
                             updateStudentCount();
                             loadRecentStudents();
                         } else {
-                            showAlert('❌ Error: ' + result.message, 'error');
+                            showAlert('âŒ Error: ' + result.message, 'error');
                         }
                     } catch (error) {
-                        showAlert('❌ Connection error during rejection', 'error');
+                        showAlert('âŒ Connection error during rejection', 'error');
                     }
                 }
 
@@ -927,7 +903,7 @@
                     console.log('=== ADMIN DASHBOARD LOADED ===');
 
                     if (checkAuth()) {
-                        console.log('✅ Authentication successful');
+                        console.log('âœ… Authentication successful');
 
                         // Set user info
                         const decodedToken = decodeToken(getAuthToken());
@@ -1022,9 +998,9 @@
 
                                 if (msg.status === 'replied') {
                                     if (msg.replyEmailSent) {
-                                        emailStatusIcon = '<br><small style="color: green;">✓ Email sent</small>';
+                                        emailStatusIcon = '<br><small style="color: green;">âœ“ Email sent</small>';
                                     } else {
-                                        emailStatusIcon = '<br><small style="color: orange;">⚠ Email not sent</small>';
+                                        emailStatusIcon = '<br><small style="color: orange;">âš  Email not sent</small>';
                                     }
                                 }
 
@@ -1107,24 +1083,40 @@
                         const result = await response.json();
 
                         if (result.success) {
+                            // Open WhatsApp for the student
+                            const studentPhone = document.getElementById('modalPhone').textContent;
+                            const studentName = document.getElementById('modalName').textContent;
+                            const replyTxt = document.getElementById('replyMessage').value.trim();
+                            
+                            // Format phone number
+                            let cleanPhone = studentPhone.replace(/\D/g, '');
+                            if (cleanPhone.length === 10) cleanPhone = '91' + cleanPhone;
+                            
+                            // Format the WhatsApp message
+                            const waMessage = `Hello ${studentName},\n\nRegarding your recent inquiry, here is our reply:\n\n${replyTxt}\n\nRegards,\nMusic School of Delhi`;
+                            const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(waMessage)}`;
+                            
+                            // Open WhatsApp in new tab
+                            window.open(whatsappUrl, '_blank');
+
                             // Check if email was actually sent
                             if (result.emailSent) {
-                                showAlert('✅ Reply sent successfully via email!', 'success');
+                                showAlert('âœ… Reply sent successfully via email!', 'success');
                             } else {
                                 // Email was not sent but reply was saved
                                 const errorMsg = result.emailError || 'Email service not configured';
-                                showAlert('⚠️ Reply saved in database, but email could not be sent. ' + errorMsg, 'warning');
+                                showAlert('âš ï¸ Reply saved in database, but email could not be sent. ' + errorMsg, 'warning');
                                 console.warn('Email sending error:', result.emailError);
                             }
                             closeReplyModal();
                             loadContactMessages();
                             loadContactStats();
                         } else {
-                            showAlert('❌ ' + (result.message || 'Error sending reply'), 'error');
+                            showAlert('âŒ ' + (result.message || 'Error sending reply'), 'error');
                         }
                     } catch (error) {
                         console.error('Error submitting reply:', error);
-                        showAlert('❌ Error sending reply. Please try again.', 'error');
+                        showAlert('âŒ Error sending reply. Please try again.', 'error');
                     }
                 }
 

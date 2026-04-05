@@ -84,9 +84,22 @@ const createAdmin = async (req, res) => {
 // Update admin
 const updateAdmin = async (req, res) => {
   try {
+    const updateData = { ...req.body };
+
+    // If password is provided, hash it before saving
+    if (updateData.password) {
+      if (updateData.password.length < 6) {
+        return res.status(400).json({
+          success: false,
+          message: 'Password must be at least 6 characters',
+        });
+      }
+      updateData.password = await hashPassword(updateData.password);
+    }
+
     const admin = await Admin.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updateData,
       { new: true, runValidators: true }
     ).select('-password');
 
@@ -99,7 +112,7 @@ const updateAdmin = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: 'Admin updated successfully',
+      message: updateData.password ? 'Password updated successfully' : 'Admin updated successfully',
       data: admin,
     });
   } catch (error) {

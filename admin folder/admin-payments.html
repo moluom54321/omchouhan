@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        html { font-size: 108%; /* Added by font resizer */ }
         * {
             margin: 0;
             padding: 0;
@@ -415,13 +416,13 @@
                     const paymentsList = document.getElementById('paymentsList');
                     paymentsList.innerHTML = '<p>Loading revenue data...</p>';
 
-                    let html = '<table><thead><tr><th>Student</th><th>Course</th><th>Amount (₹)</th><th>Status</th><th>Date</th><th>Action</th></tr></thead><tbody>';
+                    let html = '<table><thead><tr><th>Student</th><th>Course</th><th>Amount (â‚¹)</th><th>Status</th><th>Date</th><th>Action</th></tr></thead><tbody>';
                     response.data.forEach(payment => {
                         html += `
                             <tr>
                                 <td>${payment.student?.name || 'N/A'}</td>
                                 <td>${payment.course?.title || 'N/A'}</td>
-                                <td>₹${payment.amount}</td>
+                                <td>â‚¹${payment.amount}</td>
                                 <td class="status-${payment.status}">${payment.status}</td>
                                 <td>${new Date(payment.createdAt).toLocaleDateString()}</td>
                                 <td>
@@ -454,7 +455,7 @@
                 return;
             }
 
-            const message = `Hello ${name}, this is a reminder from Music School of Delhi regarding your pending fee of ₹${amount} for the ${course} course. Please clear it at your earliest convenience. Thank you!`;
+            const message = `Hello ${name}, this is a reminder from Music School of Delhi regarding your pending fee of â‚¹${amount} for the ${course} course. Please clear it at your earliest convenience. Thank you!`;
 
             const cleanPhone = phone.replace(/\D/g, '');
             const finalPhone = cleanPhone.startsWith('91') ? cleanPhone : '91' + cleanPhone;

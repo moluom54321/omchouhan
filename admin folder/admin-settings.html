@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        html { font-size: 108%; /* Added by font resizer */ }
         * {
             margin: 0;
             padding: 0;
@@ -158,6 +159,39 @@
             font-size: 1rem;
         }
 
+        .password-input-wrapper {
+            position: relative;
+        }
+
+        .password-input-wrapper input {
+            padding-right: 40px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #718096;
+        }
+
+        .toggle-password:hover {
+            color: #4a5568;
+        }
+
+        .password-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .password-section h3 {
+            color: #4a5568;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
         .btn-save {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -207,7 +241,6 @@
                     <li><a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                     <li><a href="admin-students.html"><i class="fas fa-graduation-cap"></i> Enrolled Students</a></li>
                     <li><a href="admin-registration.html"><i class="fas fa-user-plus"></i> Active Students</a></li>
-                    <li><a href="admin-payments.html"><i class="fas fa-rupee-sign"></i> Payments</a></li>
                     <li><a href="admin-attendance.html"><i class="fas fa-calendar-check"></i> Pitampura Attendance</a>
                     </li>
                     <li><a href="admin-attendance-rohini.html"><i class="fas fa-calendar-check"></i> Rohini
@@ -246,11 +279,33 @@
                             <input type="text" id="adminNameInput" placeholder="Enter your name" required>
                         </div>
                         <div class="form-group">
-                            <label for="adminEmailInput">Email Address (Read-only)</label>
-                            <input type="email" id="adminEmailInput" readonly style="background-color: #edf2f7;">
+                            <label for="adminEmailInput">Email Address</label>
+                            <input type="email" id="adminEmailInput" required>
                         </div>
                         <button type="submit" class="btn-save">Save Changes</button>
                     </form>
+
+                    <div class="password-section">
+                        <h3><i class="fas fa-lock"></i> Change Password</h3>
+                        <div id="passwordAlert" class="alert"></div>
+                        <form id="passwordForm">
+                            <div class="form-group">
+                                <label for="newPassword">New Password</label>
+                                <div class="password-input-wrapper">
+                                    <input type="password" id="newPassword" placeholder="Enter new password" required minlength="6">
+                                    <i class="fas fa-eye toggle-password" onclick="togglePassword('newPassword', this)"></i>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm Password</label>
+                                <div class="password-input-wrapper">
+                                    <input type="password" id="confirmPassword" placeholder="Confirm new password" required minlength="6">
+                                    <i class="fas fa-eye toggle-password" onclick="togglePassword('confirmPassword', this)"></i>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-save">Update Password</button>
+                        </form>
+                    </div>
                 </div>
 
                 <div class="section">
@@ -409,6 +464,7 @@
             const token = getAuthToken();
             const user = decodeToken(token);
             const newName = document.getElementById('adminNameInput').value;
+            const newEmail = document.getElementById('adminEmailInput').value;
 
             try {
                 const response = await fetch(`${API_BASE_URL}/admin/${user.userId}`, {
@@ -417,7 +473,7 @@
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ name: newName })
+                    body: JSON.stringify({ name: newName, email: newEmail })
                 });
 
                 const result = await response.json();
@@ -438,6 +494,58 @@
                 }
             } catch (error) {
                 showAlert('Connection error', 'error');
+            }
+        });
+
+        function togglePassword(inputId, icon) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        document.getElementById('passwordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const token = getAuthToken();
+            const user = decodeToken(token);
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (newPassword.length < 6) {
+                showAlert('Password must be at least 6 characters', 'error', 'passwordAlert');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                showAlert('Passwords do not match!', 'error', 'passwordAlert');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/${user.userId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ password: newPassword })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    showAlert('Password updated successfully!', 'success', 'passwordAlert');
+                    document.getElementById('passwordForm').reset();
+                } else {
+                    showAlert('Error: ' + result.message, 'error', 'passwordAlert');
+                }
+            } catch (error) {
+                showAlert('Connection error', 'error', 'passwordAlert');
             }
         });
 

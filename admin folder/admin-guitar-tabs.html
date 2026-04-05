@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        html { font-size: 108%; /* Added by font resizer */ }
         * {
             margin: 0;
             padding: 0;
@@ -438,7 +439,6 @@
                     <li><a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                     <li><a href="admin-students.html"><i class="fas fa-graduation-cap"></i> Enrolled Students</a></li>
                     <li><a href="admin-registration.html"><i class="fas fa-user-plus"></i> Active Students</a></li>
-                    <li><a href="admin-payments.html"><i class="fas fa-rupee-sign"></i> Payments</a></li>
                     <li><a href="admin-attendance.html"><i class="fas fa-calendar-check"></i> Pitampura Attendance</a>
                     </li>
                     <li><a href="admin-attendance-rohini.html"><i class="fas fa-calendar-check"></i> Rohini
@@ -914,7 +914,7 @@
             try {
                 const token = getAuthToken();
                 if (!token) {
-                    alert('⚠️ Authentication Error:\n\nYou must be logged in to upload.\n\nPlease log in first by going to the login page.');
+                    alert('âš ï¸ Authentication Error:\n\nYou must be logged in to upload.\n\nPlease log in first by going to the login page.');
                     window.location.href = 'login.html';
                     return;
                 }
@@ -922,7 +922,7 @@
                 const submitButton = this.querySelector('button[type="submit"]');
                 if (!submitButton) {
                     console.error('Submit button not found!');
-                    alert('❌ Error: Could not find submit button. Please refresh the page.');
+                    alert('âŒ Error: Could not find submit button. Please refresh the page.');
                     return;
                 }
                 const originalText = submitButton.textContent;
@@ -989,7 +989,7 @@
                 } else {
                     const errorMsg = result.message || result.error || 'Unknown error occurred';
                     console.error('Upload failed:', errorMsg);
-                    alert('❌ Upload Failed:\n\n' + errorMsg);
+                    alert('âŒ Upload Failed:\n\n' + errorMsg);
                 }
             } catch (error) {
                 console.error('Submission error:', error);
@@ -998,7 +998,7 @@
                     submitButton.textContent = isEditing ? 'Update' : 'Upload';
                     submitButton.disabled = false;
                 }
-                alert('❌ Connection Error:\n\n' + error.message + '\n\nPlease check the browser console (F12) for more details.');
+                alert('âŒ Connection Error:\n\n' + error.message + '\n\nPlease check the browser console (F12) for more details.');
             }
         });
 
@@ -1476,10 +1476,10 @@
         // Initialize dashboard
         document.addEventListener('DOMContentLoaded', () => {
             if (checkAuth()) {
-                console.log('✅ User authenticated. Guitar tabs upload is ready.');
+                console.log('âœ… User authenticated. Guitar tabs upload is ready.');
                 const token = getAuthToken();
-                console.log('📌 Token present:', !!token);
-                console.log('📌 Browser console is ready for debugging. Press F12 if you encounter issues.');
+                console.log('ðŸ“Œ Token present:', !!token);
+                console.log('ðŸ“Œ Browser console is ready for debugging. Press F12 if you encounter issues.');
 
                 loadGuitarTabs();
                 setupNavigation();
