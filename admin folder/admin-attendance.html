@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -365,10 +365,60 @@
         }
 
         .toggle-cell {
-            cursor: pointer;
+            cursor: pointer !important;
             user-select: none;
             font-weight: 700;
             width: 120px;
+            transition: all 0.2s ease !important;
+            border-radius: 6px;
+            padding: 4px 8px;
+            display: inline-block;
+            position: relative;
+        }
+
+        .toggle-cell:hover {
+            background-color: #f1f5f9 !important;
+            transform: scale(1.05) !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .toggle-cell:active {
+            transform: scale(0.95) !important;
+        }
+
+        .student-row {
+            transition: all 0.2s ease !important;
+        }
+
+        .student-row:hover {
+            background-color: #f8fafc !important;
+        }
+
+        .student-row:nth-child(even):hover {
+            background-color: #f1f5f9 !important;
+        }
+
+        /* Debug styles */
+        .student-row:hover td {
+            background-color: transparent !important;
+        }
+
+        .student-row:hover .toggle-cell {
+            background-color: #e2e8f0 !important;
+        }
+
+        /* Selection styles */
+        .student-row.selected {
+            background-color: #dbeafe !important;
+            border: 2px solid #3b82f6 !important;
+        }
+
+        .student-row.selected td {
+            background-color: transparent !important;
+        }
+
+        .student-row.selected .toggle-cell {
+            background-color: #bfdbfe !important;
         }
 
         .status-pill {
@@ -409,6 +459,17 @@
             to {
                 transform: rotate(360deg);
             }
+        }
+
+        .loader-white {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255,255,255,.4);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
         }
 
         .hidden {
@@ -491,17 +552,18 @@
                 <div class="attendance-sheet-container" id="attendanceSheet">
                     <div class="sheet-actions">
                         <div style="display: flex; flex-direction: column;">
-                            <span id="sheetCourseInfo" style="font-weight: 700; color: var(--text-main);">Course:
-                                None</span>
-                            <span id="sheetSlotInfo" style="font-size: 0.85rem; color: var(--text-muted);">Slot:
-                                None</span>
+                            <span id="sheetCourseInfo" style="font-weight: 700; color: var(--text-main);">Course: None</span>
+                            <span id="sheetSlotInfo" style="font-size: 0.85rem; color: var(--text-muted);">Slot: None</span>
                         </div>
                         <div class="btn-group">
                             <button class="btn btn-outline" onclick="markAllPresent()">
-                                <i class="fas fa-check-double"></i> Mark All
+                                <i class="fas fa-check-double"></i> Present All
                             </button>
                             <button class="btn btn-outline" onclick="clearAttendance()">
-                                <i class="fas fa-eraser"></i> Clear
+                                <i class="fas fa-eraser"></i> Absent All
+                            </button>
+                            <button class="btn btn-primary" id="saveBtn" onclick="saveAttendance()">
+                                <i class="fas fa-save"></i> Save Attendance
                             </button>
                             <button class="btn btn-success" id="pdfBtn" onclick="generatePDF()">
                                 <i class="fas fa-file-pdf"></i> Generate PDF Report
@@ -516,6 +578,7 @@
                                     <th>Roll / ID</th>
                                     <th>Student Name</th>
                                     <th>Status (Click to toggle)</th>
+                                    <th>History</th>
                                 </tr>
                             </thead>
                             <tbody id="studentListBody">
@@ -788,58 +851,92 @@
             const tbody = document.getElementById('studentListBody');
             tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 2rem;"><div class="loader" style="border-top-color: var(--primary);"></div> <br>Fetching Students...</td></tr>';
 
+            
             try {
-                const response = await fetch(`${API_BASE_URL}/student`, {
-                    headers: { 'Authorization': `Bearer ${getAuthToken()}` }
-                });
-                const result = await response.json();
+                const [studentRes, attendanceRes] = await Promise.all([
+                    fetch(`${API_BASE_URL}/student`, {
+                        headers: { 'Authorization': `Bearer ${getAuthToken()}` }
+                    }),
+                    fetch(`${API_BASE_URL}/attendance?date=${selectedDate.toISOString().split('T')[0]}&courseType=${selectedCourse}&timeSlot=${selectedSlot}&branch=Pitampura`, {
+                        headers: { 'Authorization': `Bearer ${getAuthToken()}` }
+                    })
+                ]);
 
-                if (result.success) {
-                    const allStudents = result.data.students || result.data;
-                    console.log('--- Attendance Filtering Debug ---');
-                    console.log('Selected Course:', selectedCourse);
-                    console.log('Selected Slot:', selectedSlot);
+                const studentResult = await studentRes.json();
+                const attendanceResult = await attendanceRes.json();
 
-                    // Filter matching students
-                    activeStudents = allStudents.filter(s => {
-                        const courses = Array.isArray(s.selectedCourse) ? s.selectedCourse : [s.selectedCourse || ''];
+                if (studentResult.success) {
+                    const allStudents = studentResult.data.students || studentResult.data;
+                    const existingRecords = attendanceResult.success ? attendanceResult.data : [];
+
+                    
+                    // SIMPLIFIED FILTERING LOGIC FOR DEBUGGING
+                    console.log('🔍 FILTERING STUDENTS:');
+                    console.log('📋 Total students from API:', allStudents.length);
+                    console.log('📋 Selected course:', selectedCourse);
+                    console.log('📋 Selected slot:', selectedSlot);
+                    console.log('📋 Selected batch key:', selectedBatchKey);
+                    
+                    // First, let's see all students and their data
+                    console.log('📋 ALL STUDENTS DATA:');
+                    allStudents.forEach((s, index) => {
+                        console.log(`   ${index + 1}. ${s.name}`);
+                        console.log(`      Branch: ${s.branch}`);
+                        console.log(`      Schedule: ${JSON.stringify(s.preferredSchedule)}`);
+                        console.log(`      Course: ${s.selectedCourse || s.course || 'N/A'}`);
+                    });
+                    
+                    // PROPER BATCH-BASED FILTERING - Only students who booked this specific slot
+                    activeStudents = allStudents.filter((s, index) => {
+                        console.log(`🔍 Checking student ${index + 1}: ${s.name}`);
+                        
+                        // Only include students from Pitampura branch
+                        if (s.branch && s.branch.toLowerCase() !== 'pitampura') {
+                            console.log(`   ❌ Rejected: Wrong branch (${s.branch})`);
+                            return false;
+                        }
+                        
+                        // Check if student has any schedule
                         const schedules = Array.isArray(s.preferredSchedule) ? s.preferredSchedule : [s.preferredSchedule || ''];
-
-                        // Match using the dynamic batch key
-                        return schedules.some(sc => {
+                        console.log(`   - Schedules: ${JSON.stringify(schedules)}`);
+                        
+                        // STRICT MATCHING - Check if student has booked THIS EXACT time slot
+                        const hasExactMatch = schedules.some(sc => {
                             if (!sc) return false;
-
-                            // 1. Exact batch key match
-                            if (sc === selectedBatchKey) return true;
-
-                            // 2. Strict Fuzzy match for legacy/legacy-like data
-                            const cleanSc = sc.toLowerCase().replace(/[\s\u2013\u2014:\-_\/]|and|to|&/g, '');
-                            const cleanSlot = selectedSlot.toLowerCase().replace(/[\s\u2013\u2014:\-_\/]|and|to|&/g, '');
-
-                            // Check if branch matches
-                            const branchMatch = sc.toLowerCase().includes('pitampura');
-                            if (!branchMatch) return false;
-
-                            // Check if course matches (handling Piano + Instruments variation)
-                            const courseMatch = sc.toLowerCase().includes(selectedCourse.toLowerCase()) ||
-                                (selectedCourse === 'Piano' && sc.toLowerCase().includes('piano')) ||
-                                (selectedCourse === 'PIANO + INSTRUMENTS' && sc.toLowerCase().includes('piano'));
-                            if (!courseMatch) return false;
-
-                            // NEW: Strict Day Match
-                            const dayWords = selectedDays.toLowerCase().match(/mon|tue|wed|thu|fri|sat|sun/g) || [];
-                            const studentDays = sc.toLowerCase().match(/mon|tue|wed|thu|fri|sat|sun/g) || [];
-                            const dayMatch = dayWords.some(dw => studentDays.includes(dw));
-                            if (!dayMatch) return false;
-
-                            // Strict Time Match
-                            const timeMatch = cleanSc.includes(cleanSlot) || cleanSlot.includes(cleanSc);
-
-                            return timeMatch;
+                            const scLower = sc.toLowerCase();
+                            
+                            console.log(`   - Checking schedule: "${sc}" against selected slot`);
+                            
+                            // Must include: Pitampura + Course + Time Slot + Days
+                            const hasPitampura = scLower.includes('pitampura');
+                            const hasCourse = scLower.includes(selectedCourse.toLowerCase());
+                            const hasTimeSlot = scLower.includes(selectedSlot.toLowerCase().replace(/\s+/g, ''));
+                            
+                            console.log(`     - Has Pitampura: ${hasPitampura}`);
+                            console.log(`     - Has Course (${selectedCourse}): ${hasCourse}`);
+                            console.log(`     - Has Time Slot (${selectedSlot}): ${hasTimeSlot}`);
+                            
+                            return hasPitampura && hasCourse && hasTimeSlot;
                         });
+                        
+                        if (hasExactMatch) {
+                            console.log(`   ✅ Accepted: Student booked this exact time slot`);
+                            return true;
+                        } else {
+                            console.log(`   ❌ Rejected: Student has not booked this specific time slot`);
+                            return false;
+                        }
                     });
 
-                    console.log('Strict Matched Students:', activeStudents.length);
+                    console.log('📋 FILTERING RESULTS:');
+                    console.log(`✅ Total active students found: ${activeStudents.length}`);
+                    console.log('📋 Active students:', activeStudents.map(s => ` - ${s.name} (${s.branch})`));
+
+                    // Map existing status
+                    activeStudents.forEach(s => {
+                        const record = existingRecords.find(r => r.student?._id === s._id || r.student === s._id);
+                        s.currentStatus = record ? record.status : 'absent';
+                    });
 
                     renderStudentTable();
                 }
@@ -863,20 +960,45 @@
             tableCont.classList.remove('hidden');
             emptyMsg.classList.add('hidden');
 
-            tbody.innerHTML = activeStudents.map(s => `
-                <tr id="row-${s._id}">
+            tbody.innerHTML = activeStudents.map((s, index) => `
+                <tr id="row-${s._id}" class="student-row ${index % 2 === 0 ? 'even-row' : 'odd-row'}" onclick="selectStudentRow('${s._id}', this)" data-student-id="${s._id}">
                     <td style="font-family: monospace; font-weight: 600;">${s.studentId || s._id.slice(-6).toUpperCase()}</td>
                     <td>${s.name}</td>
-                    <td class="toggle-cell" onclick="toggleStatus('${s._id}')">
-                        <span id="status-${s._id}" class="status-pill status-absent">Absent</span>
+                    <td class="toggle-cell" onclick="event.stopPropagation(); toggleStatus('${s._id}')" title="Click to toggle attendance status">
+                        <span id="status-${s._id}" class="status-pill status-${s.currentStatus}">
+                            ${s.currentStatus.charAt(0).toUpperCase() + s.currentStatus.slice(1)}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-outline" style="padding: 4px 8px; font-size: 0.8rem;" onclick="event.stopPropagation(); viewStudentLedger('${s._id}', '${s.name}')">
+                            <i class="fas fa-book"></i> Ledger
+                        </button>
                     </td>
                 </tr>
             `).join('');
-
-            // Initialize default local state
-            activeStudents.forEach(s => s.currentStatus = 'absent');
         }
 
+        // Student selection functionality
+        let selectedStudents = new Set();
+
+        function selectStudentRow(studentId, rowElement) {
+            console.log('🖱️ Selecting student row:', studentId);
+            
+            // Toggle selection
+            if (selectedStudents.has(studentId)) {
+                selectedStudents.delete(studentId);
+                rowElement.classList.remove('selected');
+                console.log('   ❌ Deselected:', studentId);
+            } else {
+                selectedStudents.add(studentId);
+                rowElement.classList.add('selected');
+                console.log('   ✅ Selected:', studentId);
+            }
+            
+            console.log('📋 Currently selected students:', Array.from(selectedStudents));
+        }
+
+        
         function toggleStatus(id) {
             const student = activeStudents.find(s => s._id === id);
             const span = document.getElementById(`status-${id}`);
@@ -915,38 +1037,212 @@
         }
 
         async function generatePDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = jsPDF();
+            // Check if any students are selected
+            if (selectedStudents.size === 0) {
+                alert('Please select at least one student by clicking on their row before generating PDF.');
+                return;
+            }
 
-            // Add Header
-            doc.setFontSize(20);
-            doc.setTextColor(102, 126, 234); // Primary color
-            doc.text("Music school of delhi - Attendance Report", 105, 15, { align: "center" });
+            // Get only selected students
+            const selectedStudentObjects = activeStudents.filter(s => selectedStudents.has(s._id));
+            console.log('📋 Generating PDF for selected students:', selectedStudentObjects.length);
+            console.log('📋 Selected student names:', selectedStudentObjects.map(s => s.name));
 
-            doc.setFontSize(12);
-            doc.setTextColor(30, 41, 59);
-            doc.text(`Course: ${selectedCourse}`, 14, 25);
-            doc.text(`Slot: ${selectedSlot}`, 14, 32);
-            doc.text(`Date: ${selectedDate.toLocaleDateString('en-IN')}`, 14, 39);
+            const pdfBtn = document.getElementById('pdfBtn');
+            const origHtml = pdfBtn.innerHTML;
+            pdfBtn.innerHTML = '<div class="loader-white"></div> Generating...';
+            pdfBtn.disabled = true;
 
-            // Prepare Table Data
-            const tableData = activeStudents.map(s => [
-                s.studentId || s._id.slice(-6).toUpperCase(),
-                s.name,
-                s.currentStatus.toUpperCase()
-            ]);
+            try {
+                console.log('Starting PDF generation with selected students:', selectedStudentObjects.length);
+                const { jsPDF } = window.jspdf;
+                const doc = jsPDF();
 
-            // Add Table
-            doc.autoTable({
-                startY: 45,
-                head: [['Roll / ID', 'Student Name', 'Status']],
-                body: tableData,
-                theme: 'striped',
-                headStyles: { fillColor: [102, 126, 234] },
-                alternateRowStyles: { fillColor: [248, 250, 252] }
-            });
+                // ===== ADD HEADER =====
+                doc.setFontSize(16);
+                doc.setTextColor(102, 126, 234);
+                doc.text("Music School of Delhi", 105, 12, { align: "center" });
 
-            // Save and also perform DB Save silently for records
+                // Subheading: Branch name
+                doc.setFontSize(13);
+                doc.setTextColor(30, 41, 59);
+                doc.text(`Pitampura Branch - ${selectedStudentObjects.length} Selected Students`, 105, 20, { align: "center" });
+
+                // Horizontal line
+                doc.setDrawColor(200, 200, 200);
+                doc.setLineWidth(0.5);
+                doc.line(20, 24, 190, 24);
+
+                // ===== FETCH SELECTED STUDENT LEDGERS =====
+                const ledgerResults = [];
+                console.log('🔄 Starting to fetch ledgers for', selectedStudentObjects.length, 'selected students');
+                for (let i = 0; i < selectedStudentObjects.length; i++) {
+                    const student = selectedStudentObjects[i];
+                    try {
+                        const response = await fetch(`${API_BASE_URL}/attendance?studentId=${student._id}&branch=Pitampura`, {
+                            headers: { 'Authorization': `Bearer ${getAuthToken()}` }
+                        });
+                        const result = await response.json();
+                        if (result.success && result.data && result.data.length > 0) {
+                            console.log(`✅ ${student.name}: ${result.data.length} records found`);
+                            ledgerResults.push(result.data);
+                        } else {
+                            console.log(`⚠️ ${student.name}: No records (API returned empty or error)`);
+                            ledgerResults.push([]);
+                        }
+                    } catch (err) {
+                        console.error(`❌ Error fetching ledger for ${student.name}:`, err);
+                        ledgerResults.push([]);
+                    }
+                }
+                console.log('📊 Total ledgers fetched:', ledgerResults.length, 'of which', ledgerResults.filter(l => l.length > 0).length, 'have data');
+
+                // ===== PAGE 2+: Individual Student Ledgers =====
+                let ledgerPages = 0;
+                let firstPage = true;
+                console.log('📋 Starting PDF generation for SELECTED students:', selectedStudentObjects.length);
+                console.log('📋 Selected student list:', selectedStudentObjects.map(s => s.name));
+                
+                for (let idx = 0; idx < selectedStudentObjects.length; idx++) {
+                    const student = selectedStudentObjects[idx];
+                    const records = ledgerResults[idx];
+                    console.log(`📄 Processing selected student ${idx + 1}/${selectedStudentObjects.length}: ${student.name}`);
+                    if (!firstPage) {
+                        doc.addPage();
+                        // Repeat header and subheading on new page
+                        doc.setFontSize(16);
+                        doc.setTextColor(102, 126, 234);
+                        doc.text("Music School of Delhi", 105, 12, { align: "center" });
+                        doc.setFontSize(13);
+                        doc.setTextColor(30, 41, 59);
+                        doc.text("Pitampura Branch Student Attendance", 105, 20, { align: "center" });
+                        doc.setDrawColor(200, 200, 200);
+                        doc.setLineWidth(0.5);
+                        doc.line(20, 24, 190, 24);
+                    } else {
+                        firstPage = false;
+                    }
+                    ledgerPages++;
+                    // Student name left-aligned, below header
+                    doc.setFontSize(12);
+                    doc.setTextColor(30, 41, 59);
+                    doc.text(`Student: ${student.name}`, 20, 30, { align: "left" });
+                    let tableRows = [];
+                    if (records && records.length > 0) {
+                        for (let r = 0; r < records.length; r++) {
+                            const rec = records[r];
+                            const d = new Date(rec.date);
+                            const rowData = [
+                                d.toLocaleDateString('en-IN'),
+                                d.toLocaleDateString('en-IN', { weekday: 'short' }),
+                                rec.courseType || '-',
+                                rec.timeSlot || '-',
+                                rec.status.toUpperCase()
+                            ];
+                            tableRows.push(rowData);
+                        }
+                    } else {
+                        tableRows.push([
+                            '-', '-', '-', '-', 'No attendance records found'
+                        ]);
+                    }
+                    doc.autoTable({
+                        startY: 36,
+                        head: [['Date', 'Day', 'Batch', 'Time', 'Status']],
+                        body: tableRows,
+                        theme: 'striped',
+                        margin: { left: 20, right: 20, top: 40, bottom: 20 },
+                        styles: {
+                            fontSize: 9,
+                            cellPadding: 3,
+                            textColor: [30, 41, 59],
+                            lineColor: [226, 232, 240]
+                        },
+                        headStyles: {
+                            fillColor: [241, 245, 249],
+                            textColor: [30, 41, 59],
+                            fontStyle: 'bold',
+                            fontSize: 9,
+                            cellPadding: 4,
+                            lineColor: [226, 232, 240],
+                            lineWidth: 0.5
+                        },
+                        bodyStyles: {
+                            textColor: [30, 41, 59],
+                            lineColor: [226, 232, 240]
+                        },
+                        alternateRowStyles: {
+                            fillColor: [255, 255, 255]
+                        },
+                        columnStyles: {
+                            0: { halign: 'left', cellWidth: 'auto' },
+                            1: { halign: 'left', cellWidth: 'auto' },
+                            2: { halign: 'left', cellWidth: 'auto' },
+                            3: { halign: 'left', cellWidth: 'auto' },
+                            4: { halign: 'center', fontStyle: 'bold', cellWidth: 'auto' }
+                        },
+                        didParseCell: function(data) {
+                            if (data.column.index === 4 && data.section === 'body') {
+                                const cellValue = data.cell.text ? data.cell.text.toString() : '';
+                                if (cellValue.includes('PRESENT')) {
+                                    data.cell.styles.textColor = [6, 95, 70];
+                                    data.cell.styles.fillColor = [209, 250, 229];
+                                } else if (cellValue.includes('ABSENT')) {
+                                    data.cell.styles.textColor = [153, 27, 27];
+                                    data.cell.styles.fillColor = [254, 226, 226];
+                                } else if (cellValue.includes('No attendance records found')) {
+                                    data.cell.styles.textColor = [153, 27, 27];
+                                }
+                            }
+                        }
+                    });
+                }
+
+                // Silent save attendance to DB (only for selected students)
+                const payload = {
+                    date: selectedDate,
+                    courseType: selectedCourse,
+                    timeSlot: selectedSlot,
+                    branch: 'Pitampura',
+                    records: selectedStudentObjects.map(s => ({
+                        studentId: s._id,
+                        status: s.currentStatus
+                    }))
+                };
+                fetch(`${API_BASE_URL}/attendance`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${getAuthToken()}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                }).catch(err => console.error('Silent save failed:', err));
+
+                // Download PDF
+                doc.save(`Pitampura_Selected_${selectedStudentObjects.length}_${selectedCourse}_${selectedDate.toISOString().split('T')[0]}.pdf`);
+                
+                console.log('✅ PDF generated successfully');
+                
+            } catch (error) {
+                console.error('PDF generation failed:', error);
+                alert('Error generating PDF: ' + error.message);
+            } finally {
+                pdfBtn.innerHTML = origHtml;
+                pdfBtn.disabled = false;
+            }
+        }
+
+        async function saveAttendance() {
+            if (!selectedDate || !selectedCourse || !selectedSlot) {
+                alert('Please select a date, course, and slot first.');
+                return;
+            }
+
+            const saveBtn = document.getElementById('saveBtn');
+            const originalContent = saveBtn.innerHTML;
+            saveBtn.innerHTML = '<div class="loader-white"></div> Saving...';
+            saveBtn.disabled = true;
+
             const payload = {
                 date: selectedDate,
                 courseType: selectedCourse,
@@ -958,18 +1254,162 @@
                 }))
             };
 
-            // Silent save
-            fetch(`${API_BASE_URL}/attendance`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${getAuthToken()}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            }).catch(err => console.error('Silent save failed:', err));
+            try {
+                const response = await fetch(`${API_BASE_URL}/attendance`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${getAuthToken()}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
 
-            // Download PDF
-            doc.save(`Pitampura_Attendance_${selectedCourse}_${selectedDate.toISOString().split('T')[0]}.pdf`);
+                const result = await response.json();
+                if (result.success) {
+                    alert('Attendance saved successfully!');
+                } else {
+                    throw new Error(result.message || 'Failed to save attendance');
+                }
+            } catch (error) {
+                console.error('Save failed:', error);
+                alert('Error saving attendance: ' + error.message);
+            } finally {
+                saveBtn.innerHTML = originalContent;
+                saveBtn.disabled = false;
+            }
+        }
+
+        async function viewStudentLedger(studentId, studentName) {
+            console.log('🔍 VIEWING STUDENT LEDGER:');
+            console.log(`   - Student ID: ${studentId}`);
+            console.log(`   - Student Name: ${studentName}`);
+            console.log(`   - API URL: ${API_BASE_URL}/attendance?studentId=${studentId}&branch=Pitampura`);
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/attendance?studentId=${studentId}&branch=Pitampura`, {
+                    headers: { 'Authorization': `Bearer ${getAuthToken()}` }
+                });
+                
+                console.log(`   - Response status: ${response.status}`);
+                console.log(`   - Response ok: ${response.ok}`);
+                
+                const result = await response.json();
+                console.log(`   - Response data:`, result);
+
+                if (result.success) {
+                    console.log(`   ✅ Found ${result.data.length} attendance records for ${studentName}`);
+                    const records = result.data;
+                    let ledgerHtml = `
+                        <div style="padding: 20px;">
+                            <h3 style="margin-bottom: 15px; color: var(--primary);">${studentName}</h3>
+                            <div style="max-height: 400px; overflow-y: auto;">
+                                <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                                    <thead>
+                                        <tr style="background: #f1f5f9;">
+                                            <th style="padding: 10px; text-align: left; border-bottom: 2px solid #e2e8f0;">Date</th>
+                                            <th style="padding: 10px; text-align: left; border-bottom: 2px solid #e2e8f0;">Day</th>
+                                            <th style="padding: 10px; text-align: left; border-bottom: 2px solid #e2e8f0;">Batch</th>
+                                            <th style="padding: 10px; text-align: left; border-bottom: 2px solid #e2e8f0;">Time</th>
+                                            <th style="padding: 10px; text-align: left; border-bottom: 2px solid #e2e8f0;">Status</th>
+                                            <th style="padding: 10px; text-align: left; border-bottom: 2px solid #e2e8f0;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ledger-tbody-${studentId}">
+                    `;
+
+                    if (records.length === 0) {
+                        ledgerHtml += `<tr><td colspan="6" style="padding: 20px; text-align: center; color: var(--text-muted);">No attendance records found for this student.</td></tr>`;
+                    } else {
+                        records.forEach(r => {
+                            const date = new Date(r.date);
+                            const dayName = date.toLocaleDateString('en-IN', { weekday: 'short' });
+                            ledgerHtml += `
+                                <tr id="ledger-row-${r._id}" style="border-bottom: 1px solid #e2e8f0;">
+                                    <td style="padding: 10px;">${date.toLocaleDateString('en-IN')}</td>
+                                    <td style="padding: 10px; font-weight: 600;">${dayName}</td>
+                                    <td style="padding: 10px;">${r.courseType}</td>
+                                    <td style="padding: 10px;">${r.timeSlot}</td>
+                                    <td style="padding: 10px;">
+                                        <span class="status-pill status-${r.status}" style="font-size: 0.7rem;">${r.status.toUpperCase()}</span>
+                                    </td>
+                                    <td style="padding: 10px;">
+                                        <button onclick="deleteAttendanceRecord('${r._id}')" style="background:#fee2e2; color:#991b1b; border:none; padding:4px 10px; border-radius:6px; cursor:pointer; font-size:0.75rem; font-weight:600;">
+                                            <i class="fas fa-trash"></i> Remove
+                                        </button>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                    }
+
+                    ledgerHtml += `
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button class="btn btn-primary" style="margin-top: 20px; width: 100%;" onclick="closeHistoryModal()">Close</button>
+                        </div>
+                    `;
+
+                    showModal(ledgerHtml);
+                } else {
+                    console.log(`   ❌ Failed to get attendance records for ${studentName}`);
+                    console.log(`   - Error message: ${result.message}`);
+                    alert(`No attendance records found for ${studentName}. Error: ${result.message || 'Unknown error'}`);
+                }
+            } catch (error) {
+                console.error(`   ❌ API call failed for ${studentName}:`, error);
+                alert('Error fetching ledger: ' + error.message);
+            }
+        }
+
+        async function deleteAttendanceRecord(recordId) {
+            if (!confirm('Are you sure you want to remove this attendance record?')) return;
+            try {
+                const response = await fetch(`${API_BASE_URL}/attendance/${recordId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${getAuthToken()}` }
+                });
+                const result = await response.json();
+                if (result.success) {
+                    const row = document.getElementById(`ledger-row-${recordId}`);
+                    if (row) row.remove();
+                } else {
+                    alert('Failed to remove record: ' + (result.message || 'Unknown error'));
+                }
+            } catch (error) {
+                alert('Error removing record: ' + error.message);
+            }
+        }
+
+        
+        function showModal(content) {
+            let modal = document.getElementById('historyModal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'historyModal';
+                modal.style.position = 'fixed';
+                modal.style.top = '0';
+                modal.style.left = '0';
+                modal.style.width = '100%';
+                modal.style.height = '100%';
+                modal.style.background = 'rgba(0,0,0,0.5)';
+                modal.style.display = 'flex';
+                modal.style.alignItems = 'center';
+                modal.style.justifyContent = 'center';
+                modal.style.zIndex = '2000';
+                document.body.appendChild(modal);
+            }
+            modal.innerHTML = `
+                <div style="background: white; border-radius: 12px; max-width: 500px; width: 90%; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
+                    ${content}
+                </div>
+            `;
+            modal.style.display = 'flex';
+        }
+
+        function closeHistoryModal() {
+            const modal = document.getElementById('historyModal');
+            if (modal) modal.style.display = 'none';
         }
 
         // --- AUTH & HELPERS ---

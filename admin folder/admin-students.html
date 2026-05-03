@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -355,6 +355,7 @@
                     </li>
                     <li><a href="admin-attendance-rohini.html"><i class="fas fa-calendar-check"></i> Rohini
                             Attendance</a></li>
+                    <li><a href="admin-student-attendance.html"><i class="fas fa-user-clock"></i> Student-wise Attendance</a></li>
                     <li><a href="admin-announcements.html"><i class="fas fa-bullhorn"></i> Announcements</a></li>
                     <li><a href="admin-guitar-tabs.html"><i class="fas fa-guitar"></i> Guitar Tabs</a></li>
                     <li><a href="admin-content.html"><i class="fas fa-video"></i> Content Management</a></li>
@@ -540,12 +541,72 @@
                         ${student.address?.street || ''}, ${student.address?.city || ''}, ${student.address?.state || ''} ${student.address?.zipCode || ''}
                     </p>
                 </div>
-                <button class="btn btn-delete" style="width: 100%;" onclick="deleteStudent('${student._id}')">
-                    <i class="fas fa-trash"></i> Delete Student
-                </button>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button class="btn" style="flex: 1; background: #2ecc71;" onclick="viewAttendance('${student._id}', '${student.name}')">
+                        <i class="fas fa-calendar-check"></i> View Attendance
+                    </button>
+                    <button class="btn btn-delete" style="flex: 1; margin-top: 0;" onclick="deleteStudent('${student._id}')">
+                        <i class="fas fa-trash"></i> Delete Student
+                    </button>
+                </div>
             `;
             document.getElementById('modalStudentDetails').innerHTML = detailsHtml;
             document.getElementById('studentModal').style.display = 'block';
+        }
+
+        async function viewAttendance(studentId, studentName) {
+            try {
+                const response = await apiCall(`${API_BASE_URL}/attendance?studentId=${studentId}`);
+                if (response.success) {
+                    const records = response.data;
+                    let attendanceHtml = `
+                        <div style="margin-bottom: 20px;">
+                            <h4 style="margin-bottom: 15px; color: #333; border-bottom: 2px solid #764ba2; display: inline-block;">Attendance: ${studentName}</h4>
+                            <div style="overflow-x: auto;">
+                                <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem;">
+                                    <thead style="background: #f8f9fa;">
+                                        <tr>
+                                            <th style="padding: 10px; text-align: left; border-bottom: 2px solid #dee2e6;">Date</th>
+                                            <th style="padding: 10px; text-align: left; border-bottom: 2px solid #dee2e6;">Slot</th>
+                                            <th style="padding: 10px; text-align: left; border-bottom: 2px solid #dee2e6;">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                    `;
+
+                    if (records.length === 0) {
+                        attendanceHtml += `<tr><td colspan="3" style="padding: 20px; text-align: center; color: #666;">No records found.</td></tr>`;
+                    } else {
+                        records.forEach(rec => {
+                            const date = new Date(rec.date).toLocaleDateString('en-IN');
+                            const slot = `${rec.courseType || ''} ${rec.timeSlot || ''}`;
+                            const statusColor = rec.status === 'present' ? '#2ecc71' : (rec.status === 'late' ? '#f39c12' : '#e74c3c');
+                            attendanceHtml += `
+                                <tr>
+                                    <td style="padding: 10px; border-bottom: 1px solid #eee;">${date}</td>
+                                    <td style="padding: 10px; border-bottom: 1px solid #eee;">${slot}</td>
+                                    <td style="padding: 10px; border-bottom: 1px solid #eee;">
+                                        <span style="background: ${statusColor}; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; text-transform: capitalize;">${rec.status}</span>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                    }
+
+                    attendanceHtml += `
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <button class="btn" style="width: 100%;" onclick="viewStudentDetails('${studentId}')">
+                            <i class="fas fa-arrow-left"></i> Back to Details
+                        </button>
+                    `;
+                    document.getElementById('modalStudentDetails').innerHTML = attendanceHtml;
+                }
+            } catch (error) {
+                alert('Error fetching attendance: ' + error.message);
+            }
         }
 
 

@@ -35,44 +35,66 @@ exports.submitContact = async (req, res) => {
 
         await contact.save();
 
-        // Send confirmation email to user
-        try {
-            await transporter.sendMail({
-                from: env.GMAIL_USER,
-                to: email,
-                subject: 'We received your message - Music School of Delhi',
-                html: `
-                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 10px 10px 0 0; text-align: center;">
-                            <h1 style="margin: 0;">Music School of Delhi</h1>
-                        </div>
-                        <div style="padding: 20px; background: #f9f9f9;">
-                            <h2>Thank you for contacting us!</h2>
-                            <p>Dear <strong>${name}</strong>,</p>
-                            <p>We have received your message and will get back to you as soon as possible.</p>
-                            <div style="background: white; padding: 15px; border-left: 4px solid #667eea; margin: 20px 0;">
-                                <p><strong>Your Message Details:</strong></p>
-                                <p><strong>Subject:</strong> ${subject}</p>
-                                <p><strong>Message:</strong> ${message}</p>
-                            </div>
-                            <p>Our team will review your inquiry and respond shortly.</p>
-                            <p>Best regards,<br><strong>Music School of Delhi Team</strong></p>
-                        </div>
-                        <div style="background: #f0f0f0; padding: 15px; text-align: center; font-size: 12px; color: #666; border-radius: 0 0 10px 10px;">
-                            <p>Email: info@musicschooldelhi.com | Phone: +91 98765 43210</p>
-                        </div>
-                    </div>
-                `
-            });
-        } catch (emailError) {
-            console.error('Error sending confirmation email:', emailError);
-            // Don't fail the request if email doesn't send
-        }
-
+        // Respond immediately - don't wait for email
         res.status(201).json({
             success: true,
             message: 'Your message has been received. We will contact you soon!',
             data: contact
+        });
+
+        // Send confirmation email in background (non-blocking)
+        setImmediate(async () => {
+            try {
+                await transporter.sendMail({
+                    from: env.GMAIL_USER,
+                    to: email,
+                    subject: 'We received your message - Music School of Delhi',
+                    html: `
+                        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 10px 10px 0 0; text-align: center;">
+                                <h1 style="margin: 0;">Music School of Delhi</h1>
+                            </div>
+                            <div style="padding: 20px; background: #f9f9f9;">
+                                <h2>Thank you for contacting us!</h2>
+                                <p>Dear <strong>${name}</strong>,</p>
+                                <p>We have received your message and will get back to you as soon as possible.</p>
+                                <div style="background: white; padding: 15px; border-left: 4px solid #667eea; margin: 20px 0;">
+                                    <p><strong>Your Message Details:</strong></p>
+                                    <p><strong>Subject:</strong> ${subject}</p>
+                                    <p><strong>Message:</strong> ${message}</p>
+                                </div>
+                                <p>Our team will review your inquiry and respond shortly.</p>
+                                <p>Best regards,<br><strong>Music School of Delhi Team</strong></p>
+                            </div>
+                            <div style="background: #f0f0f0; padding: 15px; text-align: center; font-size: 12px; color: #666; border-radius: 0 0 10px 10px;">
+                                <p>Email: info@musicschooldelhi.com | Phone: +91 98765 43210</p>
+                            </div>
+                        </div>
+                    `
+                });
+                console.log('✅ Confirmation email sent to:', email);
+            } catch (emailError) {
+                console.error('❌ Error sending confirmation email to', email, ':', emailError.message);
+                // Try to send admin alert
+                try {
+                    await transporter.sendMail({
+                        from: env.GMAIL_USER,
+                        to: env.GMAIL_USER,
+                        subject: 'ALERT: Contact form email failed',
+                        html: `<p>Failed to send confirmation email to user: <b>${email}</b></p>
+                            <p><b>Error:</b> ${emailError.message}</p>
+                            <p><b>Contact Details:</b></p>
+                            <ul>
+                                <li>Name: ${name}</li>
+                                <li>Email: ${email}</li>
+                                <li>Phone: ${phone}</li>
+                                <li>Subject: ${subject}</li>
+                            </ul>`
+                    });
+                } catch (adminAlertError) {
+                    console.error('❌ Error sending admin alert:', adminAlertError.message);
+                }
+            }
         });
     } catch (error) {
         console.error('Error submitting contact:', error);
@@ -176,9 +198,18 @@ exports.replyToContact = async (req, res) => {
 
         let emailSendError = null;
 
+        // Enhanced debugging for email configuration
+        console.log('🔧 Email Reply Configuration Check:');
+        console.log('   - Gmail User:', env.GMAIL_USER);
+        console.log('   - Password Configured:', !!env.GMAIL_PASSWORD);
+        console.log('   - Password Length:', env.GMAIL_PASSWORD ? env.GMAIL_PASSWORD.length : 0);
+        console.log('   - Contact Email:', contact.email);
+        console.log('   - Has Valid Credentials:', hasValidCredentials);
+        console.log('   - Looks Like Regular Password:', looksLikeRegularPassword);
+
         // Send reply email only if valid credentials exist
         if (!hasValidCredentials) {
-            console.warn('Gmail credentials not configured. Email sending disabled.');
+            console.warn('❌ Gmail credentials not configured. Email sending disabled.');
             emailSendError = 'Gmail credentials not configured. Please update .env file with valid GMAIL_USER and GMAIL_PASSWORD.';
             contact.replyEmailSent = false;
         } else if (looksLikeRegularPassword) {
@@ -189,8 +220,10 @@ exports.replyToContact = async (req, res) => {
 
             // Try to send anyway, but it will likely fail
             try {
+                console.log('📧 Attempting to send email with regular password...');
                 const emailResponse = await transporter.sendMail({
-                    from: env.GMAIL_USER,
+                    from: `"${adminName} - Music School of Delhi" <${env.GMAIL_USER}>`,
+                    replyTo: env.GMAIL_USER,
                     to: contact.email,
                     subject: `Re: ${contact.subject} - Music School of Delhi`,
                     html: `
@@ -236,8 +269,14 @@ exports.replyToContact = async (req, res) => {
         } else {
             // Credentials look valid, try to send
             try {
+                console.log('📧 Sending email with proper app password...');
+                console.log('   - From:', env.GMAIL_USER);
+                console.log('   - To:', contact.email);
+                console.log('   - Admin Name:', adminName);
+                
                 const emailResponse = await transporter.sendMail({
-                    from: env.GMAIL_USER,
+                    from: `"${adminName} - Music School of Delhi" <${env.GMAIL_USER}>`,
+                    replyTo: env.GMAIL_USER,
                     to: contact.email,
                     subject: `Re: ${contact.subject} - Music School of Delhi`,
                     html: `
@@ -352,6 +391,91 @@ exports.getContactStats = async (req, res) => {
             success: false,
             message: 'Error fetching contact stats',
             error: error.message
+        });
+    }
+};
+
+// Test Email Configuration
+exports.testEmailConfiguration = async (req, res) => {
+    try {
+        const { toEmail } = req.body;
+        
+        if (!toEmail) {
+            return res.status(400).json({
+                success: false,
+                message: 'Test email address is required'
+            });
+        }
+
+        console.log('🔧 Testing email configuration:');
+        console.log('   - From:', env.GMAIL_USER);
+        console.log('   - To:', toEmail);
+        console.log('   - Password configured:', !!env.GMAIL_PASSWORD);
+        console.log('   - Password length:', env.GMAIL_PASSWORD ? env.GMAIL_PASSWORD.length : 0);
+
+        // Test email sending
+        const emailResponse = await transporter.sendMail({
+            from: env.GMAIL_USER,
+            to: toEmail,
+            subject: '📧 Email Configuration Test - Music School of Delhi',
+            html: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                    <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 20px; border-radius: 10px 10px 0 0; text-align: center;">
+                        <h1 style="margin: 0;">✅ Email Test Successful!</h1>
+                    </div>
+                    <div style="padding: 20px; background: #f9f9f9;">
+                        <h2>Email Configuration Test</h2>
+                        <p>This is a test email to verify that your Gmail configuration is working correctly.</p>
+                        <div style="background: white; padding: 15px; border-left: 4px solid #10b981; margin: 20px 0;">
+                            <p><strong>Test Details:</strong></p>
+                            <p><strong>From:</strong> ${env.GMAIL_USER}</p>
+                            <p><strong>To:</strong> ${toEmail}</p>
+                            <p><strong>Sent at:</strong> ${new Date().toLocaleString()}</p>
+                        </div>
+                        <p>If you received this email, your Gmail configuration is working perfectly!</p>
+                        <p>Best regards,<br><strong>Music School of Delhi System</strong></p>
+                    </div>
+                    <div style="background: #f0f0f0; padding: 15px; text-align: center; font-size: 12px; color: #666; border-radius: 0 0 10px 10px;">
+                        <p>Email: info@musicschooldelhi.com | Phone: +91 98765 43210</p>
+                    </div>
+                </div>
+            `
+        });
+
+        console.log('✅ Test email sent successfully to:', toEmail);
+        console.log('   - Message ID:', emailResponse.messageId);
+        console.log('   - Response:', emailResponse);
+
+        res.status(200).json({
+            success: true,
+            message: 'Test email sent successfully',
+            emailSent: true,
+            messageId: emailResponse.messageId,
+            fromEmail: env.GMAIL_USER,
+            toEmail: toEmail
+        });
+
+    } catch (error) {
+        console.error('❌ Test email failed:', error);
+        console.error('   - Error code:', error.code);
+        console.error('   - Error message:', error.message);
+        
+        let errorMessage = 'Email test failed';
+        
+        if (error.code === 'EAUTH') {
+            errorMessage = 'Authentication failed. Please check your Gmail App Password.';
+        } else if (error.code === 'ECONNECTION') {
+            errorMessage = 'Connection failed. Please check your internet connection.';
+        } else if (error.message.includes('Invalid login')) {
+            errorMessage = 'Invalid Gmail credentials. Please verify your App Password.';
+        }
+
+        res.status(500).json({
+            success: false,
+            message: errorMessage,
+            emailSent: false,
+            error: error.message,
+            errorCode: error.code
         });
     }
 };

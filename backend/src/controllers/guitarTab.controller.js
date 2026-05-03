@@ -6,7 +6,7 @@ const fs = require('fs');
 // Upload guitar tab/song
 const uploadGuitarTab = async (req, res) => {
   try {
-    const { songName, artist, tabContent, lyrics, chordsContent, defaultKey, category } = req.body;
+    const { songName, artist, tabContent, chordsContent, defaultKey, category } = req.body;
     const userId = req.user.userId;
 
     const admin = await Admin.findById(userId);
@@ -28,6 +28,8 @@ const uploadGuitarTab = async (req, res) => {
         fileType = 'pdf';
       } else if (['.mp3', '.wav', '.ogg', '.m4a'].includes(ext)) {
         fileType = 'audio';
+      } else if (['.jpg', '.jpeg', '.png', '.gif', '.webp'].includes(ext)) {
+        fileType = 'image';
       } else {
         fileType = 'tab';
       }
@@ -39,7 +41,6 @@ const uploadGuitarTab = async (req, res) => {
       songName,
       artist,
       tabContent: tabContent || '',
-      lyrics: lyrics || '',
       chordsContent: chordsContent || '',
       defaultKey: defaultKey || 'C',
       filePath,
@@ -189,14 +190,13 @@ const getGuitarTabById = async (req, res) => {
 const updateGuitarTab = async (req, res) => {
   try {
     const { id } = req.params;
-    const { songName, artist, tabContent, lyrics, chordsContent, defaultKey, category } = req.body;
+    const { songName, artist, tabContent, chordsContent, defaultKey, category } = req.body;
 
     // Prepare update data
     const updateData = {
       songName,
       artist,
       tabContent,
-      lyrics,
       chordsContent,
       defaultKey,
       category,
@@ -223,6 +223,8 @@ const updateGuitarTab = async (req, res) => {
         updateData.fileType = 'pdf';
       } else if (['.mp3', '.wav', '.ogg', '.m4a'].includes(ext)) {
         updateData.fileType = 'audio';
+      } else if (['.jpg', '.jpeg', '.png', '.gif', '.webp'].includes(ext)) {
+        updateData.fileType = 'image';
       } else {
         updateData.fileType = 'tab';
       }
@@ -301,7 +303,7 @@ const getAllTabs = async (req, res) => {
     })
       .populate('creator', 'name email')
       .sort({ createdAt: -1 })
-      .limit(10); // Limit to 10 tabs
+      .limit(10);
 
     res.status(200).json({
       success: true,
@@ -317,11 +319,36 @@ const getAllTabs = async (req, res) => {
   }
 };
 
+// Get trending songs
+const getTrendingSongs = async (req, res) => {
+  try {
+    const trendingSongs = await GuitarTab.find({
+      category: 'trending'
+    })
+      .populate('creator', 'name email')
+      .sort({ createdAt: -1 })
+      .limit(10);
+
+    res.status(200).json({
+      success: true,
+      data: trendingSongs
+    });
+  } catch (error) {
+    console.error('Get trending songs error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   uploadGuitarTab,
   getAllGuitarTabs,
   getLatestSongs,
   getAllTabs,
+  getTrendingSongs,
   getPopularTabs,
   getGuitarTabById,
   updateGuitarTab,

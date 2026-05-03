@@ -67,6 +67,17 @@ const connectDB = async () => {
 
     // Don't exit immediately, allow for retry if needed
     throw error;
+    // Fallback to local MongoDB if Atlas connection fails
+    const fallbackUri = process.env.LOCAL_MONGODB_URI || 'mongodb://localhost:27017/music_school_delhi';
+    console.log('Attempting fallback local MongoDB connection...');
+    try {
+      const localConn = await mongoose.connect(fallbackUri, options);
+      console.log(`MongoDB fallback connected: ${localConn.connection.host}`);
+      return localConn;
+    } catch (fallbackError) {
+      console.error('❌ Fallback MongoDB Connection Error:', fallbackError.message);
+      throw fallbackError;
+    }
   }
 };
 

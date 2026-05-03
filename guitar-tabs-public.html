@@ -42,7 +42,7 @@
         .guitar-tabs-container {
             width: 100vw;
             background: white;
-            overflow: hidden;
+            overflow-x: hidden;
             margin: 0;
             padding: 0;
         }
@@ -215,36 +215,9 @@
             overflow: hidden;
         }
 
-        /* Auto-scroll styles */
-        .carousel.auto-scroll {
-            display: flex;
-            overflow-x: hidden;
-            animation: autoScroll 30s linear infinite;
-        }
-
-        .carousel.auto-scroll .tab-card {
+        /* Auto-scroll handled fully by JS requestAnimationFrame */
+        .carousel .tab-card {
             flex-shrink: 0;
-        }
-
-        /* Hide navigation buttons when auto-scroll is active */
-        .carousel.auto-scroll+.carousel-next,
-        .carousel.auto-scroll+.carousel-prev {
-            display: none !important;
-        }
-
-        @keyframes autoScroll {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(-50%);
-            }
-        }
-
-        .carousel.auto-scroll {
-            animation-duration: 20s !important;
-            /* Faster speed */
         }
 
         .tab-card {
@@ -283,6 +256,11 @@
 
         .badge-latest {
             background: #007bff;
+            color: white;
+        }
+
+        .badge-trending {
+            background: #e91e63;
             color: white;
         }
 
@@ -350,8 +328,6 @@
             cursor: pointer;
             flex: 1;
         }
-
-
 
         .loading {
             text-align: center;
@@ -518,10 +494,86 @@
             font-size: 0.9rem;
         }
 
+        .open-pdf-btn {
+            margin-left: auto;
+            background: #e53935;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .open-pdf-btn:hover {
+            background: #c62828;
+        }
+
+        .pdf-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pdf-popup {
+            width: 92vw;
+            height: 92vh;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pdf-popup-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 0.75rem 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .pdf-popup-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            color: white;
+            font-size: 1.4rem;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            line-height: 1;
+        }
+
+        .pdf-popup-close:hover {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
         .tab-content-viewer {
             font-family: 'Courier New', Courier, monospace;
-            font-size: 1.1rem;
-            line-height: 2.2;
+            font-size: 1.05rem;
+            line-height: 1.75;
             white-space: pre-wrap;
             word-wrap: break-word;
             background: #fafafa;
@@ -532,7 +584,7 @@
             color: #333;
             max-height: 500px;
             overflow-y: auto;
-            overflow-x: hidden;
+            overflow-x: auto;
         }
 
         .chord-tag {
@@ -554,23 +606,87 @@
             border-color: #ff9800;
         }
 
-        .lyrics-section {
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 2px dashed #eee;
+        .chord-line-above {
+            display: block;
+            color: #d32f2f;
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre;
+            font-size: 1.05rem;
+            line-height: 1.5;
+            letter-spacing: 0;
         }
 
-        .lyrics-section h3 {
-            margin-bottom: 1rem;
-            color: #555;
+        .section-label {
+            display: inline-block;
+            color: #1565c0;
+            font-weight: bold;
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            background: #e3f2fd;
+            border-left: 3px solid #1565c0;
+            padding: 2px 10px;
+            border-radius: 0 4px 4px 0;
+            margin: 0.8em 0 0.3em 0;
         }
 
-        .lyrics-text {
-            font-family: inherit;
-            line-height: 1.6;
-            font-size: 1.1rem;
-            color: #444;
-            white-space: pre-wrap;
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 0;
+            flex-shrink: 0;
+        }
+
+        .modal-header h2, .modal-header p {
+            color: white;
+        }
+
+        .close-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.5);
+            color: white;
+            font-size: 1.5rem;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            background: rgba(255,255,255,0.35);
+        }
+
+        .tab-file-viewer {
+            margin-top: 1.5rem;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .tab-file-viewer img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .tab-file-viewer embed,
+        .tab-file-viewer iframe {
+            width: 100%;
+            height: 75vh;
+            min-height: 500px;
+            border: none;
+            display: block;
         }
 
         /* Mobile specific adjustments */
@@ -587,7 +703,8 @@
             }
         }
     </style>
-</head>
+
+        </head>
 
 <body>
     <div class="guitar-tabs-container">
@@ -636,10 +753,10 @@
 
         <div class="section">
             <div class="section-header">
-                <h2><i class="fas fa-music"></i> Guitar Tabs</h2>
+                <h2><i class="fas fa-chart-line"></i> Trending Songs</h2>
             </div>
             <div class="carousel-container">
-                <div class="carousel" id="allTabsCarousel">
+                <div class="carousel" id="trendingSongsCarousel">
                     <div class="loading">
                         <div class="loading-spinner"></div>
                     </div>
@@ -735,20 +852,19 @@
             try {
                 // Load all sections
                 await loadLatestSongs();
-                await loadAllTabs();
+                await loadTrendingSongs();
                 await loadPopularTabs();
-
-                // Combine all tabs for search functionality
-                combineAllTabs();
 
                 // Set up event listeners
                 setupEventListeners();
 
-                // Start auto-scroll for all carousels
+                // Start auto-scroll first (may clone cards), then combine only originals
                 setTimeout(() => {
                     startAutoScroll('latestSongsCarousel');
-                    startAutoScroll('allTabsCarousel');
+                    startAutoScroll('trendingSongsCarousel');
                     startAutoScroll('popularTabsCarousel');
+                    // Combine AFTER auto-scroll so aria-hidden clones are already marked
+                    combineAllTabs();
                 }, 1000);
             } catch (error) {
                 console.error('Error initializing page:', error);
@@ -758,82 +874,74 @@
             }
         }
 
-        // Auto-scroll function for carousels
+        // Auto-scroll: JS requestAnimationFrame — works for any number of songs
         function startAutoScroll(carouselId) {
             const carousel = document.getElementById(carouselId);
             if (!carousel) return;
 
-            // Remove loading indicators first
-            const loadingIndicators = carousel.querySelectorAll('.loading, .error-message');
-            loadingIndicators.forEach(indicator => indicator.remove());
+            carousel.querySelectorAll('.loading, .error-message').forEach(el => el.remove());
 
-            // Get current items
-            const currentItems = [...carousel.children];
+            const originalItems = [...carousel.children];
+            if (originalItems.length === 0) return;
 
-            // Only clone items if there are not enough to create a seamless loop
-            // Check if carousel width is smaller than its container
-            if (currentItems.length > 0) {
-                const totalContentWidth = currentItems.reduce((total, item) => total + item.offsetWidth, 0);
-                const containerWidth = carousel.parentElement.clientWidth;
+            // Clone once for seamless infinite loop
+            originalItems.forEach(item => {
+                const clone = item.cloneNode(true);
+                clone.setAttribute('aria-hidden', 'true');
+                carousel.appendChild(clone);
+            });
 
-                // Only duplicate if we don't have enough content to fill the screen twice for seamless loop
-                if (totalContentWidth < containerWidth * 2) {
-                    // Clone each item to create a seamless loop
-                    currentItems.forEach(item => {
-                        const clone = item.cloneNode(true);
-                        carousel.appendChild(clone);
-                    });
+            const gap = 24; // matches CSS gap: 1.5rem
+            const singleSetWidth = originalItems.reduce((w, el) => w + el.offsetWidth + gap, 0);
+
+            // Carousel setup
+            carousel.style.display = 'flex';
+            carousel.style.flexWrap = 'nowrap';
+            carousel.style.willChange = 'transform';
+            carousel.parentElement.style.overflow = 'hidden'; // clip scrolling content
+
+            let x = 0;
+            let paused = false;
+
+            function tick() {
+                if (!paused) {
+                    x -= 0.7; // scroll speed (px per frame)
+                    if (x <= -singleSetWidth) x += singleSetWidth; // seamless reset
+                    carousel.style.transform = 'translateX(' + x + 'px)';
                 }
+                requestAnimationFrame(tick);
             }
 
-            // Add auto-scroll class to enable CSS animation
-            carousel.classList.add('auto-scroll');
+            // Pause on hover
+            carousel.parentElement.addEventListener('mouseenter', () => { paused = true; });
+            carousel.parentElement.addEventListener('mouseleave', () => { paused = false; });
 
-            // Pause animation on hover
-            carousel.addEventListener('mouseenter', () => {
-                carousel.style.animationPlayState = 'paused';
-            });
-
-            carousel.addEventListener('mouseleave', () => {
-                carousel.style.animationPlayState = 'running';
-            });
+            requestAnimationFrame(tick);
         }
 
         // Set up event listeners
         function setupEventListeners() {
-            // Search functionality
             document.getElementById('searchInput').addEventListener('input', handleSearch);
-
-            // Also support mouse wheel scrolling for carousels
-            document.querySelectorAll('.carousel').forEach(carousel => {
-                carousel.addEventListener('wheel', (e) => {
-                    if (carousel.classList.contains('auto-scroll')) {
-                        return;
-                    }
-                    e.preventDefault();
-                    carousel.scrollBy({
-                        left: e.deltaY,
-                        behavior: 'smooth'
-                    });
-                });
-            });
+            // Carousels use CSS auto-scroll animation — no wheel handler needed
         }
 
         // Combine all tabs for search functionality
         function combineAllTabs() {
             allTabs = [];
 
-            // Collect tabs from all sections
             const sections = [
                 { id: 'latestSongsCarousel', category: 'Latest' },
-                { id: 'allTabsCarousel', category: 'Tabs' },
+                { id: 'trendingSongsCarousel', category: 'Trending' },
                 { id: 'popularTabsCarousel', category: 'Popular' }
             ];
 
             sections.forEach(section => {
                 const carousel = document.getElementById(section.id);
                 if (carousel) {
-                    const cards = carousel.querySelectorAll('.tab-card');
+                    // Only pick original cards, skip aria-hidden clones
+                    const cards = [...carousel.querySelectorAll('.tab-card')].filter(
+                        card => card.getAttribute('aria-hidden') !== 'true'
+                    );
                     cards.forEach(card => {
                         const title = card.querySelector('h3')?.textContent || '';
                         const artist = card.querySelector('p')?.textContent || '';
@@ -898,78 +1006,66 @@
             document.getElementById('searchResultsSection').classList.remove('visible');
         }
 
+        // Shared card builder
+        function buildTabCard(tab, badgeClass, badgeLabel) {
+            const card = document.createElement('div');
+            card.className = 'tab-card';
+            card.innerHTML = `
+                <span class="tab-badge ${badgeClass}">${badgeLabel}</span>
+                <h3>${tab.songName}</h3>
+                <p style="color:#555; margin-bottom:0.25rem;">${tab.artist}</p>
+                <p style="font-size:0.8rem; color:#999;">${tab.creator?.name || 'Unknown'} &bull; ${new Date(tab.createdAt).toLocaleDateString()}</p>
+                <div class="action-buttons">
+                    <button class="btn-primary" onclick="viewTab('${tab._id}')">View Tab</button>
+                </div>
+            `;
+            return card;
+        }
+
+        function showEmptyCarousel(carouselId, message) {
+            const carousel = document.getElementById(carouselId);
+            carousel.innerHTML = `
+                <div style="padding:2rem; color:#aaa; text-align:center; width:100%;">
+                    <i class="fas fa-music" style="font-size:2rem; margin-bottom:0.5rem; display:block;"></i>
+                    <p style="margin:0;">${message}</p>
+                </div>`;
+        }
+
         // Load latest songs
         async function loadLatestSongs() {
             try {
-                // Make unauthenticated call to get latest songs
                 const response = await fetch(`${API_BASE_URL}/guitar-tabs/latest`);
                 const data = await response.json();
+                const carousel = document.getElementById('latestSongsCarousel');
+                carousel.innerHTML = '';
 
-                if (data.success) {
-                    const carousel = document.getElementById('latestSongsCarousel');
-                    carousel.innerHTML = '';
-                    data.data.forEach(tab => {
-                        const difficultyClass = tab.difficulty ? `difficulty-${tab.difficulty}` : '';
-                        const difficultyText = tab.difficulty ? tab.difficulty.charAt(0).toUpperCase() + tab.difficulty.slice(1) : '';
-
-                        const card = document.createElement('div');
-                        card.className = 'tab-card';
-                        card.innerHTML = `
-                            <span class="tab-badge badge-latest">Latest</span>
-                            <h3>${tab.songName}</h3>
-                            <p>${tab.artist}</p>
-                            <div class="tab-meta">
-                                <span>${tab.category || 'Tabs'}</span>
-                                ${tab.difficulty ? `<span class="difficulty ${difficultyClass}">${difficultyText}</span>` : ''}
-                            </div>
-                            <p>${tab.creator?.name || 'Unknown Artist'} • Uploaded ${new Date(tab.createdAt).toLocaleDateString()}</p>
-                            <div class="action-buttons">
-                                <button class="btn-primary" onclick="viewTab('${tab._id}')">View Tab</button>
-                            </div>
-                        `;
-                        carousel.appendChild(card);
-                    });
+                if (data.success && data.data && data.data.length > 0) {
+                    data.data.forEach(tab => carousel.appendChild(buildTabCard(tab, 'badge-latest', 'Latest')));
+                } else {
+                    showEmptyCarousel('latestSongsCarousel', 'No latest songs yet');
                 }
             } catch (error) {
                 console.error('Error loading latest songs:', error);
-                document.getElementById('latestSongsCarousel').innerHTML = `<div class="error-message">Error loading latest songs: ${error.message}</div>`;
+                showEmptyCarousel('latestSongsCarousel', 'Could not load songs');
             }
         }
 
-        // Load all tabs
-        async function loadAllTabs() {
+        // Load trending songs
+        async function loadTrendingSongs() {
             try {
-                const response = await fetch(`${API_BASE_URL}/guitar-tabs/all-tabs`);
+                const response = await fetch(`${API_BASE_URL}/guitar-tabs/trending`);
                 const data = await response.json();
+                const carousel = document.getElementById('trendingSongsCarousel');
+                carousel.innerHTML = '';
 
-                if (data.success) {
-                    const carousel = document.getElementById('allTabsCarousel');
-                    carousel.innerHTML = '';
-                    data.data.forEach(tab => {
-                        const difficultyClass = tab.difficulty ? `difficulty-${tab.difficulty}` : '';
-                        const difficultyText = tab.difficulty ? tab.difficulty.charAt(0).toUpperCase() + tab.difficulty.slice(1) : '';
-
-                        const card = document.createElement('div');
-                        card.className = 'tab-card';
-                        card.innerHTML = `
-                            <span class="tab-badge badge-latest">Tabs</span>
-                            <h3>${tab.songName}</h3>
-                            <p>${tab.artist}</p>
-                            <div class="tab-meta">
-                                <span>${tab.category || 'Tabs'}</span>
-                                ${tab.difficulty ? `<span class="difficulty ${difficultyClass}">${difficultyText}</span>` : ''}
-                            </div>
-                            <p>${tab.creator?.name || 'Unknown Artist'} • Uploaded ${new Date(tab.createdAt).toLocaleDateString()}</p>
-                            <div class="action-buttons">
-                                <button class="btn-primary" onclick="viewTab('${tab._id}')">View Tab</button>
-                            </div>
-                        `;
-                        carousel.appendChild(card);
-                    });
+                if (data.success && data.data && data.data.length > 0) {
+                    data.data.forEach(tab => carousel.appendChild(buildTabCard(tab, 'badge-trending', 'Trending')));
+                } else {
+                    showEmptyCarousel('trendingSongsCarousel', 'No trending songs yet');
                 }
             } catch (error) {
-                console.error('Error loading all tabs:', error);
-                document.getElementById('allTabsCarousel').innerHTML = `<div class="error-message">Error loading all tabs: ${error.message}</div>`;
+                console.error('Error loading trending songs:', error);
+                showEmptyCarousel('trendingSongsCarousel', 'Could not load songs');
             }
         }
 
@@ -979,34 +1075,17 @@
                 const response = await fetch(`${API_BASE_URL}/guitar-tabs/popular`);
                 const data = await response.json();
 
-                if (data.success) {
-                    const carousel = document.getElementById('popularTabsCarousel');
-                    carousel.innerHTML = '';
-                    data.data.forEach(tab => {
-                        const difficultyClass = tab.difficulty ? `difficulty-${tab.difficulty}` : '';
-                        const difficultyText = tab.difficulty ? tab.difficulty.charAt(0).toUpperCase() + tab.difficulty.slice(1) : '';
+                const carousel = document.getElementById('popularTabsCarousel');
+                carousel.innerHTML = '';
 
-                        const card = document.createElement('div');
-                        card.className = 'tab-card';
-                        card.innerHTML = `
-                            <span class="tab-badge badge-popular">Popular</span>
-                            <h3>${tab.songName}</h3>
-                            <p>${tab.artist}</p>
-                            <div class="tab-meta">
-                                <span>${tab.category || 'Tabs'}</span>
-                                ${tab.difficulty ? `<span class="difficulty ${difficultyClass}">${difficultyText}</span>` : ''}
-                            </div>
-                            <p>${tab.creator?.name || 'Unknown Artist'} • Uploaded ${new Date(tab.createdAt).toLocaleDateString()}</p>
-                            <div class="action-buttons">
-                                <button class="btn-primary" onclick="viewTab('${tab._id}')">View Tab</button>
-                            </div>
-                        `;
-                        carousel.appendChild(card);
-                    });
+                if (data.success && data.data && data.data.length > 0) {
+                    data.data.forEach(tab => carousel.appendChild(buildTabCard(tab, 'badge-popular', 'Popular')));
+                } else {
+                    showEmptyCarousel('popularTabsCarousel', 'No popular tabs yet');
                 }
             } catch (error) {
                 console.error('Error loading popular tabs:', error);
-                document.getElementById('popularTabsCarousel').innerHTML = `<div class="error-message">Error loading popular tabs: ${error.message}</div>`;
+                showEmptyCarousel('popularTabsCarousel', 'Could not load tabs');
             }
         }
 
@@ -1038,20 +1117,124 @@
             return MUSICAL_SCALE[newIndex] + info.suffix;
         }
 
-        function parseAndRenderChords(text, steps = 0) {
-            // Process line by line to preserve line breaks and proper spacing
-            let chordCount = 0;
-            const result = text.split('\n').map(line => {
-                // Replace chords in each line with styled spans
-                return line.replace(/\[([^\]]+)\]/g, (match, chord) => {
-                    chordCount++;
-                    const transposed = transposeChord(chord, steps);
-                    return `<span class="chord-tag">${transposed}</span>`;
-                });
-            }).join('\n');
-            
-            console.log(`🎸 Rendered ${chordCount} chords with ${steps} semitone steps`);
+        // ── Chord-above-lyrics format helpers ────────────────────────────────
+
+        // Matches: G, Am, C#, Db, Cmaj, Cmaj7, Em7, Dsus4, F#m, Bbm, Cadd9, G7, Cdim7 etc.
+        const CHORD_TOKEN_RE = /^[A-G][#b]?(maj7?|min7?|m7?|dim7?|aug7?|sus[24]?|add\d+|M7?|7|9|11|13|6|5|2)?$/;
+
+        // Also accepts slash chords like G/B, Am/E, C/G
+        function isValidChordToken(token) {
+            const parts = token.split('/');
+            if (parts.length > 2) return false;
+            return parts.every(p => CHORD_TOKEN_RE.test(p));
+        }
+
+        // Returns true when every non-space word on the line is a valid chord
+        function isChordLine(line) {
+            const trimmed = line.trim();
+            if (!trimmed) return false;
+            // Bracket-only line like [Em] — not a chord line (handled by inline path)
+            if (/^\[.+\]$/.test(trimmed)) return false;
+            const tokens = trimmed.split(/\s+/);
+            return tokens.length > 0 && tokens.every(t => isValidChordToken(t));
+        }
+
+        // Returns true for section headers: [Verse 1], [Chorus], [Break] etc.
+        function isSectionMarker(line) {
+            const trimmed = line.trim();
+            if (!/^\[.+\]$/.test(trimmed)) return false;
+            const inner = trimmed.slice(1, -1);
+            // It's a section marker if the inner text is NOT a single valid chord
+            return !isValidChordToken(inner);
+        }
+
+        // Transpose every chord in a chord-only line, adjusting spaces so alignment is preserved
+        function transposeChordLine(line, steps) {
+            if (steps === 0) return line;
+            let result = '';
+            let i = 0;
+            let pendingDiff = 0; // cumulative length change from previous chords
+
+            while (i < line.length) {
+                const remaining = line.slice(i);
+
+                // Whitespace block
+                const spaceM = remaining.match(/^(\s+)/);
+                if (spaceM) {
+                    let spaces = spaceM[1];
+                    if (pendingDiff > 0) {
+                        // Previous chord(s) grew — eat trailing spaces to compensate
+                        const eat = Math.min(pendingDiff, spaces.length - 1);
+                        spaces = spaces.slice(eat);
+                        pendingDiff -= eat;
+                    } else if (pendingDiff < 0) {
+                        // Previous chord(s) shrank — pad with extra spaces
+                        spaces += ' '.repeat(-pendingDiff);
+                        pendingDiff = 0;
+                    }
+                    result += spaces;
+                    i += spaceM[1].length;
+                    continue;
+                }
+
+                // Non-whitespace token
+                const tokenM = remaining.match(/^([^\s]+)/);
+                if (tokenM) {
+                    const token = tokenM[1];
+                    if (isValidChordToken(token)) {
+                        const transposed = transposeChord(token, steps);
+                        result += transposed;
+                        pendingDiff += transposed.length - token.length;
+                    } else {
+                        result += token;
+                    }
+                    i += token.length;
+                } else {
+                    result += line[i++];
+                }
+            }
+            // If last chord shrank and there's nothing after it, pad
+            if (pendingDiff < 0) result += ' '.repeat(-pendingDiff);
             return result;
+        }
+
+        // ── Main renderer ────────────────────────────────────────────────────
+
+        function parseAndRenderChords(text, steps = 0) {
+            const lines = text.split('\n');
+
+            const rendered = lines.map(line => {
+                const trimmed = line.trim();
+
+                // 1. Empty line — preserve vertical spacing
+                if (!trimmed) return '';
+
+                // 2. Section marker: [Verse 1], [Chorus], [Break], [Outro] …
+                if (isSectionMarker(trimmed)) {
+                    return `<span class="section-label">${trimmed.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span>`;
+                }
+
+                // 3. Chord-above-lyrics line: "G             Cmaj"
+                if (isChordLine(line)) {
+                    const out = transposeChordLine(line, steps);
+                    return `<span class="chord-line-above">${out}</span>`;
+                }
+
+                // 4. Inline bracket format: "[Am] Tera ban jaunga [F] main tera"
+                if (/\[[^\]]+\]/.test(line)) {
+                    return line.replace(/\[([^\]]+)\]/g, (match, inner) => {
+                        if (isValidChordToken(inner)) {
+                            return `<span class="chord-tag">${transposeChord(inner, steps)}</span>`;
+                        }
+                        return match; // not a chord token, keep as-is
+                    });
+                }
+
+                // 5. Plain lyrics line
+                return line;
+            });
+
+            return rendered.join('\n');
         }
 
         window.updateTranspose = function (change) {
@@ -1136,21 +1319,19 @@
                                         <button class="t-btn" onclick="updateTranspose(1)">+</button>
                                         <button class="t-btn reset" onclick="resetTranspose()">Reset</button>
                                     </div>
+                                    ${currentTab.filePath && currentTab.fileType === 'pdf' ? `
+                                    <button class="open-pdf-btn" onclick="openPdfPopup('http://localhost:5000${currentTab.filePath}')">
+                                        <i class="fas fa-file-pdf"></i> Open PDF
+                                    </button>` : ''}
                                 </div>
-                                
+
                                 <div class="tab-content-viewer" id="tabDisplayContent">
                                     <!-- Content rendered here -->
                                 </div>
 
-                                ${currentTab.lyrics ? `
-                                <div class="lyrics-section">
-                                    <h3>📝 Full Lyrics</h3>
-                                    <pre class="lyrics-text">${currentTab.lyrics}</pre>
-                                </div>` : ''}
-
-                                ${currentTab.filePath ? `
-                                <div class="tab-file">
-                                    <p><strong>Original Attachment:</strong> <a href="http://localhost:5000${currentTab.filePath}" target="_blank">Open File</a></p>
+                                ${currentTab.filePath && currentTab.fileType === 'image' ? `
+                                <div class="tab-file-viewer" style="margin-top:1.5rem;">
+                                    <img src="http://localhost:5000${currentTab.filePath}" alt="Guitar Tab">
                                 </div>` : ''}
                             </div>
                         </div>`;
@@ -1164,6 +1345,25 @@
                 alert('Error loading tab');
             }
         }
+
+        window.openPdfPopup = function (url) {
+            const overlay = document.createElement('div');
+            overlay.className = 'pdf-popup-overlay';
+            overlay.id = 'pdfPopup';
+            overlay.innerHTML = `
+                <div class="pdf-popup">
+                    <div class="pdf-popup-header">
+                        <span><i class="fas fa-file-pdf"></i>&nbsp; PDF Viewer</span>
+                        <button class="pdf-popup-close" onclick="document.getElementById('pdfPopup').remove()">&times;</button>
+                    </div>
+                    <embed src="${url}" type="application/pdf" style="flex:1; width:100%; height:100%; border:none;">
+                </div>
+            `;
+            overlay.addEventListener('click', function (e) {
+                if (e.target === overlay) overlay.remove();
+            });
+            document.body.appendChild(overlay);
+        };
 
         window.closeTabModal = function () {
             const modal = document.getElementById('tabModal');
@@ -1182,11 +1382,10 @@
             }
         });
 
-
-
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', initPage);
     </script>
+
 </body>
 
 </html>

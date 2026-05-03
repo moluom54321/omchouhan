@@ -1,51 +1,64 @@
 const Attendance = require('../models/Attendance');
 const Student = require('../models/Student');
 const Course = require('../models/Course');
+const mongoose = require('mongoose');
 
 // Create attendance record
 const createAttendance = async (req, res) => {
   try {
-    const { records, studentId, courseType, timeSlot, date, status, notes } = req.body;
+    const { records, studentId, courseType, timeSlot, date, status, notes, branch } = req.body;
+
+    const queryDate = new Date(date || new Date());
+    queryDate.setHours(0, 0, 0, 0);
+    const start = new Date(queryDate);
+    const end = new Date(queryDate);
+    end.setHours(23, 59, 59, 999);
 
     // Handle single record
     if (!records || !Array.isArray(records)) {
-      const attendance = new Attendance({
-        student: studentId,
-        courseType,
-        timeSlot,
-        date: date ? new Date(date) : new Date(),
-        status: status || 'absent',
-        notes: notes || ''
-      });
-      await attendance.save();
-      return res.status(201).json({ success: true, message: 'Attendance marked' });
+      await Attendance.findOneAndUpdate(
+        {
+          student: studentId,
+          courseType,
+          timeSlot,
+          branch: branch || 'Pitampura',
+          date: { $gte: start, $lte: end }
+        },
+        {
+          student: studentId,
+          courseType,
+          timeSlot,
+          branch: branch || 'Pitampura',
+          date: date ? new Date(date) : new Date(),
+          status: status || 'absent',
+          notes: notes || ''
+        },
+        { upsert: true, new: true }
+      );
+      return res.status(201).json({ success: true, message: 'Attendance marked/updated' });
     }
 
     // Handle bulk records [ { studentId, status, ... } ]
     const attendancePromises = records.map(async (record) => {
-      // Clean up old record for same student/date/slot/type to avoid duplicates
-      const queryDate = new Date(date || record.date);
-      queryDate.setHours(0, 0, 0, 0);
-
-      const start = new Date(queryDate);
-      const end = new Date(queryDate);
-      end.setHours(23, 59, 59, 999);
-
-      await Attendance.deleteMany({
-        student: record.studentId,
-        courseType: courseType || record.courseType,
-        timeSlot: timeSlot || record.timeSlot,
-        date: { $gte: start, $lte: end }
-      });
-
-      return new Attendance({
-        student: record.studentId,
-        courseType: courseType || record.courseType,
-        timeSlot: timeSlot || record.timeSlot,
-        date: date ? new Date(date) : (record.date ? new Date(record.date) : new Date()),
-        status: record.status || 'absent',
-        notes: record.notes || ''
-      }).save();
+      return Attendance.findOneAndUpdate(
+        {
+          student: record.studentId,
+          courseType: courseType || record.courseType,
+          timeSlot: timeSlot || record.timeSlot,
+          branch: branch || record.branch || 'Pitampura',
+          date: { $gte: start, $lte: end }
+        },
+        {
+          student: record.studentId,
+          courseType: courseType || record.courseType,
+          timeSlot: timeSlot || record.timeSlot,
+          branch: branch || record.branch || 'Pitampura',
+          date: date ? new Date(date) : (record.date ? new Date(record.date) : new Date()),
+          status: record.status || 'absent',
+          notes: record.notes || ''
+        },
+        { upsert: true, new: true }
+      );
     });
 
     await Promise.all(attendancePromises);
@@ -67,16 +80,25 @@ const createAttendance = async (req, res) => {
 // Get all attendance records
 const getAllAttendance = async (req, res) => {
   try {
-    const { studentId, courseId, startDate, endDate, status, branch } = req.query;
+    const { studentId, courseId, courseType, timeSlot, startDate, endDate, status, branch, date } = req.query;
 
     let filter = {};
 
-    if (studentId) filter.student = studentId;
+    if (studentId) filter.student = new mongoose.Types.ObjectId(studentId);
     if (courseId) filter.course = courseId;
+    if (courseType) filter.courseType = courseType;
+    if (timeSlot) filter.timeSlot = timeSlot;
     if (status) filter.status = status;
     if (branch) filter.branch = branch;
 
-    if (startDate || endDate) {
+    if (date) {
+        const queryDate = new Date(date);
+        queryDate.setHours(0, 0, 0, 0);
+        const start = new Date(queryDate);
+        const end = new Date(queryDate);
+        end.setHours(23, 59, 59, 999);
+        filter.date = { $gte: start, $lte: end };
+    } else if (startDate || endDate) {
       filter.date = {};
       if (startDate) filter.date.$gte = new Date(startDate);
       if (endDate) filter.date.$lte = new Date(endDate);
@@ -84,7 +106,6 @@ const getAllAttendance = async (req, res) => {
 
     const attendanceRecords = await Attendance.find(filter)
       .populate('student', 'name email phone')
-      .populate('course', 'title description')
       .sort({ date: -1 });
 
     res.status(200).json({
@@ -107,8 +128,7 @@ const getAttendanceById = async (req, res) => {
     const { id } = req.params;
 
     const attendance = await Attendance.findById(id)
-      .populate('student', 'name email phone')
-      .populate('course', 'title description');
+      .populate('student', 'name email phone');
 
     if (!attendance) {
       return res.status(404).json({
@@ -145,8 +165,7 @@ const updateAttendance = async (req, res) => {
         date: date ? new Date(date) : undefined
       },
       { new: true }
-    ).populate('student', 'name email phone')
-      .populate('course', 'title description');
+    ).populate('student', 'name email phone');
 
     if (!attendance) {
       return res.status(404).json({
@@ -216,7 +235,6 @@ const getTodaysAttendance = async (req, res) => {
       }
     })
       .populate('student', 'name email phone')
-      .populate('course', 'title description')
       .sort({ date: -1 });
 
     res.status(200).json({
@@ -233,11 +251,89 @@ const getTodaysAttendance = async (req, res) => {
   }
 };
 
+// Get logged-in student's attendance records
+const getMyAttendance = async (req, res) => {
+  try {
+    const studentId = req.user.userId;
+    const { startDate, endDate, status } = req.query;
+
+    let filter = { student: studentId };
+
+    if (status) filter.status = status;
+
+    if (startDate || endDate) {
+      filter.date = {};
+      if (startDate) filter.date.$gte = new Date(startDate);
+      if (endDate) filter.date.$lte = new Date(endDate);
+    }
+
+    const attendanceRecords = await Attendance.find(filter)
+      .sort({ date: -1 });
+
+    res.status(200).json({
+      success: true,
+      data: attendanceRecords
+    });
+  } catch (error) {
+    console.error('Get my attendance error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+      error: error.message
+    });
+  }
+};
+
+// Get stats for student attendance
+const getStudentAttendanceStats = async (req, res) => {
+  try {
+    const studentId = req.user.userId;
+
+    const stats = await Attendance.aggregate([
+      { $match: { student: new mongoose.Types.ObjectId(studentId) } },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: 1 },
+          present: {
+            $sum: { $cond: [{ $eq: ['$status', 'present'] }, 1, 0] }
+          },
+          absent: {
+            $sum: { $cond: [{ $eq: ['$status', 'absent'] }, 1, 0] }
+          },
+          late: {
+            $sum: { $cond: [{ $eq: ['$status', 'late'] }, 1, 0] }
+          }
+        }
+      }
+    ]);
+
+    const result = stats.length > 0 ? stats[0] : { total: 0, present: 0, absent: 0, late: 0 };
+    
+    // Calculate percentage
+    result.percentage = result.total > 0 ? ((result.present / result.total) * 100).toFixed(2) : 0;
+
+    res.status(200).json({
+      success: true,
+      data: result
+    });
+  } catch (error) {
+    console.error('Get student attendance stats error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   createAttendance,
   getAllAttendance,
   getAttendanceById,
   updateAttendance,
   deleteAttendance,
-  getTodaysAttendance
+  getTodaysAttendance,
+  getMyAttendance,
+  getStudentAttendanceStats
 };

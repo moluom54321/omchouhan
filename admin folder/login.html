@@ -134,7 +134,8 @@
             100% { transform: rotate(360deg); }
         }
     </style>
-</head>
+
+        </head>
 <body>
     <div class="login-container">
         <div class="login-header">
@@ -346,8 +347,108 @@
             }
         }
         
+        // Test backend server connection
+        async function testBackendConnection() {
+            console.log('TEST: Testing backend server connection...');
+            try {
+                const response = await fetch('http://localhost:5000/api/health', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                if (response.ok) {
+                    console.log('SUCCESS: Backend server is running');
+                    return true;
+                } else {
+                    console.log('ERROR: Backend server responded with status:', response.status);
+                    return false;
+                }
+            } catch (error) {
+                console.log('ERROR: Cannot connect to backend server:', error.message);
+                return false;
+            }
+        }
+
+        // Test admin credentials directly
+        async function testAdminCredentials() {
+            console.log('TEST: Testing admin credentials...');
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/admin-login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        email: 'admin@musicschooldelhi.com', 
+                        password: 'admin123' 
+                    }),
+                    credentials: 'include'
+                });
+                
+                console.log('TEST: Admin login response status:', response.status);
+                
+                const data = await response.json();
+                console.log('TEST: Admin login response data:', data);
+                
+                if (data.success) {
+                    console.log('SUCCESS: Admin credentials are valid');
+                    return true;
+                } else {
+                    console.log('ERROR: Admin credentials invalid:', data.message);
+                    return false;
+                }
+            } catch (error) {
+                console.log('ERROR: Admin credentials test failed:', error.message);
+                return false;
+            }
+        }
+
+        // Run tests on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('=== ADMIN LOGIN PAGE LOADED ===');
+            
+            // Test backend connection
+            const backendWorking = await testBackendConnection();
+            
+            if (backendWorking) {
+                // Test admin credentials
+                await testAdminCredentials();
+            } else {
+                console.log('ERROR: Backend server is not running - login will fail');
+            }
+        });
+
+        // Show Alert function
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 25px;
+                border-radius: 5px;
+                font-size: 14px;
+                z-index: 11000;
+                background: ${type === 'success' ? '#10b981' : '#e74c3c'};
+                color: white;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            `;
+            alertDiv.textContent = message;
+            document.body.appendChild(alertDiv);
+
+            setTimeout(() => {
+                alertDiv.style.transition = 'opacity 0.3s';
+                alertDiv.style.opacity = '0';
+                setTimeout(() => alertDiv.remove(), 300);
+            }, 3000);
+        }
+
         // Check auth on page load
         checkAuth();
     </script>
+
 </body>
 </html>

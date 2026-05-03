@@ -1,22 +1,23 @@
 const express = require('express');
-const { 
-  getAllPayments, 
-  getPaymentById, 
-  createPayment, 
-  updatePayment, 
-  deletePayment 
+const {
+  getAllPayments,
+  getPaymentById,
+  createPayment,
+  updatePayment,
+  deletePayment
 } = require('../controllers/payment.controller');
+const { adminAuth } = require('../middlewares/auth.middleware');
 
 const router = express.Router();
 
-// Payment routes
+// Payment routes (admin only)
 router.route('/')
-  .get(getAllPayments)
-  .post(createPayment);
+  .get(adminAuth, getAllPayments)
+  .post(adminAuth, createPayment);
 
 router.route('/:id')
-  .get(getPaymentById)
-  .put(updatePayment)
-  .delete(deletePayment);
+  .get(adminAuth, getPaymentById)
+  .put(adminAuth, updatePayment)
+  .delete(adminAuth, deletePayment);
 
 module.exports = router;

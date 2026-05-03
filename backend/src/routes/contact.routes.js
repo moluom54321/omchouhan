@@ -5,7 +5,8 @@ const {
     getContactById,
     replyToContact,
     deleteContact,
-    getContactStats
+    getContactStats,
+    testEmailConfiguration
 } = require('../controllers/contact.controller');
 const { adminAuth } = require('../middlewares/auth.middleware');
 
@@ -17,6 +18,9 @@ router.post('/submit', submitContact);
 // Admin only routes
 router.get('/', adminAuth, getAllContacts);
 router.get('/stats', adminAuth, getContactStats);
+
+// Test email configuration
+router.post('/test-email', adminAuth, testEmailConfiguration);
 
 // Get single contact by ID
 router.get('/:id', adminAuth, getContactById);

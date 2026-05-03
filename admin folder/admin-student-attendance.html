@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Attendance Manager - Music School Delhi</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg: #f1f5f9;
+            --card: #ffffff;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --sidebar-w: 260px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        /* ─── SIDEBAR ─── */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: linear-gradient(160deg, var(--primary) 0%, var(--secondary) 100%);
+            height: 100vh;
+            position: fixed;
+            top: 0; left: 0;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 4px 0 20px rgba(102,126,234,.25);
+        }
+
+        .sidebar-header {
+            padding: 1.6rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,.15);
+        }
+
+        .sidebar-header h2 {
+            color: white;
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: -.3px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 1rem 0;
+        }
+
+        .sidebar-menu li a {
+            color: rgba(255,255,255,.8);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: .8rem 1.5rem;
+            gap: 12px;
+            font-size: .92rem;
+            font-weight: 500;
+            transition: all .2s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-menu li a:hover,
+        .sidebar-menu li a.active {
+            color: white;
+            background: rgba(255,255,255,.12);
+            border-left-color: white;
+        }
+
+        /* ─── LAYOUT ─── */
+        .main-content {
+            margin-left: var(--sidebar-w);
+            min-height: 100vh;
+        }
+
+        /* ─── TOPBAR ─── */
+        .topbar {
+            background: white;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 3px rgba(0,0,0,.08);
+            position: sticky;
+            top: 0;
+            z-index: 900;
+        }
+
+        .topbar h1 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .user-avatar {
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: 700; font-size: .9rem;
+        }
+
+        .btn-logout {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: .9rem;
+            display: flex; align-items: center; gap: 6px;
+        }
+
+        /* ─── TWO-PANEL LAYOUT ─── */
+        .page-body {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 1.5rem;
+            padding: 1.5rem 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 1100px) {
+            .page-body { grid-template-columns: 1fr; }
+        }
+
+        /* ─── STUDENT LIST PANEL ─── */
+        .panel {
+            background: var(--card);
+            border-radius: 14px;
+            box-shadow: 0 4px 20px rgba(0,0,0,.06);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel-header h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            flex: 1;
+        }
+
+        .student-count-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-size: .75rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+        .search-box {
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: .6rem 1rem .6rem 2.4rem;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-size: .9rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color .2s;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E") no-repeat 10px center;
+        }
+
+        .search-box input:focus { border-color: var(--primary); }
+
+        .student-list-body {
+            max-height: calc(100vh - 280px);
+            overflow-y: auto;
+        }
+
+        .student-row {
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border);
+            transition: all .2s;
+        }
+
+        .student-row:hover { background: #f8fafc; }
+
+        .student-row.selected {
+            background: linear-gradient(90deg, #eff1ff, #f5f3ff);
+            border-left: 3px solid var(--primary);
+        }
+
+        .avatar-circle {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .student-info { flex: 1; min-width: 0; }
+        .student-info .s-name { font-weight: 600; font-size: .93rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .student-info .s-meta { font-size: .78rem; color: var(--muted); margin-top: 2px; }
+
+        .branch-pill {
+            font-size: .7rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+        .branch-pill.pitampura { background: #eff6ff; color: #2563eb; }
+        .branch-pill.rohini { background: #fdf4ff; color: #9333ea; }
+
+        /* ─── DETAIL PANEL ─── */
+        .detail-placeholder {
+            text-align: center;
+            padding: 5rem 2rem;
+            color: var(--muted);
+        }
+
+        .detail-placeholder i { font-size: 3.5rem; opacity: .2; margin-bottom: 1rem; display: block; }
+        .detail-placeholder p { font-size: .95rem; }
+
+        /* ─── STUDENT DETAIL HEADER ─── */
+        .detail-topcard {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 14px;
+            padding: 1.5rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .detail-avatar {
+            width: 64px; height: 64px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.25);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; font-weight: 700;
+            border: 3px solid rgba(255,255,255,.5);
+            flex-shrink: 0;
+        }
+
+        .detail-info h2 { font-size: 1.2rem; font-weight: 700; }
+        .detail-info p { font-size: .85rem; opacity: .85; margin-top: 3px; }
+
+        .detail-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 900px) {
+            .detail-stats { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .stat-box {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,.05);
+            border: 1.5px solid transparent;
+        }
+
+        .stat-box.blue { border-color: #bfdbfe; }
+        .stat-box.green { border-color: #a7f3d0; }
+        .stat-box.red { border-color: #fecaca; }
+        .stat-box.purple { border-color: #e9d5ff; }
+
+        .stat-box .stat-val {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .stat-box.blue .stat-val { color: var(--primary); }
+        .stat-box.green .stat-val { color: var(--success); }
+        .stat-box.red .stat-val { color: var(--danger); }
+        .stat-box.purple .stat-val { color: #8b5cf6; }
+
+        .stat-box .stat-label { font-size: .78rem; color: var(--muted); font-weight: 500; }
+
+        /* ─── ADD ATTENDANCE FORM ─── */
+        .add-form-card {
+            background: var(--card);
+            border-radius: 14px;
+            box-shadow: 0 4px 20px rgba(0,0,0,.06);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .add-form-toggle {
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+            background: linear-gradient(90deg, #fafafa, white);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .add-form-toggle:hover { background: #f0f4ff; }
+
+        .add-form-toggle .toggle-title {
+            font-size: .95rem;
+            font-weight: 700;
+            display: flex; align-items: center; gap: 8px;
+            color: var(--primary);
+        }
+
+        .add-form-body {
+            padding: 1.5rem;
+            display: none;
+        }
+
+        .add-form-body.open { display: block; }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 900px) {
+            .form-row { grid-template-columns: 1fr; }
+        }
+
+        .form-group label {
+            display: block;
+            font-size: .8rem;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            margin-bottom: .4rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: .6rem .9rem;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-size: .9rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color .2s;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus { border-color: var(--primary); }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: .65rem 1.3rem;
+            border: none;
+            border-radius: 8px;
+            font-size: .9rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102,126,234,.4); }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-danger:hover { background: #dc2626; transform: translateY(-1px); }
+        .btn-secondary { background: #f1f5f9; color: var(--text); border: 1px solid var(--border); }
+        .btn-secondary:hover { background: #e2e8f0; }
+
+        /* ─── ATTENDANCE TABLE ─── */
+        .table-card {
+            background: var(--card);
+            border-radius: 14px;
+            box-shadow: 0 4px 20px rgba(0,0,0,.06);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .table-header h3 { font-size: 1rem; font-weight: 700; }
+
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-bar select {
+            padding: .4rem .8rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: .85rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+        }
+
+        .att-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .att-table th {
+            background: #f8fafc;
+            padding: .85rem 1.2rem;
+            text-align: left;
+            font-size: .78rem;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .att-table td {
+            padding: .85rem 1.2rem;
+            border-bottom: 1px solid var(--border);
+            font-size: .9rem;
+            vertical-align: middle;
+        }
+
+        .att-table tr:last-child td { border-bottom: none; }
+        .att-table tr:hover td { background: #fafbff; }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: .75rem;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+
+        .pill-present { background: #d1fae5; color: #065f46; }
+        .pill-absent { background: #fee2e2; color: #991b1b; }
+        .pill-late { background: #fef3c7; color: #92400e; }
+
+        .action-btns { display: flex; gap: 6px; }
+
+        .btn-icon {
+            width: 30px; height: 30px;
+            display: flex; align-items: center; justify-content: center;
+            border: none; border-radius: 6px;
+            cursor: pointer; transition: all .2s;
+            font-size: .8rem;
+        }
+
+        .btn-edit { background: #eff6ff; color: #2563eb; }
+        .btn-edit:hover { background: #2563eb; color: white; }
+        .btn-del { background: #fef2f2; color: var(--danger); }
+        .btn-del:hover { background: var(--danger); color: white; }
+
+        /* ─── EMPTY STATE ─── */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--muted);
+        }
+
+        .empty-state i { font-size: 2.5rem; opacity: .25; margin-bottom: .8rem; display: block; }
+        .empty-state p { font-size: .9rem; }
+
+        /* ─── TOAST ─── */
+        .toast-container {
+            position: fixed;
+            bottom: 2rem; right: 2rem;
+            z-index: 9999;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+
+        .toast {
+            background: white;
+            border-radius: 10px;
+            padding: .9rem 1.2rem;
+            box-shadow: 0 8px 30px rgba(0,0,0,.15);
+            display: flex; align-items: center; gap: 10px;
+            border-left: 4px solid var(--success);
+            animation: slideInRight .3s ease;
+            font-size: .9rem;
+            font-weight: 500;
+            min-width: 250px;
+        }
+
+        .toast.error { border-left-color: var(--danger); }
+        .toast.warning { border-left-color: var(--warning); }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* ─── LOADING SPINNER ─── */
+        .spinner {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 2px solid rgba(255,255,255,.4);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin .7s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loading-row td { text-align: center; padding: 2rem; color: var(--muted); }
+    </style>
+</head>
+
+<body>
+    <div style="display:flex;">
+        <!-- ─── SIDEBAR ─── -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-music"></i> Music School</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="admin-students.html"><i class="fas fa-graduation-cap"></i> Enrolled Students</a></li>
+                <li><a href="admin-registration.html"><i class="fas fa-user-plus"></i> Active Students</a></li>
+                <li><a href="admin-attendance.html"><i class="fas fa-calendar-check"></i> Pitampura Attendance</a></li>
+                <li><a href="admin-attendance-rohini.html"><i class="fas fa-calendar-check"></i> Rohini Attendance</a></li>
+                <li><a href="admin-student-attendance.html" class="active"><i class="fas fa-user-clock"></i> Student-wise Attendance</a></li>
+                <li><a href="admin-announcements.html"><i class="fas fa-bullhorn"></i> Announcements</a></li>
+                <li><a href="admin-guitar-tabs.html"><i class="fas fa-guitar"></i> Guitar Tabs</a></li>
+                <li><a href="admin-content.html"><i class="fas fa-video"></i> Content Management</a></li>
+                <li><a href="admin-settings-batches.html"><i class="fas fa-clock"></i> Batch Settings</a></li>
+                <li><a href="admin-settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+            </ul>
+        </div>
+
+        <!-- ─── MAIN CONTENT ─── -->
+        <div class="main-content">
+            <div class="topbar">
+                <h1><i class="fas fa-user-clock" style="color:var(--primary);"></i> Student-wise Attendance</h1>
+                <div class="topbar-right">
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <div class="user-avatar" id="userInitial">A</div>
+                        <span id="adminName" style="font-weight:600;font-size:.9rem;">Admin</span>
+                    </div>
+                    <button class="btn-logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+            </div>
+
+            <div class="page-body">
+                <!-- ─── LEFT: STUDENT LIST ─── -->
+                <div class="panel" style="position:sticky;top:80px;">
+                    <div class="panel-header">
+                        <i class="fas fa-users" style="color:var(--primary);"></i>
+                        <h3>All Students</h3>
+                        <span class="student-count-badge" id="studentCountBadge">0</span>
+                    </div>
+                    <div class="search-box">
+                        <input type="text" id="studentSearch" placeholder="Search student..." oninput="filterStudents()">
+                    </div>
+                    <div class="student-list-body" id="studentListBody">
+                        <div class="empty-state" style="padding:2rem;">
+                            <i class="fas fa-spinner fa-spin" style="opacity:.5;"></i>
+                            <p>Loading students...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ─── RIGHT: DETAIL PANEL ─── -->
+                <div id="detailPanel">
+                    <div class="detail-placeholder">
+                        <i class="fas fa-hand-pointer"></i>
+                        <p>Select a student from the left to view and manage their attendance.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── TOAST CONTAINER ─── -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ─── EDIT MODAL ─── -->
+    <div id="editModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;align-items:center;justify-content:center;">
+        <div style="background:white;border-radius:16px;padding:2rem;width:90%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.2);">
+            <h3 style="margin-bottom:1.2rem;font-size:1rem;font-weight:700;"><i class="fas fa-edit" style="color:var(--primary);margin-right:8px;"></i>Edit Attendance Record</h3>
+            <div class="form-group" style="margin-bottom:1rem;">
+                <label>Date</label>
+                <input type="date" id="editDate">
+            </div>
+            <div class="form-group" style="margin-bottom:1rem;">
+                <label>Status</label>
+                <select id="editStatus">
+                    <option value="present">Present</option>
+                    <option value="absent">Absent</option>
+                </select>
+            </div>
+            <div class="form-group" style="margin-bottom:1.5rem;">
+                <label>Notes (optional)</label>
+                <input type="text" id="editNotes" placeholder="Any notes...">
+            </div>
+            <div style="display:flex;gap:10px;justify-content:flex-end;">
+                <button class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+                <button class="btn btn-primary" id="saveEditBtn" onclick="saveEdit()"><i class="fas fa-save"></i> Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API = 'http://localhost:5000/api';
+        let allStudents = [];
+        let currentStudentId = null;
+        let allRecords = [];
+        let editingRecordId = null;
+
+        const getToken = () => localStorage.getItem('token');
+        const removeToken = () => localStorage.removeItem('token');
+
+        function decodeToken(t) {
+            try {
+                const b = t.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+                return JSON.parse(decodeURIComponent(atob(b).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join('')));
+            } catch { return null; }
+        }
+
+        function checkAuth() {
+            const t = getToken();
+            if (!t) { location.href = 'login.html'; return false; }
+            const d = decodeToken(t);
+            if (!d || (d.role !== 'admin' && d.role !== 'super_admin')) { removeToken(); location.href = 'login.html'; return false; }
+            return true;
+        }
+
+        async function apiFetch(url, opts = {}) {
+            const res = await fetch(url, {
+                ...opts,
+                headers: { 'Authorization': `Bearer ${getToken()}`, 'Content-Type': 'application/json', ...opts.headers }
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || 'Request failed');
+            return data;
+        }
+
+        // ─── TOAST ───
+        function showToast(msg, type = 'success') {
+            const tc = document.getElementById('toastContainer');
+            const t = document.createElement('div');
+            t.className = `toast${type === 'error' ? ' error' : type === 'warning' ? ' warning' : ''}`;
+            const icon = type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-times-circle' : 'fa-exclamation-triangle';
+            const color = type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#f59e0b';
+            t.innerHTML = `<i class="fas ${icon}" style="color:${color};font-size:1.1rem;"></i> ${msg}`;
+            tc.appendChild(t);
+            setTimeout(() => t.remove(), 4000);
+        }
+
+        // ─── LOAD STUDENTS ───
+        async function loadStudents() {
+            try {
+                const res = await apiFetch(`${API}/student`);
+                allStudents = (res.data.students || res.data).filter(s => s.isActive !== false);
+                document.getElementById('studentCountBadge').textContent = allStudents.length;
+                renderStudentList(allStudents);
+            } catch (e) {
+                document.getElementById('studentListBody').innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>${e.message}</p></div>`;
+            }
+        }
+
+        function renderStudentList(list) {
+            const el = document.getElementById('studentListBody');
+            if (!list.length) {
+                el.innerHTML = '<div class="empty-state"><i class="fas fa-users-slash"></i><p>No students found</p></div>';
+                return;
+            }
+            el.innerHTML = list.map(s => {
+                const initials = (s.name || 'S').charAt(0).toUpperCase();
+                const branch = s.branch || 'Pitampura';
+                const branchClass = branch.toLowerCase() === 'rohini' ? 'rohini' : 'pitampura';
+                const course = Array.isArray(s.selectedCourse) ? s.selectedCourse.join(', ') : (s.selectedCourse || s.course || '—');
+                return `
+                <div class="student-row ${currentStudentId === s._id ? 'selected' : ''}" onclick="selectStudent('${s._id}')">
+                    <div class="avatar-circle">${initials}</div>
+                    <div class="student-info">
+                        <div class="s-name">${s.name || 'Unknown'}</div>
+                        <div class="s-meta">${s.email || ''}</div>
+                    </div>
+                    <span class="branch-pill ${branchClass}">${branch}</span>
+                </div>`;
+            }).join('');
+        }
+
+        function filterStudents() {
+            const q = document.getElementById('studentSearch').value.toLowerCase();
+            renderStudentList(allStudents.filter(s => (s.name || '').toLowerCase().includes(q) || (s.email || '').toLowerCase().includes(q)));
+        }
+
+        // ─── SELECT STUDENT ───
+        async function selectStudent(id) {
+            currentStudentId = id;
+            renderStudentList(document.getElementById('studentSearch').value ?
+                allStudents.filter(s => (s.name || '').toLowerCase().includes(document.getElementById('studentSearch').value.toLowerCase())) :
+                allStudents);
+
+            const s = allStudents.find(x => x._id === id);
+            if (!s) return;
+
+            // Render skeleton
+            document.getElementById('detailPanel').innerHTML = `
+                <div class="detail-topcard">
+                    <div class="detail-avatar">${(s.name || 'S').charAt(0).toUpperCase()}</div>
+                    <div class="detail-info">
+                        <h2>${s.name || 'Student'}</h2>
+                        <p>${s.email || ''} &bull; ${s.branch || 'Pitampura'}</p>
+                        <p style="margin-top:4px;"><i class="fas fa-music"></i> ${Array.isArray(s.selectedCourse) ? s.selectedCourse.join(', ') : (s.selectedCourse || '—')}</p>
+                    </div>
+                </div>
+                <div class="detail-stats" id="statsRow">
+                    <div class="stat-box blue"><div class="stat-val" id="statTotal">—</div><div class="stat-label">Total Classes</div></div>
+                    <div class="stat-box green"><div class="stat-val" id="statPresent">—</div><div class="stat-label">Present</div></div>
+                    <div class="stat-box red"><div class="stat-val" id="statAbsent">—</div><div class="stat-label">Absent</div></div>
+                    <div class="stat-box purple"><div class="stat-val" id="statPct">—</div><div class="stat-label">Attendance %</div></div>
+                </div>
+
+                <!-- ADD FORM -->
+                <div class="add-form-card">
+                    <div class="add-form-toggle" onclick="toggleAddForm()">
+                        <span class="toggle-title"><i class="fas fa-plus-circle"></i> Add / Update Attendance Record</span>
+                        <i class="fas fa-chevron-down" id="formChevron"></i>
+                    </div>
+                    <div class="add-form-body" id="addFormBody">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="date" id="newDate" value="${new Date().toISOString().split('T')[0]}">
+                            </div>
+                            <div class="form-group">
+                                <label>Course</label>
+                                <select id="newCourse">
+                                    <option value="Guitar">Guitar</option>
+                                    <option value="Piano">Piano</option>
+                                    <option value="Vocal">Vocal</option>
+                                    <option value="Instruments">Instruments</option>
+                                    <option value="PIANO + INSTRUMENTS">Piano + Instruments</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Time Slot</label>
+                                <input type="text" id="newSlot" placeholder="e.g. 5-6 PM">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Branch</label>
+                                <select id="newBranch">
+                                    <option value="Pitampura" ${(s.branch === 'Pitampura' || !s.branch) ? 'selected' : ''}>Pitampura</option>
+                                    <option value="Rohini" ${s.branch === 'Rohini' ? 'selected' : ''}>Rohini</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select id="newStatus">
+                                    <option value="present">✅ Present</option>
+                                    <option value="absent">❌ Absent</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Notes (optional)</label>
+                                <input type="text" id="newNotes" placeholder="Any remarks...">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" id="addAttBtn" onclick="addAttendance()">
+                            <i class="fas fa-save"></i> Save Attendance to Student Dashboard
+                        </button>
+                    </div>
+                </div>
+
+                <!-- RECORDS TABLE -->
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3><i class="fas fa-list-alt" style="color:var(--primary);margin-right:6px;"></i>Attendance History</h3>
+                        <div class="filter-bar">
+                            <select id="filterStatus" onchange="applyFilter()">
+                                <option value="">All Status</option>
+                                <option value="present">Present</option>
+                                <option value="absent">Absent</option>
+                            </select>
+                            <select id="filterMonth" onchange="applyFilter()">
+                                <option value="">All Months</option>
+                                <option value="0">January</option>
+                                <option value="1">February</option>
+                                <option value="2">March</option>
+                                <option value="3">April</option>
+                                <option value="4">May</option>
+                                <option value="5">June</option>
+                                <option value="6">July</option>
+                                <option value="7">August</option>
+                                <option value="8">September</option>
+                                <option value="9">October</option>
+                                <option value="10">November</option>
+                                <option value="11">December</option>
+                            </select>
+                        </div>
+                    </div>
+                    <table class="att-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Day</th>
+                                <th>Course</th>
+                                <th>Time Slot</th>
+                                <th>Branch</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attTableBody">
+                            <tr class="loading-row"><td colspan="7"><i class="fas fa-spinner fa-spin"></i> Loading records...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            // Pre-fill course from student data
+            const sc = Array.isArray(s.selectedCourse) ? s.selectedCourse[0] : s.selectedCourse;
+            if (sc) {
+                const courseSelect = document.getElementById('newCourse');
+                for (let opt of courseSelect.options) {
+                    if (opt.value.toLowerCase() === sc.toLowerCase()) { opt.selected = true; break; }
+                }
+            }
+
+            loadAttendanceRecords(id);
+        }
+
+        // ─── TOGGLE FORM ───
+        function toggleAddForm() {
+            const body = document.getElementById('addFormBody');
+            const chevron = document.getElementById('formChevron');
+            body.classList.toggle('open');
+            chevron.style.transform = body.classList.contains('open') ? 'rotate(180deg)' : '';
+        }
+
+        // ─── LOAD RECORDS ───
+        async function loadAttendanceRecords(studentId) {
+            try {
+                const res = await apiFetch(`${API}/attendance?studentId=${studentId}`);
+                allRecords = res.data || [];
+                updateStats(allRecords);
+                renderTable(allRecords);
+            } catch (e) {
+                document.getElementById('attTableBody').innerHTML = `<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--danger);">${e.message}</td></tr>`;
+            }
+        }
+
+        function updateStats(records) {
+            const total = records.length;
+            const present = records.filter(r => r.status === 'present').length;
+            const absent = records.filter(r => r.status === 'absent').length;
+            const pct = total > 0 ? ((present / total) * 100).toFixed(1) : 0;
+            document.getElementById('statTotal').textContent = total;
+            document.getElementById('statPresent').textContent = present;
+            document.getElementById('statAbsent').textContent = absent;
+            document.getElementById('statPct').textContent = pct + '%';
+        }
+
+        function applyFilter() {
+            const status = document.getElementById('filterStatus').value;
+            const month = document.getElementById('filterMonth').value;
+            let filtered = [...allRecords];
+            if (status) filtered = filtered.filter(r => r.status === status);
+            if (month !== '') filtered = filtered.filter(r => new Date(r.date).getMonth() === parseInt(month));
+            renderTable(filtered);
+        }
+
+        const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+        function renderTable(records) {
+            const tb = document.getElementById('attTableBody');
+            if (!records.length) {
+                tb.innerHTML = `<tr><td colspan="7"><div class="empty-state"><i class="fas fa-calendar-times"></i><p>No attendance records found.</p></div></td></tr>`;
+                return;
+            }
+            tb.innerHTML = records.map(r => {
+                const d = new Date(r.date);
+                const dateStr = d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+                const dayStr = dayNames[d.getDay()];
+                const pillClass = r.status === 'present' ? 'pill-present' : 'pill-absent';
+                const icon = r.status === 'present' ? 'fa-check' : 'fa-times';
+                return `
+                <tr>
+                    <td><strong>${dateStr}</strong></td>
+                    <td style="color:var(--muted);">${dayStr}</td>
+                    <td>${r.courseType || '—'}</td>
+                    <td>${r.timeSlot || '—'}</td>
+                    <td>${r.branch || '—'}</td>
+                    <td><span class="status-pill ${pillClass}"><i class="fas ${icon}"></i>${r.status}</span></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-icon btn-edit" title="Edit" onclick="openEditModal('${r._id}','${r.date}','${r.status}','${r.notes || ''}')"><i class="fas fa-edit"></i></button>
+                            <button class="btn-icon btn-del" title="Delete" onclick="deleteRecord('${r._id}')"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        // ─── ADD ATTENDANCE ───
+        async function addAttendance() {
+            const date = document.getElementById('newDate')?.value;
+            const course = document.getElementById('newCourse')?.value;
+            const slot = document.getElementById('newSlot')?.value || '—';
+            const branch = document.getElementById('newBranch')?.value;
+            const status = document.getElementById('newStatus')?.value;
+            const notes = document.getElementById('newNotes')?.value || '';
+
+            if (!date || !course || !status) { showToast('Please fill Date, Course and Status!', 'warning'); return; }
+
+            const btn = document.getElementById('addAttBtn');
+            btn.innerHTML = '<span class="spinner"></span> Saving...';
+            btn.disabled = true;
+
+            try {
+                await apiFetch(`${API}/attendance`, {
+                    method: 'POST',
+                    body: JSON.stringify({ studentId: currentStudentId, courseType: course, timeSlot: slot, branch, date, status, notes })
+                });
+                showToast('✅ Attendance saved! Student dashboard updated.', 'success');
+                loadAttendanceRecords(currentStudentId);
+            } catch (e) {
+                showToast('Error: ' + e.message, 'error');
+            } finally {
+                btn.innerHTML = '<i class="fas fa-save"></i> Save Attendance to Student Dashboard';
+                btn.disabled = false;
+            }
+        }
+
+        // ─── EDIT ───
+        function openEditModal(id, date, status, notes) {
+            editingRecordId = id;
+            document.getElementById('editDate').value = new Date(date).toISOString().split('T')[0];
+            document.getElementById('editStatus').value = status;
+            document.getElementById('editNotes').value = notes;
+            document.getElementById('editModal').style.display = 'flex';
+        }
+
+        function closeEditModal() { document.getElementById('editModal').style.display = 'none'; editingRecordId = null; }
+
+        async function saveEdit() {
+            if (!editingRecordId) return;
+            const date = document.getElementById('editDate').value;
+            const status = document.getElementById('editStatus').value;
+            const notes = document.getElementById('editNotes').value;
+            const btn = document.getElementById('saveEditBtn');
+            btn.innerHTML = '<span class="spinner"></span> Saving...';
+            btn.disabled = true;
+            try {
+                await apiFetch(`${API}/attendance/${editingRecordId}`, { method: 'PUT', body: JSON.stringify({ date, status, notes }) });
+                showToast('✅ Record updated!', 'success');
+                closeEditModal();
+                loadAttendanceRecords(currentStudentId);
+            } catch (e) {
+                showToast('Error: ' + e.message, 'error');
+            } finally {
+                btn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+                btn.disabled = false;
+            }
+        }
+
+        // ─── DELETE ───
+        async function deleteRecord(id) {
+            if (!confirm('Delete this attendance record?')) return;
+            try {
+                await apiFetch(`${API}/attendance/${id}`, { method: 'DELETE' });
+                showToast('Record deleted.', 'success');
+                loadAttendanceRecords(currentStudentId);
+            } catch (e) {
+                showToast('Error: ' + e.message, 'error');
+            }
+        }
+
+        // ─── INIT ───
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!checkAuth()) return;
+            const d = decodeToken(getToken());
+            if (d) {
+                const name = localStorage.getItem('adminName') || d.name || 'Admin';
+                document.getElementById('userInitial').textContent = name.charAt(0).toUpperCase();
+                document.getElementById('adminName').textContent = name;
+            }
+            loadStudents();
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', () => { removeToken(); location.href = 'login.html'; });
+
+        // Close edit modal on backdrop click
+        document.getElementById('editModal').addEventListener('click', e => { if (e.target === document.getElementById('editModal')) closeEditModal(); });
+    </script>
+</body>
+</html>

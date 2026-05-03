@@ -67,7 +67,9 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 20px;
+    padding: 1rem 0.5%; /* Minimum padding for extremely wide gap */
+    max-width: 1700px !important; /* Maximized width for extreme gap */
+    margin: 0 auto;
 }
 
 .logo {
@@ -86,7 +88,7 @@ body {
 .nav-menu {
     display: flex;
     list-style: none;
-    gap: 2rem;
+    gap: 2.5rem; /* Increased gap between menu items for more spacious feel */
     align-items: center;
 }
 

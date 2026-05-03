@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Detail - Music School of Delhi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .blog-detail-container {
+            padding: 80px 0;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .blog-detail-header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .blog-detail-title {
+            font-size: 3rem;
+            color: #1a1a2e;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .blog-detail-meta {
+            color: #6c757d;
+            font-size: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .blog-detail-image {
+            width: 100%;
+            height: auto;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .blog-detail-content {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .blog-detail-content p {
+            margin-bottom: 25px;
+        }
+
+        .blog-detail-content h2, .blog-detail-content h3 {
+            color: #1a1a2e;
+            margin: 40px 0 20px;
+        }
+
+        .blog-detail-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .back-to-blog {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #00bcd4;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 40px;
+            transition: transform 0.2s;
+        }
+
+        .back-to-blog:hover {
+            transform: translateX(-5px);
+        }
+
+        #error-message {
+            text-align: center;
+            padding: 100px 0;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-music"></i>
+                <span>Music School of Delhi</span>
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="courses.html">Courses</a></li>
+                <li><a href="admission.html">Admission Form</a></li>
+                <li><a href="blogs.html" class="active">Blog</a></li>
+                <li><a href="reviews.html">Location</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li><a href="student-login.html" class="btn-login">Student Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div id="blog-detail" class="blog-detail-container">
+            <a href="blogs.html" class="back-to-blog"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+            <div id="blog-content-area">
+                <div style="text-align: center; padding: 50px;">
+                    <i class="fas fa-spinner fa-spin fa-3x"></i>
+                    <p>Fetching the melody...</p>
+                </div>
+            </div>
+        </div>
+        <div id="error-message">
+            <h2>Oops! This blog post hit a wrong note.</h2>
+            <p>Maybe it moved backstage or never existed.</p>
+            <a href="blogs.html" class="btn btn-primary" style="margin-top: 20px; display: inline-block;">View All Blogs</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>Music School of Delhi</h3>
+                    <p>Transforming passion into mastery since 2010</p>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/musicschoolofdelhi/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/musicschoolofdelhi/" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.youtube.com/channel/UCq2QrmOMYyBJPI7rvkUfG9A/featured" target="_blank"><i class="fab fa-youtube"></i></a>
+                        <a href="https://x.com/MUSICSCHOOLOFDL" target="_blank"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="courses.html">Courses</a></li>
+                        <li><a href="blogs.html">Blog</a></li>
+                        <li><a href="admission.html">Admission</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Courses</h4>
+                    <ul>
+                        <li><a href="courses.html#piano">Piano Classes</a></li>
+                        <li><a href="courses.html#guitar">Guitar Classes</a></li>
+                        <li><a href="courses.html#vocal">Vocal Training</a></li>
+                        <li><a href="reviews.html">Location</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Info</h4>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-map-marker-alt"></i> Music School of Delhi, Pitampura, New Delhi</li>
+                        <li><i class="fas fa-phone"></i> +91 98765 43210</li>
+                        <li><i class="fas fa-envelope"></i> info@musicschooldelhi.com</li>
+                        <li><i class="fas fa-clock"></i> Mon-Sat: 9AM - 8PM</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Music School of Delhi. All Rights Reserved. | Designed with <i class="fas fa-heart"></i> for Music</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:5000/api';
+
+        async function fetchBlogDetail() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const slug = urlParams.get('slug');
+
+            if (!slug) {
+                window.location.href = 'blogs.html';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/blogs/${slug}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    renderBlog(result.data);
+                } else {
+                    showError();
+                }
+            } catch (error) {
+                console.error('Error fetching blog detail:', error);
+                showError();
+            }
+        }
+
+        function renderBlog(blog) {
+            document.title = `${blog.title} - Music School of Delhi`;
+            const contentArea = document.getElementById('blog-content-area');
+            
+            contentArea.innerHTML = `
+                <header class="blog-detail-header">
+                    <span class="blog-category" style="color: #00bcd4; font-weight: 700; text-transform: uppercase;">${blog.category}</span>
+                    <h1 class="blog-detail-title">${blog.title}</h1>
+                    <div class="blog-detail-meta">
+                        <span><i class="far fa-user"></i> By ${blog.author}</span>
+                        <span><i class="far fa-calendar-alt"></i> ${new Date(blog.createdAt).toLocaleDateString()}</span>
+                        <span><i class="far fa-eye"></i> ${blog.views} views</span>
+                    </div>
+                </header>
+                <img src="${blog.image.startsWith('http') ? blog.image : 'http://localhost:5000' + blog.image}" 
+                     alt="${blog.title}" 
+                     class="blog-detail-image" 
+                     onerror="this.src='images/guitar-course.jpg'">
+                <div class="blog-detail-content">
+                    ${blog.content}
+                </div>
+            `;
+        }
+
+        function showError() {
+            document.getElementById('blog-detail').style.display = 'none';
+            document.getElementById('error-message').style.display = 'block';
+        }
+
+        window.addEventListener('DOMContentLoaded', fetchBlogDetail);
+    </script>
+</body>
+
+</html>

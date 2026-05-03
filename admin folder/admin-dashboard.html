@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -295,6 +295,10 @@
             background: #c0392b;
         }
     </style>
+
+    
+
+    
 </head>
 
 <body>
@@ -314,7 +318,9 @@
                     </li>
                     <li><a href="admin-attendance-rohini.html"><i class="fas fa-calendar-check"></i> Rohini
                             Attendance</a></li>
+                    <li><a href="admin-student-attendance.html"><i class="fas fa-user-clock"></i> Student-wise Attendance</a></li>
                     <li><a href="admin-announcements.html"><i class="fas fa-bullhorn"></i> Announcements</a></li>
+                    <li><a href="admin-blogs.html"><i class="fas fa-blog"></i> Blogs</a></li>
                     <li><a href="admin-guitar-tabs.html"><i class="fas fa-guitar"></i> Guitar Tabs</a></li>
                     <li><a href="admin-content.html"><i class="fas fa-video"></i> Content Management</a></li>
                     <li><a href="admin-settings-batches.html"><i class="fas fa-clock"></i> Batch Settings</a></li>
@@ -340,7 +346,6 @@
                     </button>
                 </div>
             </div>
-
             <!-- Dashboard Content -->
             <div class="dashboard-content">
                 <div id="dashboard-section">
@@ -365,18 +370,21 @@
 
                         <!-- Email Configuration Status Banner -->
                         <div id="emailConfigBanner"
-                            style="display: block; background: linear-gradient(135deg, #fff3cd 0%, #ffe8a1 100%); border-left: 5px solid #ff9800; padding: 16px 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(255, 152, 0, 0.2);">
+                            style="display: block; background: linear-gradient(135deg, #e8f5e8 0%, #d4e8d4 100%); border-left: 5px solid #10b981; padding: 16px 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);">
                             <div style="display: flex; align-items: start; gap: 12px;">
-                                <i class="fas fa-exclamation-triangle"
-                                    style="color: #ff9800; font-size: 24px; margin-top: 2px;"></i>
+                                <i class="fas fa-check-circle"
+                                    style="color: #10b981; font-size: 24px; margin-top: 2px;"></i>
                                 <div style="flex: 1;">
                                     <strong style="font-size: 15px; color: #333; display: block; margin-bottom: 8px;">
-                                        <i class="fas fa-envelope-open-text"></i> Email Configuration Required
+                                        <i class="fas fa-envelope"></i> Email Configuration - Gmail Active
                                     </strong>
-                                    <p style="margin: 0 0 12px 0; color: #555; line-height: 1.5; font-size: 13px;">
-                                        Gmail is <strong>not properly configured</strong>. Admin replies will be saved
-                                        in the database but <strong>emails won't be sent to users</strong>.
-                                        You need to set up a Google App Password to enable email functionality.
+                                    <p style="margin: 0 0 8px 0; color: #555; line-height: 1.5; font-size: 13px;">
+                                        <strong>Gmail ID:</strong> <code style="background: #f0f0f0; padding: 2px 6px; border-radius: 3px;">shivayechouhan6@gmail.com</code><br>
+                                        <strong>Status:</strong> <span style="color: #10b981; font-weight: 600;">✅ Configured with App Password</span><br>
+                                        Admin replies will be sent automatically to users via email.
+                                    </p>
+                                    <p style="margin: 0 0 12px 0; color: #666; font-size: 12px; font-style: italic;">
+                                        Emails are sent from <strong>shivayechouhan6@gmail.com</strong> with proper Google App Password authentication.
                                     </p>
                                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                                         <a href="../CONTACT_REPLY_EMAIL_FIX.md" target="_blank"
@@ -391,11 +399,17 @@
                                             onmouseout="this.style.background='#667eea'">
                                             <i class="fas fa-key"></i> Generate App Password
                                         </a>
+                                        <button onclick="testEmailConfiguration()"
+                                            style="background: #10b981; color: white; padding: 8px 16px; border: none; border-radius: 5px; cursor: pointer; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; transition: background 0.3s;"
+                                            onmouseover="this.style.background='#059669'"
+                                            onmouseout="this.style.background='#10b981'">
+                                            <i class="fas fa-paper-plane"></i> Test Email
+                                        </button>
                                         <button onclick="dismissEmailWarning()"
                                             style="background: #e0e0e0; color: #666; padding: 8px 16px; border: none; border-radius: 5px; cursor: pointer; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; transition: background 0.3s;"
                                             onmouseover="this.style.background='#d0d0d0'"
                                             onmouseout="this.style.background='#e0e0e0'">
-                                            <i class="fas fa-times"></i> Dismiss
+                                            <i class="fas fa-times"></i> Hide
                                         </button>
                                     </div>
                                 </div>
@@ -584,9 +598,10 @@
                     try {
                         const base64Url = token.split('.')[1];
                         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-                        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+                        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
                             return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
                         }).join(''));
+                        
                         return JSON.parse(jsonPayload);
                     } catch (error) {
                         console.error('Error decoding token:', error);
@@ -885,46 +900,99 @@
                             return;
                         }
 
-                        // Always show the warning since Gmail app password is not configured
-                        // The .env file has a regular password instead of Google App Password
-                        document.getElementById('emailConfigBanner').style.display = 'block';
+                        // Check email configuration
+                        const token = getAuthToken();
+                        const response = await fetch(`${API_BASE_URL}/admin/check-email-config`, {
+                            method: 'GET',
+                            headers: {
+                                'Authorization': `Bearer ${token}`
+                            }
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success && result.configured) {
+                            // Email is properly configured
+                            document.getElementById('emailConfigBanner').style.display = 'none';
+                            console.log('✅ Email configuration is working');
+                        } else {
+                            // Email not configured properly
+                            document.getElementById('emailConfigBanner').style.display = 'block';
+                            console.warn('⚠️ Email configuration issue:', result.message);
+                        }
                     } catch (error) {
+                        // If API call fails, assume email not configured
+                        document.getElementById('emailConfigBanner').style.display = 'block';
                         console.warn('Could not check Gmail configuration:', error);
                     }
                 }
 
-                // Dismiss Email Warning
+                // Dismiss email warning
                 function dismissEmailWarning() {
                     localStorage.setItem('emailWarningDismissed', 'true');
                     document.getElementById('emailConfigBanner').style.display = 'none';
                 }
 
-                document.addEventListener('DOMContentLoaded', () => {
-                    console.log('=== ADMIN DASHBOARD LOADED ===');
+                // Test email configuration
+                async function testEmailConfiguration() {
+                    showAlert('📧 Testing email configuration to student email...', 'success');
+                    
+                    try {
+                        const token = getAuthToken();
+                        const response = await fetch(`${API_BASE_URL}/contact/test-email`, {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                toEmail: 'shivayechouhan098@gmail.com' // Test with student email
+                            })
+                        });
 
-                    if (checkAuth()) {
-                        console.log('âœ… Authentication successful');
-
-                        // Set user info
-                        const decodedToken = decodeToken(getAuthToken());
-                        if (decodedToken) {
-                            const savedName = localStorage.getItem('adminName') || decodedToken.name || 'Admin User';
-                            document.getElementById('userInitial').textContent = savedName.charAt(0).toUpperCase();
-                            document.getElementById('adminName').textContent = savedName;
+                        const result = await response.json();
+                        
+                        if (result.success && result.emailSent) {
+                            showAlert('✅ Email test successful! Check student inbox at shivayechouhan098@gmail.com', 'success');
+                            console.log('📧 Email test details:', result);
+                        } else {
+                            showAlert('❌ Email test failed: ' + (result.message || 'Unknown error'), 'error');
+                            console.error('Email test error details:', result);
                         }
-
-                        // Update student count and load recent admissions
-                        console.log('Starting dashboard data load...');
-                        setTimeout(() => {
-                            updateStudentCount();
-                            loadPendingApprovals();
-                            loadRecentStudents();
-                            loadContactMessages();
-                            loadContactStats();
-                            checkGmailConfiguration();
-                        }, 300);
+                    } catch (error) {
+                        console.error('Email test error:', error);
+                        showAlert('❌ Email test failed. Please check backend server.', 'error');
                     }
-                });
+                }
+
+                // Dismiss Email Warning
+
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('=== ADMIN DASHBOARD LOADED ===');
+
+    if (checkAuth()) {
+        console.log('✅ Authentication successful');
+
+        // Set user info
+        const decodedToken = decodeToken(getAuthToken());
+        if (decodedToken) {
+            const savedName = localStorage.getItem('adminName') || decodedToken.name || 'Admin User';
+            document.getElementById('userInitial').textContent = savedName.charAt(0).toUpperCase();
+            document.getElementById('adminName').textContent = savedName;
+        }
+
+        // Update student count and load recent admissions
+        console.log('Starting dashboard data load...');
+        setTimeout(() => {
+            updateStudentCount();
+            loadPendingApprovals();
+            loadRecentStudents();
+            loadContactMessages();
+            loadContactStats();
+            checkGmailConfiguration();
+        }, 300);
+    }
+});
 
                 // Handle logout
                 document.getElementById('logoutBtn').addEventListener('click', () => {
@@ -998,9 +1066,9 @@
 
                                 if (msg.status === 'replied') {
                                     if (msg.replyEmailSent) {
-                                        emailStatusIcon = '<br><small style="color: green;">âœ“ Email sent</small>';
+                                        emailStatusIcon = '<br><small style="color: green;">✓ Email sent</small>';
                                     } else {
-                                        emailStatusIcon = '<br><small style="color: orange;">âš  Email not sent</small>';
+                                        emailStatusIcon = '<br><small style="color: orange;">⚠ Email not sent</small>';
                                     }
                                 }
 
@@ -1101,22 +1169,23 @@
 
                             // Check if email was actually sent
                             if (result.emailSent) {
-                                showAlert('âœ… Reply sent successfully via email!', 'success');
+                                showAlert('✅ Reply sent successfully via email!', 'success');
+                                console.log('SUCCESS: Email sent to student');
                             } else {
-                                // Email was not sent but reply was saved
+                                // Show warning if email wasn't sent but reply was saved
                                 const errorMsg = result.emailError || 'Email service not configured';
-                                showAlert('âš ï¸ Reply saved in database, but email could not be sent. ' + errorMsg, 'warning');
-                                console.warn('Email sending error:', result.emailError);
+                                console.warn('Email sending error:', errorMsg);
+                                showAlert('⚠️ Reply saved but email not sent. ' + errorMsg, 'warning');
                             }
                             closeReplyModal();
                             loadContactMessages();
                             loadContactStats();
                         } else {
-                            showAlert('âŒ ' + (result.message || 'Error sending reply'), 'error');
+                            showAlert('❌ ' + (result.message || 'Error sending reply'), 'error');
                         }
                     } catch (error) {
                         console.error('Error submitting reply:', error);
-                        showAlert('âŒ Error sending reply. Please try again.', 'error');
+                        showAlert('❌ Error sending reply. Please try again.', 'error');
                     }
                 }
 
@@ -1151,6 +1220,20 @@
                 // Show Alert
                 function showAlert(message, type) {
                     const alertDiv = document.createElement('div');
+                    
+                    // Set colors based on type
+                    let bgColor, textColor;
+                    if (type === 'success') {
+                        bgColor = '#10b981';
+                        textColor = 'white';
+                    } else if (type === 'warning') {
+                        bgColor = '#f59e0b';
+                        textColor = 'white';
+                    } else {
+                        bgColor = '#e74c3c';
+                        textColor = 'white';
+                    }
+                    
                     alertDiv.style.cssText = `
                 position: fixed;
                 top: 100px;
@@ -1159,9 +1242,10 @@
                 border-radius: 5px;
                 font-size: 14px;
                 z-index: 11000;
-                background: ${type === 'success' ? '#10b981' : '#e74c3c'};
-                color: white;
+                background: ${bgColor};
+                color: ${textColor};
                 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                max-width: 400px;
             `;
                     alertDiv.textContent = message;
                     document.body.appendChild(alertDiv);
@@ -1170,7 +1254,7 @@
                         alertDiv.style.transition = 'opacity 0.3s';
                         alertDiv.style.opacity = '0';
                         setTimeout(() => alertDiv.remove(), 300);
-                    }, 3000);
+                    }, 4000);
                 }
 
                 // Close modal when clicking outside
@@ -1180,6 +1264,9 @@
                     }
                 });
             </script>
+
+        </script>
+
 </body>
 
 </html>

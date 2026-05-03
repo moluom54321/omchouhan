@@ -9,6 +9,7 @@ const {
   getAllGuitarTabs,
   getLatestSongs,
   getAllTabs,
+  getTrendingSongs,
   getPopularTabs,
   getGuitarTabById,
   updateGuitarTab,
@@ -37,16 +38,17 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  // Accept images, pdfs, audio files, and text files
-  if (file.mimetype.startsWith('audio/') || 
-      file.mimetype === 'application/pdf' || 
+  if (file.mimetype.startsWith('audio/') ||
+      file.mimetype.startsWith('image/') ||
+      file.mimetype === 'application/pdf' ||
       file.mimetype === 'text/plain' ||
       file.mimetype === 'text/tab-separated-values' ||
-      path.extname(file.originalname).toLowerCase() === '.txt' ||
-      path.extname(file.originalname).toLowerCase() === '.tab') {
+      ['.txt', '.tab', '.pdf', '.mp3', '.wav', '.jpg', '.jpeg', '.png'].includes(
+        path.extname(file.originalname).toLowerCase()
+      )) {
     cb(null, true);
   } else {
-    cb(new Error('Invalid file type. Only audio, PDF, TXT, and TAB files are allowed.'), false);
+    cb(new Error('Invalid file type. Allowed: audio, image, PDF, TXT, TAB files.'), false);
   }
 };
 
@@ -67,8 +69,9 @@ router.delete('/:id', adminAuth, deleteGuitarTab);
 // Public routes (no authentication required)
 router.get('/', getAllGuitarTabs);
 router.get('/latest', getLatestSongs);
-router.get('/all-tabs', require('../controllers/guitarTab.controller').getAllTabs);
+router.get('/all-tabs', getAllTabs);
 router.get('/popular', getPopularTabs);
+router.get('/trending', getTrendingSongs);
 router.get('/:id', getGuitarTabById);
 
 module.exports = router;

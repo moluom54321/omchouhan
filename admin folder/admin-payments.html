@@ -160,6 +160,7 @@
         .recent-payments table {
             width: 100%;
             border-collapse: collapse;
+            margin: 0 15px;
         }
 
         .recent-payments th,
@@ -268,7 +269,8 @@
             }
         }
     </style>
-</head>
+
+        </head>
 
 <body>
     <div class="admin-dashboard">
@@ -321,7 +323,6 @@
                         <!-- Payments will be loaded here -->
                     </div>
                 </div>
-
 
             </div>
         </div>
@@ -410,7 +411,7 @@
             if (!checkAuth()) return;
 
             try {
-                const response = await apiCall(`${API_BASE_URL}/payments`);
+                const response = await apiCall(`${API_BASE_URL}/payment`);
 
                 if (response.success) {
                     const paymentsList = document.getElementById('paymentsList');
@@ -515,6 +516,7 @@
             }
         });
     </script>
+
 </body>
 
 </html>

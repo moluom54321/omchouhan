@@ -425,7 +425,8 @@
             }
         }
     </style>
-</head>
+
+        </head>
 
 <body>
     <div class="admin-dashboard">
@@ -490,9 +491,9 @@
                             </button>
                         </div>
                         <div class="upload-option">
-                            <h3><i class="fas fa-file-pdf"></i> Guitar Tabs</h3>
-                            <button class="btn" onclick="openUploadModal('tabs')">
-                                <i class="fas fa-upload"></i> Upload Guitar Tab/PDF
+                            <h3><i class="fas fa-chart-line"></i> Trending Songs</h3>
+                            <button class="btn" onclick="openUploadModal('trending')">
+                                <i class="fas fa-upload"></i> Upload Trending Song
                             </button>
                         </div>
                     </div>
@@ -527,7 +528,12 @@
                     <div class="modal-content">
                         <span class="close" onclick="closeUploadModal()">&times;</span>
                         <h3 id="modalTitle">Upload Content</h3>
+                        <div id="sectionIndicator" style="display:inline-flex;align-items:center;gap:0.5rem;background:#f0f4ff;border:1.5px solid #667eea;border-radius:20px;padding:0.35rem 1rem;margin-bottom:1rem;font-size:0.9rem;">
+                            <i id="sectionIcon" class="fas fa-music"></i>
+                            Uploading to: <strong id="sectionName">Guitar Tabs</strong>
+                        </div>
                         <form id="uploadForm" enctype="multipart/form-data">
+                            <input type="hidden" id="uploadCategory" name="category" value="tabs">
                             <div class="form-group">
                                 <label for="songName">Song Name:</label>
                                 <input type="text" id="songName" name="songName" required>
@@ -536,8 +542,6 @@
                                 <label for="artist">Artist:</label>
                                 <input type="text" id="artist" name="artist" required>
                             </div>
-
-
 
                             <div class="form-group">
                                 <label for="defaultKey">Default Key:</label>
@@ -574,16 +578,24 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="chordsContent">Lyrics with Chords (use [C] format):</label>
+                                <label for="chordsContent">Lyrics with Chords (use [Chord] format):</label>
                                 <textarea id="chordsContent" name="chordsContent" rows="10"
-                                    placeholder="Enter lyrics with chords in brackets... e.g. [C]Hello [G]world"></textarea>
-                                <small class="file-hint">Example: [C]Amazing [G]Grace, how [F]sweet the [C]sound</small>
+                                    placeholder="Enter lyrics with chords in brackets...&#10;Example:&#10;[Am] Tera ban jaunga&#10;[F] Main tera ban jaunga&#10;[C] Tere rang mein [G] rang jaunga"></textarea>
+                                <small class="file-hint">Format: [Am] Tera ban jaunga [F] Main tera &mdash; Supports: Am, F, C#m, G7, Dsus4 etc.</small>
                             </div>
 
-                            <div class="form-group hidden">
-                                <label for="tabContent">Tab Content (if applicable):</label>
-                                <textarea id="tabContent" name="tabContent" rows="5"
-                                    placeholder="Enter guitar tab content here..."></textarea>
+                            <div class="form-group">
+                                <label for="tabContent">Guitar Tabs (text format):</label>
+                                <textarea id="tabContent" name="tabContent" rows="7"
+                                    placeholder="Enter guitar tab in text format...&#10;e|--0--2--3--2--0--|&#10;B|--1--3--2--3--1--|&#10;G|--0--2--0--2--0--|&#10;D|--2--0--0--0--2--|&#10;A|--3--0--2--0--3--|&#10;E|--0--2--3--2--0--|"
+                                    style="font-family: 'Courier New', monospace; font-size: 0.9rem;"></textarea>
+                                <small class="file-hint">Write tab in standard 6-string format (e, B, G, D, A, E strings)</small>
+                            </div>
+
+                            <div class="form-group" id="fileGroup">
+                                <label for="file" id="fileLabel">Upload File (PDF / Image / Text, optional):</label>
+                                <input type="file" id="file" name="file" accept=".pdf,.txt,.tab,.mp3,.wav,.jpg,.jpeg,.png">
+                                <small class="file-hint">Accepted: PDF, TXT, TAB, MP3, WAV, JPG, PNG &mdash; max 10MB</small>
                             </div>
 
                             <div class="form-actions">
@@ -594,7 +606,6 @@
                         </form>
                     </div>
                 </div>
-
 
             </div>
         </div>
@@ -694,11 +705,17 @@
 
                     response.data.forEach(tab => {
                         const row = document.createElement('tr');
+                        const catCfg = {
+                            latest:   { label: 'Latest Songs',   color: '#007bff' },
+                            popular:  { label: 'Popular Songs',   color: '#28a745' },
+                            trending: { label: 'Trending Songs',  color: '#e91e63' },
+                            tabs:     { label: 'Guitar Tabs',     color: '#667eea' }
+                        }[tab.category] || { label: tab.category, color: '#888' };
 
                         row.innerHTML = `
                             <td>${tab.songName}</td>
                             <td>${tab.artist}</td>
-                            <td>${tab.category || 'tabs'}</td>
+                            <td><span style="background:${catCfg.color}20;color:${catCfg.color};border:1px solid ${catCfg.color};padding:2px 10px;border-radius:20px;font-size:0.8rem;font-weight:600;">${catCfg.label}</span></td>
                             <td>${tab.creator?.name || 'N/A'}</td>
                             <td>
                                 <button class="btn" onclick="viewGuitarTab('${tab._id}')">View</button>
@@ -774,12 +791,23 @@
                     document.getElementById('songName').value = tab.songName || '';
                     document.getElementById('artist').value = tab.artist || '';
                     document.getElementById('tabContent').value = tab.tabContent || '';
-                    // Lyrics field removed
                     document.getElementById('chordsContent').value = tab.chordsContent || '';
-                    document.getElementById('defaultKey').value = tab.defaultKey || 'C';
+                    document.getElementById('defaultKey').value = tab.defaultKey || 'C Major';
+
+                    // Set category from the existing tab data
+                    const existingCategory = tab.category || 'tabs';
+                    document.getElementById('uploadCategory').value = existingCategory;
+
+                    // Show section indicator for edit mode
+                    const cfg = SECTION_CONFIG[existingCategory] || SECTION_CONFIG.tabs;
+                    document.getElementById('sectionName').textContent = cfg.label;
+                    document.getElementById('sectionIcon').className = 'fas ' + cfg.icon;
+                    document.getElementById('sectionIndicator').style.borderColor = cfg.color;
+                    document.getElementById('sectionIndicator').style.background = cfg.color + '15';
+                    document.getElementById('sectionIcon').style.color = cfg.color;
 
                     // Change modal title
-                    document.getElementById('modalTitle').textContent = 'Edit Guitar Tab';
+                    document.getElementById('modalTitle').textContent = 'Edit — ' + cfg.label;
 
                     // Show the modal
                     document.getElementById('uploadModal').classList.remove('hidden');
@@ -791,7 +819,7 @@
                     document.querySelector('#uploadForm button[type="submit"]').textContent = 'Update';
 
                     // Show file input for optional file replacement
-                    document.getElementById('file').closest('.form-group').style.display = 'block';
+                    document.getElementById('fileGroup').style.display = 'block';
                     document.getElementById('fileLabel').textContent = 'Replace File (optional):';
                     document.getElementById('file').removeAttribute('required');
                 }
@@ -816,26 +844,32 @@
             }
         }
 
+        // Section config for modal indicator
+        const SECTION_CONFIG = {
+            latest:   { label: 'Latest Songs',   icon: 'fa-star',       color: '#007bff' },
+            popular:  { label: 'Popular Songs',   icon: 'fa-fire',       color: '#28a745' },
+            trending: { label: 'Trending Songs',  icon: 'fa-chart-line', color: '#e91e63' },
+            tabs:     { label: 'Guitar Tabs',     icon: 'fa-guitar',     color: '#667eea' }
+        };
+
         // Modal functions
         function openUploadModal(type) {
             document.getElementById('uploadModal').classList.remove('hidden');
 
-            // Set title based on type
-            let title;
-            switch (type) {
-                case 'latest':
-                    title = 'Upload Latest Guitar Tab';
-                    break;
-                case 'popular':
-                    title = 'Upload Popular Tab';
-                    break;
-                case 'tabs':
-                    title = 'Upload Guitar Tab/PDF';
-                    break;
-                default:
-                    title = 'Upload Content';
-            }
-            document.getElementById('modalTitle').textContent = title;
+            const cfg = SECTION_CONFIG[type] || SECTION_CONFIG.tabs;
+
+            // Set modal title
+            document.getElementById('modalTitle').textContent = 'Upload to ' + cfg.label;
+
+            // Set section indicator badge
+            document.getElementById('sectionName').textContent = cfg.label;
+            document.getElementById('sectionIcon').className = 'fas ' + cfg.icon;
+            document.getElementById('sectionIndicator').style.borderColor = cfg.color;
+            document.getElementById('sectionIndicator').style.background = cfg.color + '15';
+            document.getElementById('sectionIcon').style.color = cfg.color;
+
+            // Set category directly in hidden field — no title-guessing needed
+            document.getElementById('uploadCategory').value = type || 'trending';
         }
 
         function closeUploadModal() {
@@ -843,20 +877,18 @@
             document.getElementById('uploadForm').reset();
 
             // Clear textareas manually if reset doesn't hit them
-            // Lyrics field removed
             document.getElementById('chordsContent').value = '';
+            document.getElementById('tabContent').value = '';
 
             // Reset modal to default state
             document.getElementById('uploadForm').removeAttribute('data-edit-id');
             document.querySelector('#uploadForm button[type="submit"]').textContent = 'Upload';
+            document.getElementById('uploadCategory').value = 'trending';
 
-            // Reset file input to required for new uploads
-            document.getElementById('file').closest('.form-group').style.display = 'block';
-            document.getElementById('fileLabel').textContent = 'Upload File:';
-            document.getElementById('file').setAttribute('required', 'required');
+            // Reset file label back to default
+            document.getElementById('fileGroup').style.display = 'block';
+            document.getElementById('fileLabel').textContent = 'Upload File (PDF / Image / Text, optional):';
         }
-
-
 
         // Validate file before upload
         function validateFile() {
@@ -902,14 +934,9 @@
                 return;
             }
 
-            // Determine category
-            const title = document.getElementById('modalTitle').textContent;
-            let category = 'tabs';
-            if (title.includes('Latest')) category = 'latest';
-            else if (title.includes('Popular')) category = 'popular';
-
+            // Category comes directly from hidden field — set by openUploadModal or editGuitarTab
             const formData = new FormData(this);
-            formData.append('category', category);
+            // 'category' is already included via <input type="hidden" name="category">
 
             try {
                 const token = getAuthToken();
@@ -1004,7 +1031,7 @@
 
         // Add guitar tab function
         function addGuitarTab() {
-            openUploadModal('tabs');
+            openUploadModal('trending');
         }
 
         // Navigation
@@ -1045,9 +1072,6 @@
                 });
             });
         }
-
-
-
 
         // Initialize guitar tabs calendar
         function initializeGuitarTabsCalendar() {
@@ -1252,7 +1276,7 @@
         async function loadStudentsForClass(classType, time) {
             try {
                 // Fetch students from backend API
-                const response = await apiCall(`${API_BASE_URL}/students?branch=pitampura&course=${classType}&time=${encodeURIComponent(time)}`);
+                const response = await apiCall(`${API_BASE_URL}/student?branch=pitampura&course=${classType}&time=${encodeURIComponent(time)}`);
 
                 if (response.success && response.data) {
                     guitarTabsList = response.data;
@@ -1494,6 +1518,7 @@
             }
         });
     </script>
+
 </body>
 
 </html>

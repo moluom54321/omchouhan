@@ -432,6 +432,10 @@
             }
         }
     </style>
+
+    
+
+    
 </head>
 
 <body>
@@ -447,6 +451,7 @@
                 <li><a href="about.html">About Us</a></li>
                 <li><a href="courses.html">Courses</a></li>
                 <li><a href="admission.html">Admission Form</a></li>
+                <li><a href="blogs.html">Blog</a></li>
                 <li><a href="reviews.html">Location</a></li>
                 <li><a href="contact.html">Contact Us</a></li>
                 <li><a href="student-login.html" class="btn-login">Student Login</a></li>
@@ -505,10 +510,6 @@
             </div>
         </div>
     </section>
-
-
-
-    <!-- Single video display - no JavaScript needed -->
 
     <!-- Student Performance Video -->
     <section class="student-performance">
@@ -594,48 +595,16 @@
         }
 
         document.addEventListener('DOMContentLoaded', function () {
-            // Video selector functionality
-            const videoButtons = document.querySelectorAll('.video-btn');
-            const videoItems = document.querySelectorAll('.short-item');
+            // Mobile menu toggle
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('navMenu');
 
-            videoButtons.forEach(button => {
-                button.addEventListener('click', function () {
-                    const videoNumber = this.getAttribute('data-video');
-
-                    // Remove active class from all buttons and items
-                    videoButtons.forEach(btn => btn.classList.remove('active'));
-                    videoItems.forEach(item => item.classList.remove('active'));
-
-                    // Add active class to clicked button
-                    this.classList.add('active');
-
-                    // Show the corresponding video
-                    if (videoNumber === '1') {
-                        document.getElementById('video1').classList.add('active');
-                    } else if (videoNumber === '2') {
-                        document.getElementById('video2').classList.add('active');
-                    } else if (videoNumber === '3') {
-                        document.getElementById('video3').classList.add('active');
-                    }
+            if (hamburger && navMenu) {
+                hamburger.addEventListener('click', function() {
+                    hamburger.classList.toggle('active');
+                    navMenu.classList.toggle('active');
                 });
-            });
-
-            // Add error handling for iframes
-            const iframes = document.querySelectorAll('iframe');
-            iframes.forEach(iframe => {
-                iframe.addEventListener('load', function () {
-                    console.log('Iframe loaded: ' + this.src);
-                });
-
-                iframe.addEventListener('error', function () {
-                    console.log('Iframe error: ' + this.src);
-                });
-            });
-
-            console.log("Video selector initialized with " + videoItems.length + " videos");
-
-            // Add manual controls for testing
-            window.setVideoPlaying = setVideoPlaying;
+            }
         });
     </script>
 
@@ -662,6 +631,7 @@
                         <li><a href="index.html">Home</a></li>
                         <li><a href="about.html">About Us</a></li>
                         <li><a href="courses.html">Courses</a></li>
+                        <li><a href="blogs.html">Blog</a></li>
                         <li><a href="admission.html">Admission</a></li>
                     </ul>
                 </div>
@@ -710,7 +680,7 @@
 
     <script src="js/main.js"></script>
 
-    <!-- Animated Counter Script -->
+    <!-- Scripts for dynamic content and animations -->
     <script>
         // Function to animate numbers with smooth easing
         function animateCounter(element, target, duration = 2000) {
@@ -720,15 +690,12 @@
                 const elapsed = timestamp - startTime;
                 const progress = Math.min(elapsed / duration, 1);
 
-                // Use easing function for smooth animation (easeOutQuart)
                 const easedProgress = 1 - Math.pow(1 - progress, 4);
                 const currentValue = Math.floor(easedProgress * target);
 
-                // Handle percentage values
                 if (element.textContent.includes('%')) {
                     element.textContent = currentValue + '%';
                 } else {
-                    // Format numbers with commas for thousands
                     if (target >= 1000) {
                         element.textContent = currentValue.toLocaleString() + '+';
                     } else {
@@ -736,52 +703,37 @@
                     }
                 }
 
-                // Continue animation if not complete
                 if (progress < 1) {
                     requestAnimationFrame(updateCounter);
                 }
             }
-
             requestAnimationFrame(updateCounter);
         }
 
-        // Function to check if element is in viewport
         function isInViewport(element) {
+            if (!element) return false;
             const rect = element.getBoundingClientRect();
-            return (
-                rect.top <= window.innerHeight &&
-                rect.bottom >= 0
-            );
+            return (rect.top <= window.innerHeight && rect.bottom >= 0);
         }
 
-        // Start counter when stats section is in view
         let counterStarted = false;
         function startCounterOnScroll() {
             const statsSection = document.getElementById('statsSection');
-
-            if (!counterStarted && isInViewport(statsSection)) {
+            if (statsSection && !counterStarted && isInViewport(statsSection)) {
                 counterStarted = true;
-
-                // Get all stat items
                 const statItems = document.querySelectorAll('.stat-item h3');
-
-                // Animate each counter with slight delays for a cascading effect
                 statItems.forEach((item, index) => {
                     const target = parseInt(item.getAttribute('data-target'));
                     setTimeout(() => {
                         animateCounter(item, target);
-                    }, index * 200); // Start each counter 200ms apart
+                    }, index * 200);
                 });
-
-                // Remove scroll listener after starting
                 window.removeEventListener('scroll', startCounterOnScroll);
             }
         }
 
-        // Listen for scroll events
         window.addEventListener('scroll', startCounterOnScroll);
 
-        // Also check on page load in case section is already visible
         document.addEventListener('DOMContentLoaded', () => {
             startCounterOnScroll();
             loadPerformanceVideos();
@@ -789,48 +741,39 @@
             loadStats();
         });
 
-        // Check immediately in case section is already in view
-        startCounterOnScroll();
-
         function toggleWhatsApp() {
             const popup = document.getElementById('waPopup');
             popup.classList.toggle('active');
         }
 
-        // Close popup when clicking outside
         document.addEventListener('click', function (event) {
             const waFloat = document.querySelector('.whatsapp-float');
             const popup = document.getElementById('waPopup');
-            if (waFloat && !waFloat.contains(event.target)) {
+            if (waFloat && popup && !waFloat.contains(event.target)) {
                 popup.classList.remove('active');
             }
         });
 
-        // Load performance videos from API
         async function loadPerformanceVideos() {
             try {
                 const response = await fetch('http://localhost:5000/api/content/type/performance');
                 const result = await response.json();
-
                 if (result.success && result.data && result.data.length > 0) {
                     const slider = document.getElementById('performanceSlider');
                     const videos = result.data;
-
                     let html = '';
                     videos.forEach((video, index) => {
                         html += `
-                            <div class="performance-slide ${index === 0 ? 'active' : ''}" id="perf-slide-${index + 1}">
+                            <div class="performance-slide ${index === 0 ? 'active' : ''}">
                                 <div class="performance-video">
                                     <iframe id="perf-video-${index + 1}" width="100%" height="450" 
                                         src="https://www.youtube.com/embed/${video.youtubeId}?enablejsapi=1" 
                                         title="${video.title}" frameborder="0" 
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                                        allowfullscreen></iframe>
                                 </div>
                             </div>
                         `;
                     });
-
                     html += `
                         <div class="slider-controls">
                             <button class="perf-prev-btn slider-btn"><i class="fas fa-chevron-left"></i></button>
@@ -840,16 +783,14 @@
                             ${videos.map((_, i) => `<span class="dot ${i === 0 ? 'active' : ''}" data-slide="${i}"></span>`).join('')}
                         </div>
                     `;
-
                     slider.innerHTML = html;
                     initPerformanceSlider();
                 }
             } catch (error) {
-                console.error('Error loading performance videos:', error);
+                console.error('Error loading videos:', error);
             }
         }
 
-        // Load stats from API
         async function loadStats() {
             try {
                 const response = await fetch('http://localhost:5000/api/settings');
@@ -857,229 +798,75 @@
                 if (result.success && result.data && result.data.stats) {
                     const s = result.data.stats;
                     const items = document.querySelectorAll('.stat-item');
-
-                    // Students Trained
                     items[0].querySelector('h3').setAttribute('data-target', s.studentsTrained.value.replace(/\D/g, ''));
-                    items[0].querySelector('h3').textContent = '0+';
-                    items[0].querySelector('p').textContent = s.studentsTrained.label;
-
-                    // Years Experience
                     items[1].querySelector('h3').setAttribute('data-target', s.yearsExperience.value.replace(/\D/g, ''));
-                    items[1].querySelector('h3').textContent = '0+';
-                    items[1].querySelector('p').textContent = s.yearsExperience.label;
-
-                    // Expert Instructors
                     items[2].querySelector('h3').setAttribute('data-target', s.expertInstructors.value.replace(/\D/g, ''));
-                    items[2].querySelector('h3').textContent = '0+';
-                    items[2].querySelector('p').textContent = s.expertInstructors.label;
-
-                    // Satisfaction Rate
                     items[3].querySelector('h3').setAttribute('data-target', s.satisfactionRate.value.replace(/\D/g, ''));
-                    items[3].querySelector('h3').textContent = '0%';
-                    items[3].querySelector('p').textContent = s.satisfactionRate.label;
-
-                    // Re-trigger counter if already in view
-                    if (counterStarted) {
-                        counterStarted = false;
-                        startCounterOnScroll();
-                    }
                 }
-            } catch (error) {
-                console.error('Error loading stats:', error);
-            }
+            } catch (error) {}
         }
+
         async function loadShortsVideos() {
             try {
                 const response = await fetch('http://localhost:5000/api/content/type/shorts');
                 const result = await response.json();
-
                 if (result.success && result.data && result.data.length > 0) {
                     const container = document.getElementById('shortsContainer');
                     const videos = result.data;
-
                     let html = `
                         <div class="video-selector">
-                            ${videos.map((video, i) => `
-                                <button class="video-btn ${i === 0 ? 'active' : ''}" data-video="${i}" onclick="showShort(${i})">
-                                    ${video.title}
-                                </button>
-                            `).join('')}
+                            ${videos.map((video, i) => `<button class="video-btn ${i === 0 ? 'active' : ''}" data-video="${i}">${video.title}</button>`).join('')}
                         </div>
                         <div class="shorts-slider">
                             ${videos.map((video, i) => `
-                                <div class="short-item ${i === 0 ? 'active' : ''}" id="video${i + 1}">
+                                <div class="short-item ${i === 0 ? 'active' : ''}">
                                     <iframe id="short-video-${i + 1}" width="100%" height="450" 
                                         src="https://www.youtube.com/embed/${video.youtubeId}?enablejsapi=1" 
-                                        title="${video.title}" frameborder="0" 
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                                        title="${video.title}" frameborder="0" allowfullscreen></iframe>
                                 </div>
                             `).join('')}
                         </div>
                     `;
-
                     container.innerHTML = html;
                     initShortsSelector();
                 }
-            } catch (error) {
-                console.error('Error loading shorts videos:', error);
-            }
+            } catch (error) {}
         }
 
-        // Initialize performance slider
         function initPerformanceSlider() {
             const slides = document.querySelectorAll('.performance-slide');
-            const prevBtn = document.querySelector('.perf-prev-btn');
-            const nextBtn = document.querySelector('.perf-next-btn');
             const dots = document.querySelectorAll('.slider-dots .dot');
-            let currentIndex = 0;
-            let autoSlideInterval;
-            let videoPlayingStatus = false;
+            const prev = document.querySelector('.perf-prev-btn');
+            const next = document.querySelector('.perf-next-btn');
+            let index = 0;
 
-            function showSlide(index) {
-                slides.forEach(slide => slide.classList.remove('active'));
-                dots.forEach(dot => dot.classList.remove('active'));
+            function showSlide(n) {
+                slides.forEach(s => s.classList.remove('active'));
+                dots.forEach(d => d.classList.remove('active'));
+                index = (n + slides.length) % slides.length;
                 slides[index].classList.add('active');
                 dots[index].classList.add('active');
-                currentIndex = index;
-                console.log("Performance slider moved to index:", index);
             }
 
-            // Initialize YouTube players with event listeners
-            function initializeYoutubePlayers() {
-                const iframes = document.querySelectorAll('.performance-video iframe');
-                iframes.forEach((iframe, index) => {
-                    // Create YT.Player instance for each iframe
-                    new YT.Player(iframe.id, {
-                        events: {
-                            'onStateChange': function (event) {
-                                handlePlayerStateChange(event, index);
-                            }
-                        }
-                    });
-                });
-                console.log("YouTube players initialized for performance videos");
-            }
-
-            function handlePlayerStateChange(event, playerIndex) {
-                console.log("Performance player " + playerIndex + " state:", event.data);
-                // YT.PlayerState.PLAYING = 1, PAUSED = 2, ENDED = 0
-                if (event.data === 1) { // Playing
-                    console.log("🎵 Performance video is playing - stopping auto-slide");
-                    videoPlayingStatus = true;
-                    stopAutoSlide();
-                } else if (event.data === 2 || event.data === 0) { // Paused or Ended
-                    console.log("⏸️ Performance video paused/ended - will resume auto-slide in 3 seconds");
-                    videoPlayingStatus = false;
-                    // Give user 3 seconds before resuming auto-slide
-                    setTimeout(function () {
-                        if (!videoPlayingStatus) {
-                            startAutoSlide();
-                        }
-                    }, 3000);
-                }
-            }
-
-            function startAutoSlide() {
-                if (!videoPlayingStatus) {
-                    if (autoSlideInterval) clearInterval(autoSlideInterval);
-
-                    autoSlideInterval = setInterval(function () {
-                        if (!videoPlayingStatus) {
-                            let nextIndex = (currentIndex + 1) % slides.length;
-                            showSlide(nextIndex);
-                            console.log("📺 Auto-slide to next video");
-                        }
-                    }, 3000);
-
-                    console.log("✅ Auto-slide started (3 second interval)");
-                }
-            }
-
-            function stopAutoSlide() {
-                if (autoSlideInterval) {
-                    clearInterval(autoSlideInterval);
-                    autoSlideInterval = null;
-                    console.log("❌ Auto-slide stopped");
-                }
-            }
-
-            // Manual navigation
-            if (prevBtn) prevBtn.addEventListener('click', () => {
-                stopAutoSlide();
-                currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-                showSlide(currentIndex);
-                if (!videoPlayingStatus) {
-                    setTimeout(startAutoSlide, 3000);
-                }
-            });
-
-            if (nextBtn) nextBtn.addEventListener('click', () => {
-                stopAutoSlide();
-                currentIndex = (currentIndex + 1) % slides.length;
-                showSlide(currentIndex);
-                if (!videoPlayingStatus) {
-                    setTimeout(startAutoSlide, 3000);
-                }
-            });
-
-            dots.forEach(dot => {
-                dot.addEventListener('click', () => {
-                    stopAutoSlide();
-                    currentIndex = parseInt(dot.getAttribute('data-slide'));
-                    showSlide(currentIndex);
-                    if (!videoPlayingStatus) {
-                        setTimeout(startAutoSlide, 3000);
-                    }
-                });
-            });
-
-            // Pause on hover
-            slides.forEach(slide => {
-                slide.addEventListener('mouseenter', () => {
-                    stopAutoSlide();
-                });
-
-                slide.addEventListener('mouseleave', () => {
-                    if (!videoPlayingStatus) {
-                        setTimeout(startAutoSlide, 1000);
-                    }
-                });
-            });
-
-            // Start auto-slide after videos are loaded
-            setTimeout(function () {
-                initializeYoutubePlayers();
-                startAutoSlide();
-            }, 1500);
+            if (prev) prev.onclick = () => showSlide(index - 1);
+            if (next) next.onclick = () => showSlide(index + 1);
+            dots.forEach((d, i) => d.onclick = () => showSlide(i));
         }
 
-        // Initialize shorts selector
         function initShortsSelector() {
-            const buttons = document.querySelectorAll('.video-btn');
+            const btns = document.querySelectorAll('.video-btn');
             const items = document.querySelectorAll('.short-item');
-
-            buttons.forEach(btn => {
-                btn.addEventListener('click', function () {
-                    const videoIndex = parseInt(this.getAttribute('data-video'));
-                    buttons.forEach(b => b.classList.remove('active'));
-                    items.forEach(item => item.classList.remove('active'));
-                    this.classList.add('active');
-                    if (items[videoIndex]) items[videoIndex].classList.add('active');
-                });
+            btns.forEach((btn, i) => {
+                btn.onclick = () => {
+                    btns.forEach(b => b.classList.remove('active'));
+                    items.forEach(it => it.classList.remove('active'));
+                    btn.classList.add('active');
+                    items[i].classList.add('active');
+                };
             });
-        }
-
-        // Show specific short
-        function showShort(index) {
-            const buttons = document.querySelectorAll('.video-btn');
-            const items = document.querySelectorAll('.short-item');
-            buttons.forEach(b => b.classList.remove('active'));
-            items.forEach(item => item.classList.remove('active'));
-            if (buttons[index]) buttons[index].classList.add('active');
-            if (items[index]) items[index].classList.add('active');
         }
     </script>
-</body>
+
+    </body>
 
 </html>

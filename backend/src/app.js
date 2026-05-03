@@ -53,14 +53,17 @@ app.use('/api/announcement', require('./routes/announcement.routes'));
 app.use('/api/contact', require('./routes/contact.routes'));
 app.use('/api/settings', require('./routes/settings.routes'));
 app.use('/api/batches', require('./routes/batch.routes'));
+app.use('/api/blogs', require('./routes/blog.routes'));
 
 // Serve the login page as the main entry point for the admin panel on port 5000
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '..', '..', 'admin folder', 'login.html'));
 });
 
-// Serve uploaded files from specific directories
+// Serve uploaded files — check backend/public first (where multer saves files), then root public
+app.use('/uploads', express.static(path.join(__dirname, '..', 'public', 'uploads')));
 app.use('/uploads', express.static(path.join(__dirname, '..', '..', 'public', 'uploads')));
+app.use('/uploads/blogs', express.static(path.join(__dirname, '..', '..', 'public', 'uploads', 'blogs')));
 
 // SATISFY MISSING SCRIPT REFERENCE: Redirect js/pages.js to a dummy response or script
 app.get('/js/pages.js', (req, res) => {

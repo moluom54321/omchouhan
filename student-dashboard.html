@@ -479,6 +479,138 @@
             color: #721c24;
         }
 
+        /* ── Premium Attendance Styles ── */
+        .att-hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .att-hero::before {
+            content: '';
+            position: absolute;
+            top: -30px; right: -30px;
+            width: 150px; height: 150px;
+            background: rgba(255,255,255,.08);
+            border-radius: 50%;
+        }
+
+        .att-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -50px; left: 30px;
+            width: 200px; height: 200px;
+            background: rgba(255,255,255,.05);
+            border-radius: 50%;
+        }
+
+        .att-hero-inner {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Circular progress ring */
+        .progress-ring-wrap {
+            flex-shrink: 0;
+            text-align: center;
+        }
+
+        .progress-ring-wrap svg { transform: rotate(-90deg); }
+
+        .ring-text {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .ring-pct { font-size: 1.4rem; font-weight: 800; color: white; }
+        .ring-label { font-size: .7rem; opacity: .8; }
+
+        .ring-container { position: relative; width: 110px; height: 110px; }
+
+        .att-hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .hero-stat {
+            background: rgba(255,255,255,.15);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-stat .h-val {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .hero-stat .h-lbl {
+            font-size: .78rem;
+            opacity: .85;
+            font-weight: 500;
+        }
+
+        /* Filter bar */
+        .att-filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .att-filter-bar select {
+            padding: .5rem .9rem;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: .875rem;
+            font-family: 'Segoe UI', sans-serif;
+            outline: none;
+            cursor: pointer;
+            background: white;
+            color: #1e293b;
+            transition: border-color .2s;
+        }
+
+        .att-filter-bar select:focus { border-color: var(--primary-color); }
+
+        .att-filter-label {
+            font-size: .85rem;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        /* Attendance progress bar */
+        .att-progress-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin-top: .5rem;
+            overflow: hidden;
+        }
+
+        .att-progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transition: width .8s ease;
+        }
+
+        /* Premium Table */
         .attendance-calendar {
             max-width: 100%;
             overflow-x: auto;
@@ -489,34 +621,49 @@
             border-collapse: collapse;
         }
 
-        .attendance-table th,
-        .attendance-table td {
-            padding: 0.75rem;
-            text-align: center;
-            border: 1px solid #ddd;
-        }
-
         .attendance-table th {
-            background: #f8f9fa;
-            font-weight: 600;
+            background: #f8fafc;
+            padding: .85rem 1rem;
+            text-align: left;
+            font-size: .78rem;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            border-bottom: 2px solid #e2e8f0;
         }
 
-        .attendance-present {
-            background: #d4edda;
-            color: #155724;
-            font-weight: 600;
+        .attendance-table td {
+            padding: .85rem 1rem;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: .9rem;
+            vertical-align: middle;
         }
 
-        .attendance-absent {
-            background: #f8d7da;
-            color: #721c24;
-            font-weight: 600;
+        .attendance-table tr:hover td { background: #fafbff; }
+
+        .att-status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: .75rem;
+            font-weight: 700;
+            text-transform: capitalize;
         }
 
-        .attendance-late {
-            background: #fff3cd;
-            color: #856404;
-            font-weight: 600;
+        .att-present { background: #d1fae5; color: #065f46; }
+        .att-absent  { background: #fee2e2; color: #991b1b; }
+        .att-late    { background: #fef3c7; color: #92400e; }
+
+        .att-day-badge {
+            background: #f1f5f9;
+            color: #64748b;
+            border-radius: 6px;
+            padding: 2px 8px;
+            font-size: .75rem;
+            font-weight: 700;
         }
 
         .btn {
@@ -949,6 +1096,7 @@
                     <li><a href="#" class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i>
                             Dashboard</a></li>
                     <li><a href="#" data-section="profile"><i class="fas fa-user"></i> My Profile</a></li>
+                    <li><a href="#" data-section="attendance"><i class="fas fa-calendar-check"></i> My Attendance</a></li>
                     <li><a href="#" data-section="reminders"><i class="fas fa-bullhorn"></i> Reminders &
                             Announcements</a></li>
                 </ul>
@@ -982,7 +1130,6 @@
                 <!-- Dashboard Section -->
                 <div id="dashboard-section">
                     <div id="statusAlert"></div>
-
 
                     <div class="profile-card">
                         <div class="profile-header">
@@ -1132,6 +1279,113 @@
                     </form>
                 </div>
 
+                <!-- Attendance Section (Premium) -->
+                <div id="attendance-section" class="section hidden">
+                    <h2><i class="fas fa-calendar-check"></i> My Attendance</h2>
+                    <div id="attendanceAlert"></div>
+
+                    <!-- Hero Stats Card with Ring -->
+                    <div class="att-hero">
+                        <div class="att-hero-inner">
+                            <div class="progress-ring-wrap">
+                                <div class="ring-container">
+                                    <svg width="110" height="110">
+                                        <circle cx="55" cy="55" r="48" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="8"/>
+                                        <circle id="ringCircle" cx="55" cy="55" r="48" fill="none" stroke="white" stroke-width="8"
+                                            stroke-dasharray="301.59" stroke-dashoffset="301.59"
+                                            stroke-linecap="round" style="transition: stroke-dashoffset 1s ease;"/>
+                                    </svg>
+                                    <div class="ring-text">
+                                        <div class="ring-pct" id="ringPct">0%</div>
+                                        <div class="ring-label">Attendance</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="att-hero-stats">
+                                <div class="hero-stat">
+                                    <div class="h-val" id="totalClasses">0</div>
+                                    <div class="h-lbl"><i class="fas fa-calendar-alt"></i> Total Classes</div>
+                                </div>
+                                <div class="hero-stat">
+                                    <div class="h-val" id="presentDays">0</div>
+                                    <div class="h-lbl"><i class="fas fa-check"></i> Present</div>
+                                </div>
+                                <div class="hero-stat">
+                                    <div class="h-val" id="absentDays">0</div>
+                                    <div class="h-lbl"><i class="fas fa-times"></i> Absent</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress bar summary -->
+                    <div style="background:white;border-radius:12px;padding:1.2rem 1.5rem;box-shadow:0 4px 15px rgba(0,0,0,.06);margin-bottom:1.5rem;">
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;">
+                            <span style="font-weight:600;font-size:.9rem;color:#1e293b;">Overall Attendance</span>
+                            <span style="font-weight:700;color:var(--primary-color);" id="attendancePercentage">0%</span>
+                        </div>
+                        <div class="att-progress-bar">
+                            <div class="att-progress-fill" id="progressFill" style="width:0%;"></div>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;margin-top:.5rem;font-size:.75rem;color:#94a3b8;">
+                            <span>0%</span>
+                            <span style="color:#10b981;font-weight:600;">75% — Minimum Required</span>
+                            <span>100%</span>
+                        </div>
+                    </div>
+
+                    <!-- Attendance History Table -->
+                    <div style="background:white;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,.06);overflow:hidden;">
+                        <div style="padding:1.2rem 1.5rem;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+                            <h3 style="font-size:1rem;font-weight:700;color:#1e293b;"><i class="fas fa-list-alt" style="color:var(--primary-color);margin-right:6px;"></i> Attendance History</h3>
+                            <div class="att-filter-bar" style="margin-bottom:0;">
+                                <span class="att-filter-label">Filter:</span>
+                                <select id="attFilterStatus" onchange="applyAttFilter()">
+                                    <option value="">All Status</option>
+                                    <option value="present">Present</option>
+                                    <option value="absent">Absent</option>
+                                </select>
+                                <select id="attFilterMonth" onchange="applyAttFilter()">
+                                    <option value="">All Months</option>
+                                    <option value="0">January</option>
+                                    <option value="1">February</option>
+                                    <option value="2">March</option>
+                                    <option value="3">April</option>
+                                    <option value="4">May</option>
+                                    <option value="5">June</option>
+                                    <option value="6">July</option>
+                                    <option value="7">August</option>
+                                    <option value="8">September</option>
+                                    <option value="9">October</option>
+                                    <option value="10">November</option>
+                                    <option value="11">December</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="attendance-calendar">
+                            <table class="attendance-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Day</th>
+                                        <th>Course</th>
+                                        <th>Timing</th>
+                                        <th>Branch</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="attendanceHistoryBody">
+                                    <tr>
+                                        <td colspan="6" style="text-align:center;padding:2rem;color:#94a3b8;">
+                                            <i class="fas fa-spinner fa-spin"></i> Loading attendance records...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Reminders & Announcements Section -->
                 <div id="reminders-section" class="section hidden">
                     <h2><i class="fas fa-bullhorn"></i> Reminders & Announcements</h2>
@@ -1140,7 +1394,6 @@
                     </div>
                 </div>
             </div>
-
 
         </div>
     </div>
@@ -1571,10 +1824,6 @@
             }
         }
 
-
-
-
-
         // Load profile section data
         async function loadProfile() {
             try {
@@ -1869,13 +2118,105 @@
                 case 'profile':
                     loadProfile();
                     break;
+                case 'attendance':
+                    loadAttendance();
+                    break;
                 case 'reminders':
                     loadAnnouncements();
                     break;
             }
         }
 
+        // All attendance records for filter
+        let _allAttRecords = [];
 
+        // Load attendance section data (Premium)
+        async function loadAttendance() {
+            try {
+                // Fetch stats
+                const statsResponse = await apiCall(`${API_BASE_URL}/attendance/my-stats`);
+                if (statsResponse.success) {
+                    const stats = statsResponse.data;
+                    const pct = parseFloat(stats.percentage) || 0;
+                    document.getElementById('totalClasses').textContent = stats.total;
+                    document.getElementById('presentDays').textContent = stats.present;
+                    document.getElementById('absentDays').textContent = stats.absent;
+                    document.getElementById('attendancePercentage').textContent = pct.toFixed(1) + '%';
+                    document.getElementById('ringPct').textContent = pct.toFixed(1) + '%';
+
+                    // Animate ring
+                    const circumference = 2 * Math.PI * 48; // 301.59
+                    const offset = circumference - (pct / 100) * circumference;
+                    setTimeout(() => {
+                        const ring = document.getElementById('ringCircle');
+                        if (ring) ring.style.strokeDashoffset = offset;
+                    }, 200);
+
+                    // Animate progress bar
+                    setTimeout(() => {
+                        const fill = document.getElementById('progressFill');
+                        if (fill) fill.style.width = pct + '%';
+                        if (fill) fill.style.background = pct >= 75 ?
+                            'linear-gradient(90deg, #10b981, #059669)' :
+                            'linear-gradient(90deg, #ef4444, #dc2626)';
+                    }, 300);
+                }
+
+                // Fetch history
+                const historyResponse = await apiCall(`${API_BASE_URL}/attendance/my-attendance`);
+                if (historyResponse.success) {
+                    _allAttRecords = historyResponse.data || [];
+                    renderAttTable(_allAttRecords);
+                }
+            } catch (error) {
+                console.error('Error loading attendance:', error);
+                showSectionAlert('attendance', 'danger', 'Failed to load attendance data');
+            }
+        }
+
+        function applyAttFilter() {
+            const status = document.getElementById('attFilterStatus')?.value || '';
+            const month = document.getElementById('attFilterMonth')?.value;
+            let filtered = [..._allAttRecords];
+            if (status) filtered = filtered.filter(r => r.status === status);
+            if (month !== '' && month !== undefined) filtered = filtered.filter(r => new Date(r.date).getMonth() === parseInt(month));
+            renderAttTable(filtered);
+        }
+
+        const _dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+        function renderAttTable(records) {
+            const tbody = document.getElementById('attendanceHistoryBody');
+            if (!records || records.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:2.5rem;">
+                    <i class="fas fa-calendar-times" style="font-size:2rem;color:#cbd5e1;margin-bottom:.5rem;display:block;"></i>
+                    <span style="color:#94a3b8;font-size:.9rem;">No attendance records found.</span>
+                </td></tr>`;
+                return;
+            }
+            tbody.innerHTML = records.map(record => {
+                const date = new Date(record.date);
+                const dayName = _dayNames[date.getDay()];
+                const dateStr = date.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+                const pillClass = record.status === 'present' ? 'att-present' : 'att-absent';
+                const icon = record.status === 'present' ? 'fa-check' : 'fa-times';
+                return `
+                    <tr>
+                        <td><strong>${dateStr}</strong></td>
+                        <td><span class="att-day-badge">${dayName}</span></td>
+                        <td>${record.courseType || '—'}</td>
+                        <td>${record.timeSlot || '—'}</td>
+                        <td>${record.branch || '—'}</td>
+                        <td>
+                            <span class="att-status-pill ${pillClass}">
+                                <i class="fas ${icon}"></i>
+                                ${record.status.charAt(0).toUpperCase() + record.status.slice(1)}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
 
         // Logout function
         document.getElementById('logoutBtn').addEventListener('click', () => {

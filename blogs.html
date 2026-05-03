@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Read the latest music tips, tutorials, and news from Music School of Delhi.">
+    <title>Blog - Music School of Delhi</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --premium-gradient: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%);
+            --card-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .blog-hero {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/guitar-course.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 450px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(transparent, #fff);
+        }
+
+        .blog-hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .section-header-premium {
+            text-align: left;
+            margin: 60px auto 40px;
+            max-width: 1200px;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .section-header-premium h2 {
+            font-size: 2.5rem;
+            color: #1a1a2e;
+            position: relative;
+        }
+
+        .section-header-premium h2 span {
+            display: block;
+            font-size: 1rem;
+            color: #00bcd4;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        /* Swiper Customization */
+        .featured-blogs-slider {
+            padding: 20px 0 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .swiper-slide {
+            height: auto;
+            padding: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        /* Improved Blog Grid */
+        .blog-grid {
+            padding: 40px 20px 100px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .blog-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+            height: 100%;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+        }
+
+        .blog-card-image-wrap {
+            overflow: hidden;
+            height: 240px;
+            position: relative;
+        }
+
+        .blog-card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .blog-card:hover .blog-card-image {
+            transform: scale(1.1);
+        }
+
+        .blog-card-badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--premium-gradient);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .blog-card-content {
+            padding: 30px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .blog-title {
+            font-size: 1.4rem;
+            color: #1a1a2e;
+            margin-bottom: 15px;
+            line-height: 1.4;
+            font-weight: 700;
+        }
+
+        .blog-excerpt {
+            color: #555;
+            margin-bottom: 25px;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        .blog-footer {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .read-more-btn {
+            background: #f8f9fa;
+            color: #1a1a2e;
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .read-more-btn:hover {
+            background: var(--premium-gradient);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .blog-date {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        #loading-blogs {
+            text-align: center;
+            padding: 100px 0;
+            grid-column: 1 / -1;
+        }
+
+        .sk-pulse {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 20px;
+            background-color: var(--primary-color);
+            border-radius: 100%;
+            animation: sk-pulse 1.2s infinite ease-in-out;
+        }
+
+        @keyframes sk-pulse {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); opacity: 0; }
+        }
+
+        /* Blog Category Sections */
+        .blog-category-section {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Auto-scrolling blog containers */
+        #latest-container, #recent-container, #top-container {
+            display: flex;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-behavior: smooth;
+            gap: 30px;
+            padding: 20px 0;
+            scrollbar-width: none; /* Hide scrollbar */
+            -ms-overflow-style: none;  /* Hide scrollbar */
+        }
+
+        #latest-container::-webkit-scrollbar,
+        #recent-container::-webkit-scrollbar,
+        #top-container::-webkit-scrollbar {
+            display: none; /* Hide scrollbar */
+        }
+
+        #latest-container .blog-card,
+        #recent-container .blog-card,
+        #top-container .blog-card {
+            flex: 0 0 auto;
+            width: 320px;
+            min-width: 320px;
+        }
+
+        .loading-placeholder {
+            text-align: center;
+            padding: 60px 0;
+            grid-column: 1 / -1;
+        }
+
+        /* Slider Reveal Animation */
+        .featured-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .featured-section.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .blog-category-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .blog-category-section.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-music"></i>
+                <span>Music School of Delhi</span>
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="courses.html">Courses</a></li>
+                <li><a href="admission.html">Admission Form</a></li>
+                <li><a href="blogs.html" class="active">Blog</a></li>
+                <li><a href="reviews.html">Location</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li><a href="student-login.html" class="btn-login">Student Login</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <header class="blog-hero">
+        <div class="container">
+            <h1 id="hero-title">Our Music Blog</h1>
+            <p id="hero-subtitle">Tips, Stories, and News from our instructors and students</p>
+        </div>
+    </header>
+
+    <main>
+        <!-- Latest Blogs Section -->
+        <section class="blog-category-section" id="latest-section">
+            <div class="section-header-premium">
+                <div>
+                    <h2><span>Fresh Content</span>Latest Blogs</h2>
+                </div>
+            </div>
+            <div id="latest-container" class="blog-grid">
+                <div class="loading-placeholder">
+                    <div class="sk-pulse"></div>
+                    <p>Loading latest blogs...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trending Blogs Section -->
+        <section class="blog-category-section" id="trending-section">
+            <div class="section-header-premium">
+                <div>
+                    <h2><span>Hot Topics</span>Trending Blogs</h2>
+                </div>
+            </div>
+            <div class="featured-blogs-slider">
+                <div class="swiper-container trending-swiper">
+                    <div class="swiper-wrapper" id="trending-container">
+                        <!-- Trending blogs go here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Blogs Section -->
+        <section class="blog-category-section" id="recent-section">
+            <div class="section-header-premium">
+                <div>
+                    <h2><span>Just In</span>Recent Blogs</h2>
+                </div>
+            </div>
+            <div id="recent-container" class="blog-grid">
+                <div class="loading-placeholder">
+                    <div class="sk-pulse"></div>
+                    <p>Loading recent blogs...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Top Blogs Section -->
+        <section class="blog-category-section" id="top-section">
+            <div class="section-header-premium">
+                <div>
+                    <h2><span>Editor's Choice</span>Top Blogs</h2>
+                </div>
+            </div>
+            <div id="top-container" class="blog-grid">
+                <div class="loading-placeholder">
+                    <div class="sk-pulse"></div>
+                    <p>Loading top blogs...</p>
+                </div>
+            </div>
+        </section>
+
+            </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>Music School of Delhi</h3>
+                    <p>Transforming passion into mastery since 2010</p>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/musicschoolofdelhi/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/musicschoolofdelhi/" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.youtube.com/channel/UCq2QrmOMYyBJPI7rvkUfG9A/featured" target="_blank"><i class="fab fa-youtube"></i></a>
+                        <a href="https://x.com/MUSICSCHOOLOFDL" target="_blank"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="courses.html">Courses</a></li>
+                        <li><a href="blogs.html">Blog</a></li>
+                        <li><a href="admission.html">Admission</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Courses</h4>
+                    <ul>
+                        <li><a href="courses.html#piano">Piano Classes</a></li>
+                        <li><a href="courses.html#guitar">Guitar Classes</a></li>
+                        <li><a href="courses.html#vocal">Vocal Training</a></li>
+                        <li><a href="reviews.html">Location</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Info</h4>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-map-marker-alt"></i> Music School of Delhi, Pitampura, New Delhi</li>
+                        <li><i class="fas fa-phone"></i> +91 98765 43210</li>
+                        <li><i class="fas fa-envelope"></i> info@musicschooldelhi.com</li>
+                        <li><i class="fas fa-clock"></i> Mon-Sat: 9AM - 8PM</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Music School of Delhi. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    
+    <script type="module">
+        import { animate, inView, scroll } from "https://cdn.jsdelivr.net/npm/motion@11.11.13/+esm";
+
+        const API_BASE_URL = 'http://localhost:5000/api';
+        let swiper;
+
+        async function fetchBlogs() {
+            console.log('DEBUG: Fetching blogs from API...');
+            console.log('DEBUG: API URL:', `${API_BASE_URL}/blogs`);
+            
+            try {
+                // Test API connection first
+                const response = await fetch(`${API_BASE_URL}/blogs`);
+                console.log('DEBUG: API Response status:', response.status);
+                console.log('DEBUG: Response headers:', response.headers);
+                
+                const result = await response.json();
+                console.log('DEBUG: API Response:', result);
+                
+                if (result.success) {
+                    console.log('DEBUG: Successfully fetched', result.data.length, 'blogs');
+                    
+                    // Log each blog to verify data
+                    result.data.forEach((blog, index) => {
+                        console.log(`DEBUG: Blog ${index}:`, blog.title, '| Category:', blog.category, '| ID:', blog._id);
+                    });
+                    
+                    processAndDisplayBlogs(result.data);
+                } else {
+                    console.log('DEBUG: API returned error:', result);
+                    showError('Failed to load blogs.');
+                }
+            } catch (error) {
+                console.error('DEBUG: Error fetching blogs:', error);
+                console.error('DEBUG: Error details:', error.message);
+                console.error('DEBUG: Stack trace:', error.stack);
+                showError('Error connecting to the music room.');
+            }
+        }
+
+        function processAndDisplayBlogs(blogs) {
+            if (blogs.length === 0) {
+                return;
+            }
+
+            console.log('DEBUG: Processing', blogs.length, 'blogs for website display');
+
+            // Extract blogType from category field (stored as blogType-originalCategory)
+            const blogsWithType = blogs.map((blog, index) => {
+                let blogType = 'normal';
+                let originalCategory = blog.category;
+                
+                console.log('DEBUG: Processing blog', index, ':', blog.title, 'with category:', blog.category);
+                
+                // Check if category has blogType prefix
+                if (blog.category && blog.category.includes('-')) {
+                    const parts = blog.category.split('-');
+                    const possibleType = parts[0];
+                    
+                    console.log('DEBUG: Category parts:', parts, 'possibleType:', possibleType);
+                    
+                    // Check if it's a valid blogType
+                    if (['latest', 'recent', 'trending', 'top'].includes(possibleType)) {
+                        blogType = possibleType;
+                        originalCategory = parts.slice(1).join('-'); // Get the rest after the blogType
+                        console.log('DEBUG: Extracted blogType:', blogType, 'originalCategory:', originalCategory);
+                    }
+                }
+                
+                const blogWithType = {
+                    ...blog,
+                    blogType: blogType,
+                    originalCategory: originalCategory,
+                    uniqueKey: `${blog._id}-${index}-${blogType}` // Add unique key to prevent duplication
+                };
+                
+                console.log('DEBUG: Final blog', index, ':', blog.title, '-> Type:', blogWithType.blogType, '-> UniqueKey:', blogWithType.uniqueKey);
+                return blogWithType;
+            });
+
+            // Filter blogs by type
+            const latestBlogs = blogsWithType.filter(blog => blog.blogType === 'latest');
+            const trendingBlogs = blogsWithType.filter(blog => blog.blogType === 'trending');
+            const recentBlogs = blogsWithType.filter(blog => blog.blogType === 'recent');
+            const topBlogs = blogsWithType.filter(blog => blog.blogType === 'top');
+            const normalBlogs = blogsWithType.filter(blog => blog.blogType === 'normal');
+
+            console.log('DEBUG: Blog counts - Latest:', latestBlogs.length, 
+                       'Trending:', trendingBlogs.length, 
+                       'Recent:', recentBlogs.length, 
+                       'Top:', topBlogs.length, 
+                       'Normal:', normalBlogs.length);
+
+            // Populate Latest Blogs Section
+            console.log('DEBUG: Populating Latest section with', latestBlogs.length, 'blogs');
+            populateBlogGrid('latest-container', latestBlogs.slice(0, 6), 'Latest');
+            
+            // Populate Trending Blogs Slider
+            console.log('DEBUG: Populating Trending section with', trendingBlogs.length, 'blogs');
+            populateTrendingSlider(trendingBlogs.slice(0, 5));
+            
+            // Populate Recent Blogs Section
+            console.log('DEBUG: Populating Recent section with', recentBlogs.length, 'blogs');
+            populateBlogGrid('recent-container', recentBlogs.slice(0, 6), 'Recent');
+            
+            // Populate Top Blogs Section
+            console.log('DEBUG: Populating Top section with', topBlogs.length, 'blogs');
+            populateBlogGrid('top-container', topBlogs.slice(0, 6), 'Top');
+            
+            console.log('Top blogs:', topBlogs.length);
+            console.log('Normal blogs:', normalBlogs.length);
+            console.log('=== DISPLAY COMPLETE ===');
+            
+            // Fallback: If no blogs in specific categories, show some normal blogs
+            if (latestBlogs.length === 0 && trendingBlogs.length === 0 && 
+                recentBlogs.length === 0 && topBlogs.length === 0 && normalBlogs.length > 0) {
+                console.log('DEBUG: No categorized blogs found, showing normal blogs as fallback');
+                
+                // Show some normal blogs in each section as fallback
+                const fallbackBlogs = normalBlogs.slice(0, 2);
+                populateBlogGrid('latest-container', fallbackBlogs, 'Latest');
+                populateTrendingSlider(fallbackBlogs);
+                populateBlogGrid('recent-container', fallbackBlogs, 'Recent');
+                populateBlogGrid('top-container', fallbackBlogs, 'Top');
+            }
+            
+            initializeAnimations();
+        }
+
+        function populateBlogGrid(containerId, blogs, sectionName) {
+            const container = document.getElementById(containerId);
+            
+            if (blogs.length === 0) {
+                container.innerHTML = `<div style="text-align: center; padding: 2rem; color: #718096; width: 100%;">No ${sectionName.toLowerCase()} blogs available yet.</div>`;
+                return;
+            }
+
+            container.innerHTML = blogs.map((blog, index) => `
+                <article class="blog-card" data-animate-on-view key="${blog.uniqueKey || `${blog._id}-${index}`}">
+                    <div class="blog-card-image-wrap">
+                        <span class="blog-card-badge">${getBlogTypeLabel(blog.blogType)}</span>
+                        <img src="${blog.image.startsWith('http') ? blog.image : 'http://localhost:5000' + blog.image}" 
+                             alt="${blog.title}" 
+                             class="blog-card-image" 
+                             onerror="this.src='images/guitar-course.jpg'">
+                    </div>
+                    <div class="blog-card-content">
+                        <h2 class="blog-title">${blog.title}</h2>
+                        <p class="blog-excerpt">${blog.excerpt}</p>
+                        <div class="blog-footer">
+                            <span class="blog-date"><i class="far fa-calendar-alt"></i> ${new Date(blog.createdAt).toLocaleDateString()}</span>
+                            <a href="blog-detail.html?slug=${blog.slug}" class="read-more-btn">Read More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        function populateTrendingSlider(blogs) {
+            const container = document.getElementById('trending-container');
+            
+            if (blogs.length === 0) {
+                container.innerHTML = `<div class="swiper-slide"><p style="text-align: center; padding: 2rem;">No trending blogs available yet.</p></div>`;
+                return;
+            }
+
+            container.innerHTML = blogs.map((blog, index) => `
+                <div class="swiper-slide">
+                    <article class="blog-card" key="${blog.uniqueKey || `${blog._id}-${index}`}">
+                        <div class="blog-card-image-wrap">
+                            <span class="blog-card-badge">${getBlogTypeLabel(blog.blogType)}</span>
+                            <img src="${blog.image.startsWith('http') ? blog.image : 'http://localhost:5000' + blog.image}" 
+                                 alt="${blog.title}" 
+                                 class="blog-card-image" 
+                                 onerror="this.src='images/guitar-course.jpg'">
+                        </div>
+                        <div class="blog-card-content">
+                            <h2 class="blog-title">${blog.title}</h2>
+                            <p class="blog-excerpt">${blog.excerpt.substring(0, 100)}...</p>
+                            <div class="blog-footer">
+                                <span class="blog-date"><i class="far fa-calendar-alt"></i> ${new Date(blog.createdAt).toLocaleDateString()}</span>
+                                <a href="blog-detail.html?slug=${blog.slug}" class="read-more-btn">Read More <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            `).join('');
+
+            initializeTrendingSwiper();
+        }
+
+        function getBlogTypeLabel(blogType) {
+            const labels = {
+                'latest': 'Latest',
+                'recent': 'Recent', 
+                'trending': 'Trending',
+                'top': 'Top',
+                'normal': 'Music'
+            };
+            return labels[blogType] || labels['normal'];
+        }
+
+        function initializeSwiper() {
+            swiper = new Swiper('.featured-swiper', {
+                slidesPerView: 1,
+                spaceBetween: 30,
+                loop: true,
+                autoplay: {
+                    delay: 4000,
+                    disableOnInteraction: false,
+                },
+                breakpoints: {
+                    640: { slidesPerView: 2 },
+                    1024: { slidesPerView: 3 },
+                },
+                grabCursor: true,
+            });
+        }
+
+        function initializeTrendingSwiper() {
+            new Swiper('.trending-swiper', {
+                slidesPerView: 1,
+                spaceBetween: 30,
+                loop: true,
+                autoplay: {
+                    delay: 3000,
+                    disableOnInteraction: false,
+                    pauseOnMouseEnter: true,
+                },
+                speed: 800,
+                breakpoints: {
+                    640: { slidesPerView: 2 },
+                    1024: { slidesPerView: 3 },
+                },
+                grabCursor: true,
+                effect: 'slide',
+            });
+        }
+
+        function initializeAnimations() {
+            // Hero section animations
+            animate("#hero-title", { opacity: [0, 1], y: [30, 0] }, { duration: 1, easing: "ease-out" });
+            animate("#hero-subtitle", { opacity: [0, 1], y: [20, 0] }, { duration: 1, delay: 0.3, easing: "ease-out" });
+
+            // Reveal all blog category sections
+            const sections = ['latest-section', 'trending-section', 'recent-section', 'top-section'];
+            sections.forEach((sectionId, index) => {
+                setTimeout(() => {
+                    const section = document.getElementById(sectionId);
+                    if (section) section.classList.add('active');
+                }, index * 200);
+            });
+
+            // Initialize auto-scrolling for blog grids
+            initializeAutoScroll();
+
+            // Scroll animations for grid cards
+            inView("[data-animate-on-view]", ({ target }) => {
+                animate(target, 
+                    { opacity: [0, 1], y: [50, 0], scale: [0.95, 1] }, 
+                    { duration: 0.8, easing: [0.17, 0.67, 0.83, 0.67] }
+                );
+                return () => animate(target, { opacity: 0, y: 50 }); // Optional: out animation
+            });
+        }
+
+        function initializeAutoScroll() {
+            // Auto-scroll for blog grids
+            const gridContainers = ['latest-container', 'recent-container', 'top-container'];
+            
+            gridContainers.forEach(containerId => {
+                const container = document.getElementById(containerId);
+                if (container && container.children.length > 0) {
+                    startAutoScroll(container);
+                }
+            });
+        }
+
+        function startAutoScroll(container) {
+            let scrollAmount = 0;
+            const scrollSpeed = 0.3; // Slower speed for better readability
+            const originalContentWidth = container.scrollWidth / 2; // Since we duplicated content
+            const maxScroll = originalContentWidth; // Scroll to the end of original content
+            
+            let isPaused = false;
+            let animationId;
+            let lastTimestamp = 0;
+            
+            function scroll(timestamp) {
+                if (!isPaused && maxScroll > 0) {
+                    // Smooth animation using timestamp
+                    if (!lastTimestamp) lastTimestamp = timestamp;
+                    const deltaTime = timestamp - lastTimestamp;
+                    
+                    if (deltaTime > 16) { // Cap at ~60fps
+                        scrollAmount += scrollSpeed * (deltaTime / 16);
+                        
+                        // Reset to start for seamless loop
+                        if (scrollAmount >= maxScroll) {
+                            scrollAmount = 0;
+                        }
+                        
+                        container.scrollLeft = scrollAmount;
+                        lastTimestamp = timestamp;
+                    }
+                }
+                
+                animationId = requestAnimationFrame(scroll);
+            }
+            
+            // Start scrolling after a short delay
+            setTimeout(() => {
+                scroll(0);
+            }, 1500);
+            
+            // Pause on hover
+            container.addEventListener('mouseenter', () => {
+                isPaused = true;
+            });
+            
+            container.addEventListener('mouseleave', () => {
+                isPaused = false;
+                lastTimestamp = 0; // Reset timestamp for smooth resume
+            });
+            
+            // Touch events for mobile
+            container.addEventListener('touchstart', () => {
+                isPaused = true;
+            });
+            
+            container.addEventListener('touchend', () => {
+                setTimeout(() => {
+                    isPaused = false;
+                    lastTimestamp = 0; // Reset timestamp for smooth resume
+                }, 1500); // Resume after 1.5 seconds
+            });
+            
+            // Store animation ID for cleanup
+            container.dataset.animationId = animationId;
+        }
+
+        function showError(message) {
+            console.log('DEBUG: Error message:', message);
+            document.getElementById('blog-container').innerHTML = `<p style="text-align: center; grid-column: 1/-1;">${message}</p>`;
+        }
+
+        // Test API connection before fetching blogs
+        async function testAPIConnection() {
+            console.log('DEBUG: Testing API connection...');
+            console.log('DEBUG: Attempting to connect to:', `${API_BASE_URL}/blogs`);
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/blogs`);
+                console.log('DEBUG: API Response status:', response.status);
+                console.log('DEBUG: Response headers:', response.headers);
+                
+                const result = await response.json();
+                console.log('DEBUG: API Response:', result);
+                
+                if (response.ok) {
+                    console.log('DEBUG: API is accessible and responding correctly');
+                    console.log('DEBUG: Total blogs in database:', result.data.length);
+                    
+                    // Check if any blogs have blogType prefix
+                    const categorizedBlogs = result.data.filter(blog => 
+                        blog.category && (blog.category.includes('latest-') || 
+                                       blog.category.includes('trending-') || 
+                                       blog.category.includes('recent-') || 
+                                       blog.category.includes('top-'))
+                    );
+                    
+                    console.log('DEBUG: Categorized blogs found:', categorizedBlogs.length);
+                    console.log('SUCCESS: Backend server is running and API is working!');
+                    return true;
+                } else {
+                    console.log('ERROR: API returned error status:', response.status);
+                    console.log('ERROR: Backend server may not be running properly');
+                    return false;
+                }
+            } catch (error) {
+                console.log('ERROR: API connection failed:', error.message);
+                console.log('ERROR: Full error details:', error);
+                console.log('ERROR: Cannot connect to backend server');
+                return false;
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            console.log('DEBUG: Page loaded, starting blog system...');
+            
+            // First test API connection
+            const apiWorking = await testAPIConnection();
+            if (apiWorking) {
+                console.log('TEST: API working, fetching blogs...');
+                fetchBlogs();
+            } else {
+                console.log('TEST: API not working, showing error message');
+                document.querySelector('.blogs-container').innerHTML = `
+                    <div style="text-align: center; padding: 3rem; color: #e53e3e;">
+                        <h3>Connection Error</h3>
+                        <p>Cannot connect to the blog server. Please check:</p>
+                        <ul style="text-align: left; max-width: 400px; margin: 0 auto;">
+                            <li>Backend server is running on localhost:5000</li>
+                            <li>API endpoint is accessible</li>
+                            <li>No CORS errors in console</li>
+                        </ul>
+                        <button onclick="location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer;">Retry</button>
+                        <button onclick="testDirectAPI()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #f59e0b; color: white; border: none; border-radius: 4px; cursor: pointer;">Test API Direct</button>
+                    </div>
+                `;
+            }
+        });
+
+        // Test API directly without going through connection test
+        async function testDirectAPI() {
+            console.log('TEST: Testing API directly...');
+            try {
+                const response = await fetch('http://localhost:5000/api/blogs');
+                console.log('TEST: Direct API Response status:', response.status);
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('TEST: Direct API Response:', result);
+                    console.log('SUCCESS: Direct API connection working!');
+                    alert('API is working! Please refresh the page.');
+                } else {
+                    console.log('ERROR: Direct API failed with status:', response.status);
+                    alert('API connection failed. Status: ' + response.status);
+                }
+            } catch (error) {
+                console.log('ERROR: Direct API test failed:', error);
+                alert('Direct API test failed: ' + error.message);
+            }
+        }
+
+        // Mobile menu toggle
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+    </script>
+
+</body>
+
+</html>

@@ -15,10 +15,6 @@ const guitarTabSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
-  lyrics: {
-    type: String,
-    default: ''
-  },
   chordsContent: {
     type: String,
     default: ''
@@ -32,13 +28,13 @@ const guitarTabSchema = new mongoose.Schema({
     default: null
   },
   fileType: {
-    type: String, // 'audio', 'pdf', 'tab', etc.
-    enum: ['audio', 'pdf', 'tab', 'text'],
+    type: String,
+    enum: ['audio', 'pdf', 'tab', 'text', 'image'],
     default: 'text'
   },
   category: {
     type: String,
-    enum: ['latest', 'popular', 'tabs'],
+    enum: ['latest', 'popular', 'tabs', 'trending'],
     default: 'tabs'
   },
   creator: {
