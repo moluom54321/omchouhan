@@ -6,7 +6,7 @@ const fs = require('fs');
 // Upload guitar tab/song
 const uploadGuitarTab = async (req, res) => {
   try {
-    const { songName, artist, tabContent, chordsContent, defaultKey, category } = req.body;
+    const { songName, artist, tabContent, chordsContent, defaultKey, category, audioUrl } = req.body;
     const userId = req.user.userId;
 
     const admin = await Admin.findById(userId);
@@ -46,6 +46,7 @@ const uploadGuitarTab = async (req, res) => {
       filePath,
       fileType,
       category: finalCategory,
+      audioUrl: audioUrl || null,
       creator: userId
     });
 
@@ -190,7 +191,7 @@ const getGuitarTabById = async (req, res) => {
 const updateGuitarTab = async (req, res) => {
   try {
     const { id } = req.params;
-    const { songName, artist, tabContent, chordsContent, defaultKey, category } = req.body;
+    const { songName, artist, tabContent, chordsContent, defaultKey, category, audioUrl } = req.body;
 
     // Prepare update data
     const updateData = {
@@ -200,6 +201,7 @@ const updateGuitarTab = async (req, res) => {
       chordsContent,
       defaultKey,
       category,
+      audioUrl: audioUrl || null,
       updatedAt: Date.now()
     };
 

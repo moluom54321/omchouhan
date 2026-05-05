@@ -24,8 +24,13 @@ const guitarTabSchema = new mongoose.Schema({
     default: 'C'
   },
   filePath: {
-    type: String, // Path to uploaded file (audio/pdf/tab)
+    type: String,
     default: null
+  },
+  audioUrl: {
+    type: String, // YouTube / Spotify / direct audio URL
+    default: null,
+    trim: true
   },
   fileType: {
     type: String,
