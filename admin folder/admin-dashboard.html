@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -634,13 +634,13 @@
                         // Get the display element
                         const countDisplay = document.getElementById('totalStudents');
                         if (!countDisplay) {
-                            console.error('âŒ Count display element not found!');
+                            console.error('Ã¢ÂÅ’ Count display element not found!');
                             return;
                         }
 
                         // Show loading indicator - REMOVED to prevent blinking
                         // countDisplay.textContent = '...';
-                        // console.log('âœ… Loading indicator shown');
+                        // console.log('Ã¢Å“â€¦ Loading indicator shown');
 
                         // Get authentication token
                         let authToken = getAuthToken();
@@ -664,7 +664,7 @@
                             if (loginResult.success) {
                                 authToken = loginResult.token;
                                 setAuthToken(authToken);
-                                console.log('âœ… New authentication token obtained');
+                                console.log('Ã¢Å“â€¦ New authentication token obtained');
                             } else {
                                 throw new Error('Authentication failed: ' + loginResult.message);
                             }
@@ -708,7 +708,7 @@
 
                                 studentCount = approvedStudents.length;
 
-                                console.log(`ðŸ“Š Count Breakdown: Total Records: ${studentsList.length}, Approved: ${studentCount}, Pending: ${pendingCount}`);
+                                console.log(`Ã°Å¸â€œÅ  Count Breakdown: Total Records: ${studentsList.length}, Approved: ${studentCount}, Pending: ${pendingCount}`);
                             }
                         } else {
                             console.log('No student data received or API error');
@@ -718,10 +718,10 @@
                         countDisplay.textContent = studentCount;
 
 
-                        console.log(`âœ… DASHBOARD STATS UPDATED`);
+                        console.log(`Ã¢Å“â€¦ DASHBOARD STATS UPDATED`);
 
                     } catch (error) {
-                        console.error('âŒ FATAL ERROR IN DASHBOARD LOADING:', error);
+                        console.error('Ã¢ÂÅ’ FATAL ERROR IN DASHBOARD LOADING:', error);
                         const errorDisplay = document.getElementById('totalStudents');
                         if (errorDisplay) errorDisplay.textContent = 'Err';
                     }
@@ -853,15 +853,15 @@
 
                         const result = await response.json();
                         if (result.success) {
-                            showAlert(`âœ… ${name} approved successfully!`, 'success');
+                            showAlert(`${name} approved successfully! Approval email sent to student.`, 'success');
                             loadPendingApprovals();
                             updateStudentCount();
                             loadRecentStudents();
                         } else {
-                            showAlert('âŒ Error: ' + result.message, 'error');
+                            showAlert('Error: ' + result.message, 'error');
                         }
                     } catch (error) {
-                        showAlert('âŒ Connection error during approval', 'error');
+                        showAlert('Connection error during approval', 'error');
                     }
                 }
 
@@ -877,15 +877,15 @@
 
                         const result = await response.json();
                         if (result.success) {
-                            showAlert(`âœ… ${name} rejected and removed.`, 'success');
+                            showAlert(`${name} rejected successfully.`, 'success');
                             loadPendingApprovals();
                             updateStudentCount();
                             loadRecentStudents();
                         } else {
-                            showAlert('âŒ Error: ' + result.message, 'error');
+                            showAlert('Ã¢ÂÅ’ Error: ' + result.message, 'error');
                         }
                     } catch (error) {
-                        showAlert('âŒ Connection error during rejection', 'error');
+                        showAlert('Connection error during rejection', 'error');
                     }
                 }
 
@@ -918,7 +918,7 @@
                         } else {
                             // Email not configured properly
                             document.getElementById('emailConfigBanner').style.display = 'block';
-                            console.warn('⚠️ Email configuration issue:', result.message);
+                            console.warn('âš ï¸ Email configuration issue:', result.message);
                         }
                     } catch (error) {
                         // If API call fails, assume email not configured
@@ -935,7 +935,7 @@
 
                 // Test email configuration
                 async function testEmailConfiguration() {
-                    showAlert('📧 Testing email configuration to student email...', 'success');
+                    showAlert('ðŸ“§ Testing email configuration to student email...', 'success');
                     
                     try {
                         const token = getAuthToken();
@@ -954,14 +954,14 @@
                         
                         if (result.success && result.emailSent) {
                             showAlert('✅ Email test successful! Check student inbox at shivayechouhan098@gmail.com', 'success');
-                            console.log('📧 Email test details:', result);
+                            console.log('ðŸ“§ Email test details:', result);
                         } else {
-                            showAlert('❌ Email test failed: ' + (result.message || 'Unknown error'), 'error');
+                            showAlert('âŒ Email test failed: ' + (result.message || 'Unknown error'), 'error');
                             console.error('Email test error details:', result);
                         }
                     } catch (error) {
                         console.error('Email test error:', error);
-                        showAlert('❌ Email test failed. Please check backend server.', 'error');
+                        showAlert('âŒ Email test failed. Please check backend server.', 'error');
                     }
                 }
 
@@ -1066,9 +1066,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                 if (msg.status === 'replied') {
                                     if (msg.replyEmailSent) {
-                                        emailStatusIcon = '<br><small style="color: green;">✓ Email sent</small>';
+                                        emailStatusIcon = '<br><small style="color: green;">❌“ Email sent</small>';
                                     } else {
-                                        emailStatusIcon = '<br><small style="color: orange;">⚠ Email not sent</small>';
+                                        emailStatusIcon = '<br><small style="color: orange;">âš  Email not sent</small>';
                                     }
                                 }
 
@@ -1175,17 +1175,17 @@ document.addEventListener('DOMContentLoaded', () => {
                                 // Show warning if email wasn't sent but reply was saved
                                 const errorMsg = result.emailError || 'Email service not configured';
                                 console.warn('Email sending error:', errorMsg);
-                                showAlert('⚠️ Reply saved but email not sent. ' + errorMsg, 'warning');
+                                showAlert('âš ï¸ Reply saved but email not sent. ' + errorMsg, 'warning');
                             }
                             closeReplyModal();
                             loadContactMessages();
                             loadContactStats();
                         } else {
-                            showAlert('❌ ' + (result.message || 'Error sending reply'), 'error');
+                            showAlert('âŒ ' + (result.message || 'Error sending reply'), 'error');
                         }
                     } catch (error) {
                         console.error('Error submitting reply:', error);
-                        showAlert('❌ Error sending reply. Please try again.', 'error');
+                        showAlert('âŒ Error sending reply. Please try again.', 'error');
                     }
                 }
 
@@ -1270,3 +1270,4 @@ document.addEventListener('DOMContentLoaded', () => {
 </body>
 
 </html>
+

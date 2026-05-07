@@ -1,6 +1,77 @@
 const Student = require('../models/Student');
 const Course = require('../models/Course');
 const { hashPassword } = require('../services/auth.service');
+const nodemailer = require('nodemailer');
+const env = require('../config/env');
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: { user: env.GMAIL_USER, pass: env.GMAIL_PASSWORD }
+});
+
+function sendApprovalEmail(toEmail, studentName) {
+  setImmediate(async () => {
+    try {
+      await transporter.sendMail({
+        from: `"Music School of Delhi" <${env.GMAIL_USER}>`,
+        to: toEmail,
+        subject: 'Your Admission is Approved - Music School of Delhi',
+        html: `
+        <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;">
+          <div style="background:linear-gradient(135deg,#11998e,#38ef7d);color:#fff;padding:24px;border-radius:10px 10px 0 0;text-align:center;">
+            <h1 style="margin:0;">Music School of Delhi</h1>
+          </div>
+          <div style="padding:24px;background:#f9f9f9;">
+            <h2 style="color:#333;">Your Admission is Approved!</h2>
+            <p>Dear <strong>${studentName}</strong>,</p>
+            <p>We are pleased to inform you that your admission has been <strong>approved</strong> by our admin team.</p>
+            <div style="background:#d4edda;border-left:4px solid #28a745;padding:14px;margin:20px 0;border-radius:4px;">
+              <p style="margin:0;"><strong>You can now login to your Student Dashboard</strong> using the email and password you registered with.</p>
+            </div>
+            <p>Welcome to the Music School of Delhi family! We look forward to seeing you in class.</p>
+            <p>Best regards,<br><strong>Music School of Delhi Team</strong></p>
+          </div>
+          <div style="background:#f0f0f0;padding:14px;text-align:center;font-size:12px;color:#666;border-radius:0 0 10px 10px;">
+            <p>Music School of Delhi | info@musicschooldelhi.com</p>
+          </div>
+        </div>`
+      });
+      console.log('Approval email sent to:', toEmail);
+    } catch (err) {
+      console.error('Approval email failed:', err.message);
+    }
+  });
+}
+
+function sendRejectionEmail(toEmail, studentName) {
+  setImmediate(async () => {
+    try {
+      await transporter.sendMail({
+        from: `"Music School of Delhi" <${env.GMAIL_USER}>`,
+        to: toEmail,
+        subject: 'Admission Update - Music School of Delhi',
+        html: `
+        <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;">
+          <div style="background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:24px;border-radius:10px 10px 0 0;text-align:center;">
+            <h1 style="margin:0;">Music School of Delhi</h1>
+          </div>
+          <div style="padding:24px;background:#f9f9f9;">
+            <p>Dear <strong>${studentName}</strong>,</p>
+            <p>We regret to inform you that your admission request could not be approved at this time.</p>
+            <p>Please contact us directly for more information or to reapply.</p>
+            <p>Best regards,<br><strong>Music School of Delhi Team</strong></p>
+          </div>
+          <div style="background:#f0f0f0;padding:14px;text-align:center;font-size:12px;color:#666;border-radius:0 0 10px 10px;">
+            <p>Music School of Delhi | info@musicschooldelhi.com</p>
+          </div>
+        </div>`
+      });
+      console.log('Rejection email sent to:', toEmail);
+    } catch (err) {
+      console.error('Rejection email failed:', err.message);
+    }
+  });
+}
 
 // Get all students (including pending admissions)
 const getAllStudents = async (req, res) => {
@@ -113,6 +184,9 @@ const createStudent = async (req, res) => {
 // Update student
 const updateStudent = async (req, res) => {
   try {
+    // Fetch old status before updating so we can detect status change
+    const oldStudent = await Student.findById(req.params.id).select('admissionStatus email name');
+
     const student = await Student.findByIdAndUpdate(
       req.params.id,
       req.body,
@@ -124,6 +198,15 @@ const updateStudent = async (req, res) => {
         success: false,
         message: 'Student not found',
       });
+    }
+
+    // Send email if admissionStatus changed
+    if (oldStudent && req.body.admissionStatus && req.body.admissionStatus !== oldStudent.admissionStatus) {
+      if (req.body.admissionStatus === 'approved') {
+        sendApprovalEmail(student.email, student.name);
+      } else if (req.body.admissionStatus === 'rejected') {
+        sendRejectionEmail(student.email, student.name);
+      }
     }
 
     res.status(200).json({
