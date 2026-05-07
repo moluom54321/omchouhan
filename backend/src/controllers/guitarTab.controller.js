@@ -210,7 +210,7 @@ const updateGuitarTab = async (req, res) => {
       // Delete old file if it exists
       const oldTab = await GuitarTab.findById(id);
       if (oldTab && oldTab.filePath) {
-        const oldFilePath = path.join(__dirname, '../public', oldTab.filePath);
+        const oldFilePath = path.join(__dirname, '../../public', oldTab.filePath);
         if (fs.existsSync(oldFilePath)) {
           fs.unlinkSync(oldFilePath);
         }
@@ -276,7 +276,7 @@ const deleteGuitarTab = async (req, res) => {
 
     // Delete associated file if it exists
     if (guitarTab.filePath) {
-      const fullPath = path.join(__dirname, '../public', guitarTab.filePath);
+      const fullPath = path.join(__dirname, '../../public', guitarTab.filePath);
       if (fs.existsSync(fullPath)) {
         fs.unlinkSync(fullPath);
       }

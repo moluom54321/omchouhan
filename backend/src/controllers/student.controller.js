@@ -223,7 +223,7 @@ const updateStudentProfile = async (req, res) => {
     let updateData = { name, phone, email, dateOfBirth, gender };
 
     if (req.file) {
-      updateData.profilePhoto = '/uploads/' + req.file.filename;
+      updateData.profilePhoto = '/uploads/profile/' + req.file.filename;
     }
 
     // Remove undefined fields

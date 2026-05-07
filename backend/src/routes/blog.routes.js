@@ -12,7 +12,7 @@ const {
     deleteBlog
 } = require('../controllers/blog.controller');
 
-const { adminAuth } = require('../middlewares/auth.middleware');
+const { adminAuth, auth } = require('../middlewares/auth.middleware');
 
 // Configure multer for blog image uploads
 const storage = multer.diskStorage({
@@ -43,13 +43,12 @@ const upload = multer({
     limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
 });
 
-// Helper for optional auth (to show unpublished blogs to admins)
+// Decode token if present but never block unauthenticated requests.
+// The controller uses req.user.role to decide whether to show unpublished blogs.
 const optionalAuth = (req, res, next) => {
     const authHeader = req.headers.authorization;
     if (authHeader && authHeader.startsWith('Bearer ')) {
-        // We'll let the controller handle the logic if user is present
-        // but we won't block if they aren't
-        return adminAuth(req, res, next);
+        return auth(req, res, next);
     }
     next();
 };

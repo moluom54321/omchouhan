@@ -79,25 +79,27 @@ const submitAdmission = async (req, res) => {
 
         // 3. Create or update the student record
         let existingStudent = await Student.findOne({ email: email });
-        const hashedPassword = await hashPassword(req.body.password);
+        const hashedPassword = await hashPassword(req.body.password || 'TempPass123!');
 
         if (existingStudent) {
             await Student.updateOne(
                 { email: email },
                 {
-                    name: fullName,
-                    password: hashedPassword, // Ensure password is updated
-                    admissionStatus: admissionData.admissionStatus,
-                    paymentStatus: admissionData.paymentStatus,
-                    enrollmentStatus: admissionData.enrollmentStatus,
-                    selectedCourse: course,
-                    preferredSchedule: req.body.preferredSchedule || null,
-                    guardianDetails: guardianDetails,
-                    branch: branch,
-                    transactionId: admissionData.transactionId,
-                    whatsappScreenshotSent: admissionData.whatsappScreenshotSent,
-                    isCashPayment: admissionData.isCashPayment,
-                    $set: { updatedAt: new Date() }
+                    $set: {
+                        name: fullName,
+                        password: hashedPassword,
+                        admissionStatus: admissionData.admissionStatus,
+                        paymentStatus: admissionData.paymentStatus,
+                        enrollmentStatus: admissionData.enrollmentStatus,
+                        selectedCourse: course,
+                        preferredSchedule: req.body.preferredSchedule || null,
+                        guardianDetails: guardianDetails,
+                        branch: branch,
+                        transactionId: admissionData.transactionId,
+                        whatsappScreenshotSent: admissionData.whatsappScreenshotSent,
+                        isCashPayment: admissionData.isCashPayment,
+                        updatedAt: new Date()
+                    }
                 }
             );
             console.log('Student updated successfully:', existingStudent._id);
@@ -217,11 +219,13 @@ const updateAdmissionStatus = async (req, res) => {
         await Student.updateOne(
             { email: admission.email },
             {
-                admissionStatus: admissionStatus,
-                paymentStatus: paymentStatus,
-                enrollmentStatus: enrollmentStatus,
-                selectedCourse: admission.course,
-                $set: { updatedAt: new Date() }
+                $set: {
+                    admissionStatus: admissionStatus,
+                    paymentStatus: paymentStatus,
+                    enrollmentStatus: enrollmentStatus,
+                    selectedCourse: admission.course,
+                    updatedAt: new Date()
+                }
             }
         );
 

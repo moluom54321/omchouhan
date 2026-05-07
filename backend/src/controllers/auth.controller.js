@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Admin = require('../models/Admin');
 const Student = require('../models/Student');
 const { hashPassword, comparePassword, generateToken } = require('../services/auth.service');
