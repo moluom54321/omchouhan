@@ -8,7 +8,7 @@ const attendanceSchema = new mongoose.Schema({
   },
   courseType: {
     type: String,
-    enum: ['Guitar', 'Piano', 'Instruments', 'Vocal', 'GUITAR', 'PIANO', 'PIANO + INSTRUMENTS', 'VOCAL'],
+    enum: ['Guitar', 'Piano', 'Instruments', 'Vocal', 'Piano + Instruments'],
     required: true
   },
   timeSlot: {

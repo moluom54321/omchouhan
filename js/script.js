@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Close mobile menu when clicking outside
     document.addEventListener('click', function(e) {
-        if (navMenu && !navMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+        if (navMenu && !navMenu.contains(e.target) && (!mobileMenuBtn || !mobileMenuBtn.contains(e.target))) {
             navMenu.classList.remove('active');
         }
     });

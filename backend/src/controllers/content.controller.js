@@ -61,7 +61,7 @@ exports.uploadContent = async (req, res) => {
             youtubeUrl,
             youtubeId,
             description,
-            thumbnail: `https://img.youtube.com/vi/${youtubeId}/mqdefault.jpg`, // Using mqdefault as it's more reliable than maxres
+            thumbnail: `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`,
             order: (lastContent?.order || 0) + 1,
             createdBy: req.user.userId,
             isActive: true
@@ -180,7 +180,7 @@ exports.updateContent = async (req, res) => {
             }
             updateData.youtubeUrl = youtubeUrl;
             updateData.youtubeId = youtubeId;
-            updateData.thumbnail = `https://img.youtube.com/vi/${youtubeId}/maxresdefault.jpg`;
+            updateData.thumbnail = `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
         }
 
         const updated = await Content.findByIdAndUpdate(id, updateData, { new: true });
@@ -241,6 +241,13 @@ exports.deleteContent = async (req, res) => {
 exports.reorderContent = async (req, res) => {
     try {
         const { contentIds } = req.body;
+
+        if (!Array.isArray(contentIds) || contentIds.length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'contentIds must be a non-empty array'
+            });
+        }
 
         for (let i = 0; i < contentIds.length; i++) {
             await Content.findByIdAndUpdate(contentIds[i], { order: i });
