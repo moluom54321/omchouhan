@@ -478,10 +478,10 @@
     <!-- Popup -->
     <div id="popup" class="popup">
         <div class="popup-content">
-            <h3 style="color: #2c3e50; font-size: 26px; margin-bottom: 15px;">Thank You!</h3>
-            <p style="font-size: 18px; color: #555; margin: 15px 0;">Thank you for enrolling in our school!</p>
-            <p style="font-size: 14px; color: #888;">Redirecting to student login...</p>
-            <button class="ok-btn" onclick="document.getElementById('popup').style.display='none'; window.location.href='student-login.html';">OK</button>
+            <h3 style="color: #28a745; font-size: 26px; margin-bottom: 15px;">Enrollment Received! 🎉</h3>
+            <p style="font-size: 16px; color: #555; margin: 15px 0;">You have enrolled successfully! A confirmation email has been sent to your registered email address.</p>
+            <p style="font-size: 14px; color: #e67e22; font-weight: bold; margin: 10px 0;">⏳ Please wait for admin approval. You will receive an email once your admission is approved — only then you can login to the Student Dashboard.</p>
+            <button class="ok-btn" onclick="document.getElementById('popup').style.display='none';">OK</button>
         </div>
     </div>
     </div>
@@ -688,8 +688,7 @@
                             if (popupH3) popupH3.textContent = 'Application Received!';
                             if (popupP[0]) popupP[0].textContent = 'Your application and payment details have been submitted. Admission will be confirmed once admin verifies your WhatsApp screenshot.';
                         } else {
-                            alert('Thank you for enrolling! Your application is under review until payment is verified.');
-                            window.location.href = 'student-login.html';
+                            alert('Enrollment received!\n\nPlease wait for admin approval. You will receive an email once approved — only then you can login.');
                         }
                         form.reset();
                         // Removed direct redirect to let popup handle it
