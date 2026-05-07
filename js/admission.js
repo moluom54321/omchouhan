@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
         submitBtn.disabled = true;
 
-        // Build payload
+        // Build payload — status fields intentionally omitted so backend defaults to pending/unpaid/not_enrolled
         const admissionData = {
             fullName,
             email,
@@ -92,9 +92,6 @@ document.addEventListener('DOMContentLoaded', function () {
             course: selectedCourses,
             preferredSchedule: selectedSchedules,
             guardianDetails: { name: guardianName, phone: guardianPhone },
-            admissionStatus: 'approved',
-            paymentStatus: 'paid',
-            enrollmentStatus: 'enrolled',
             joinedDate: new Date().toISOString()
         };
 

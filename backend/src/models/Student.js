@@ -86,17 +86,17 @@ const studentSchema = new mongoose.Schema({
   admissionStatus: {
     type: String,
     enum: ['pending', 'approved', 'rejected'],
-    default: 'approved'
+    default: 'pending'
   },
   paymentStatus: {
     type: String,
     enum: ['unpaid', 'paid', 'refunded'],
-    default: 'paid'
+    default: 'unpaid'
   },
   enrollmentStatus: {
     type: String,
     enum: ['not_enrolled', 'enrolled', 'completed'],
-    default: 'enrolled'
+    default: 'not_enrolled'
   },
   branch: {
     type: String,
