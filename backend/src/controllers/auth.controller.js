@@ -159,7 +159,15 @@ const studentLogin = async (req, res) => {
       if (student.admissionStatus === 'pending') {
         return res.status(401).json({
           success: false,
-          message: 'Your admission is still pending admin verification. Please wait until your payment is verified.',
+          message: 'Your enrollment is received and is awaiting admin approval. You will receive an email once approved. Please check your inbox and wait for confirmation before logging in.',
+        });
+      }
+
+      // Check if admission is rejected
+      if (student.admissionStatus === 'rejected') {
+        return res.status(401).json({
+          success: false,
+          message: 'Your admission request was not approved. Please contact the school for more information.',
         });
       }
 

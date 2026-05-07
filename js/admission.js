@@ -117,22 +117,26 @@ document.addEventListener('DOMContentLoaded', function () {
             if (response.status === 201 || (response.ok && result.success)) {
                 // SUCCESS — show popup
                 console.log('SUCCESS! Showing popup...');
+
+                // Show custom success message with WhatsApp option
                 const popup = document.getElementById('popup');
                 if (popup) {
+                    // Update popup content if elements exist
+                    const popupTitle = popup.querySelector('h2, h3, .popup-title');
+                    const popupMsg   = popup.querySelector('p, .popup-message');
+                    if (popupTitle) popupTitle.textContent = 'Enrollment Received!';
+                    if (popupMsg) popupMsg.innerHTML =
+                        'You have enrolled successfully! A confirmation email has been sent to <strong>' + email + '</strong>.<br><br>' +
+                        '<strong>Please wait for admin approval.</strong> You will receive another email once approved — only then can you login.<br><br>' +
+                        '<a href="https://wa.me/919876543210?text=' + encodeURIComponent('Hello! I have submitted my admission form for Music School of Delhi. My name is ' + fullName + ' and email is ' + email + '. Please confirm my enrollment.') + '" target="_blank" style="display:inline-block;background:#25D366;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;margin-top:8px;">📱 WhatsApp Us to Confirm</a>';
                     popup.style.display = 'flex';
                     popup.style.zIndex = '99999';
                 } else {
-                    alert('🎉 Thank you for enrolling in our school! Please login with your email and password.');
+                    alert('Enrollment received!\n\nA confirmation email has been sent to ' + email + '.\n\nPlease wait for admin approval before logging in.');
                 }
 
                 // Reset form after short delay
                 setTimeout(() => form.reset(), 500);
-
-                // Redirect to student login after 5 seconds
-                // Commented out to let the popup OK button handle the redirect
-                // setTimeout(() => {
-                //     window.location.href = 'student-login.html';
-                // }, 5000);
 
             } else {
                 // Server returned an error
