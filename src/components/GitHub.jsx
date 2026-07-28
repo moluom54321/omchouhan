@@ -7,15 +7,24 @@ const GitHub = () => {
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // List of specific repositories to showcase
-  const REPOS = ["moluom54321/kangana-website"];
+  // List of specific repositories to showcase with optional custom descriptions
+  const REPOS = [
+    {
+      path: "moluom54321/kangana-website",
+      description: "A beautifully designed and responsive website featuring modern UI/UX, smooth animations, and a seamless user experience."
+    }
+  ];
 
   useEffect(() => {
     const fetchRepos = async () => {
       try {
-        const repoPromises = REPOS.map(repo => 
-          fetch(`https://api.github.com/repos/${repo}`).then(res => res.json())
-        );
+        const repoPromises = REPOS.map(async (item) => {
+          const res = await fetch(`https://api.github.com/repos/${item.path}`);
+          const data = await res.json();
+          // Add custom description to the data object
+          data.customDescription = item.description;
+          return data;
+        });
         const data = await Promise.all(repoPromises);
         // Filter out any errors or repos that weren't found
         const validRepos = data.filter(repo => !repo.message);
@@ -75,7 +84,7 @@ const GitHub = () => {
                   </h3>
                 </div>
                 <p className="text-muted-text text-sm mb-6 flex-grow line-clamp-3">
-                  {repo.description || "No description available"}
+                  {repo.customDescription || repo.description || "No description available"}
                 </p>
                 <div className="flex items-center justify-between mt-auto">
                   <div className="flex items-center gap-4">
