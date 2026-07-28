@@ -75,8 +75,8 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full glass-effect shadow-xl border-t border-border-color">
-          <ul className="flex flex-col space-y-4 px-6 py-8">
+        <div className="md:hidden absolute top-full left-0 w-full bg-background/95 backdrop-blur-xl shadow-2xl border-b border-border-color py-4">
+          <ul className="flex flex-col space-y-4 px-6 py-4">
             {navLinks.map((link) => (
               <li key={link.name}>
                 <a
