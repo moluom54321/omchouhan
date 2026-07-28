@@ -7,19 +7,19 @@ const GitHub = () => {
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Replace with your GitHub username
-  const GITHUB_USERNAME = "octocat"; // Placeholder
+  // List of specific repositories to showcase
+  const REPOS = ["moluom54321/kangana-website"];
 
   useEffect(() => {
     const fetchRepos = async () => {
       try {
-        const response = await fetch(
-          `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=6`
+        const repoPromises = REPOS.map(repo => 
+          fetch(`https://api.github.com/repos/${repo}`).then(res => res.json())
         );
-        if (response.ok) {
-          const data = await response.json();
-          setRepos(data);
-        }
+        const data = await Promise.all(repoPromises);
+        // Filter out any errors or repos that weren't found
+        const validRepos = data.filter(repo => !repo.message);
+        setRepos(validRepos);
       } catch (error) {
         console.error("Error fetching GitHub repos:", error);
       } finally {
@@ -41,7 +41,7 @@ const GitHub = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            My <span className="text-primary">GitHub</span>
+            My <span className="text-primary">GitHub Projects</span>
           </h2>
           <div className="w-24 h-1 bg-primary mx-auto rounded-full"></div>
         </motion.div>
