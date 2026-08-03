@@ -34,15 +34,6 @@ export const skills = [
 
 export const projects = [
   {
-    title: "Music School of Delhi",
-    description: "A comprehensive platform for a music academy featuring course enrollments, instructor profiles, and student dashboard.",
-    image: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=1470&auto=format&fit=crop",
-    tech: ["React", "Tailwind CSS", "Node.js", "MongoDB"],
-    github: "https://github.com",
-    live: "https://msd-app.vercel.app",
-    featured: true,
-  },
-  {
     title: "Fameflex",
     description: "A modern, high-performance web platform with premium UI/UX, integrated services, and smooth animations.",
     image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=1350&auto=format&fit=crop",
@@ -60,6 +51,15 @@ export const projects = [
     live: "https://gym-web-mu-ashen.vercel.app/",
     featured: true,
     useIframe: true,
+  },
+  {
+    title: "Music School of Delhi",
+    description: "A comprehensive platform for a music academy featuring course enrollments, instructor profiles, and student dashboard.",
+    image: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=1470&auto=format&fit=crop",
+    tech: ["React", "Tailwind CSS", "Node.js", "MongoDB"],
+    github: "https://github.com",
+    live: "https://msd-app.vercel.app",
+    featured: true,
   },
 ];
 
