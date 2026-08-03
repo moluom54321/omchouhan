@@ -52,7 +52,15 @@ export const projects = [
     featured: true,
     useIframe: true,
   },
-
+  {
+    title: "Gym Website",
+    description: "A dynamic and bold fitness website featuring workout plans, membership sections, trainer profiles, and a high-energy modern UI built for gym enthusiasts.",
+    tech: ["React", "Tailwind CSS", "Framer Motion", "Modern UI"],
+    github: "https://github.com",
+    live: "https://gym-web-mu-ashen.vercel.app/",
+    featured: true,
+    useIframe: true,
+  },
 ];
 
 export const experience = [
