@@ -44,18 +44,37 @@ const About = () => {
             </div>
           </motion.div>
 
-          {/* Right Image / Parallax */}
-          <motion.div style={{ y: y2 }} className="w-full lg:w-1/2 relative h-[600px] rounded-3xl overflow-hidden glass-effect border border-white/5 group">
-            <motion.div 
-              className="absolute inset-0 bg-primary/20 mix-blend-overlay z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-            ></motion.div>
-            <img
-              src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1470&auto=format&fit=crop"
-              alt="Code setup"
-              className="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-[1.5s] ease-out"
+          {/* Right Side — Coding Video Background */}
+          <motion.div style={{ y: y2 }} className="w-full lg:w-1/2 relative h-[600px] rounded-3xl overflow-hidden border border-white/10 group shadow-2xl">
+            
+            {/* Video */}
+            <video
+              src="/coding-bg.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-[2s] ease-out"
             />
-            {/* Floating Element */}
-            <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-secondary/30 blur-[60px] rounded-full z-0"></div>
+
+            {/* Dark overlay for readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10 z-10" />
+
+            {/* Primary color tint on hover */}
+            <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-10 mix-blend-overlay" />
+
+            {/* Bottom-left floating badge */}
+            <div className="absolute bottom-6 left-6 z-20 flex items-center gap-3 glass-effect px-5 py-3 rounded-2xl border border-white/10 backdrop-blur-md">
+              <span className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+              </span>
+              <p className="text-white text-sm font-medium tracking-wide">Currently Coding...</p>
+            </div>
+
+            {/* Ambient glow blobs */}
+            <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-secondary/30 blur-[60px] rounded-full z-0 pointer-events-none" />
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-primary/20 blur-[60px] rounded-full z-0 pointer-events-none" />
           </motion.div>
           
         </div>
