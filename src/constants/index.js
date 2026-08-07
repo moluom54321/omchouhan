@@ -55,11 +55,11 @@ export const projects = [
   {
     title: "Kenangan Coffee India",
     description: "A premium coffee brand website with elegant UI, dark/light theme, signature menu showcase, mobile app download section, and smooth animations.",
-    image: "/kenangan-preview.jpg",
     tech: ["Next.js", "Tailwind CSS", "Framer Motion", "Modern UI"],
     github: "https://github.com",
     live: "https://kangana-website-ccyv.vercel.app/",
     featured: true,
+    useIframe: true,
   },
   {
     title: "Music School of Delhi",
