@@ -2,8 +2,8 @@ import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
 
-// ─── Formspree Config ──────────────────────────────────────────────
-const FORMSPREE_FORM_ID = "YOUR_FORMSPREE_FORM_ID"; // Update this with your Formspree Form ID
+// ─── Web3Forms Config ──────────────────────────────────────────────
+const WEB3FORMS_ACCESS_KEY = "YOUR_ACCESS_KEY_HERE"; // Get your free key from https://web3forms.com/
 // ──────────────────────────────────────────────────────────────────
 
 // ─── WhatsApp Config ──────────────────────────────────────────────
@@ -48,26 +48,28 @@ const Contact = () => {
     }
 
     try {
-      const response = await fetch(`https://formspree.io/f/${FORMSPREE_FORM_ID}`, {
+      const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json"
         },
         body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
           name: form.name,
           email: form.email,
           subject: form.subject,
-          message: form.message
+          message: form.message,
+          from_name: "Om Chouhan Portfolio"
         })
       });
 
       if (!response.ok) {
-        throw new Error("Failed to send message via Formspree");
+        throw new Error("Failed to send message via Web3Forms");
       }
 
       const result = await response.json();
-      console.log("Formspree SUCCESS:", result);
+      console.log("Web3Forms SUCCESS:", result);
 
       setLoading(false);
       setStatus("success");
