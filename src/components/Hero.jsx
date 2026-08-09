@@ -117,7 +117,7 @@ const Hero = () => {
           <div className="relative w-72 h-[400px] md:w-96 md:h-[500px] rounded-[2rem] overflow-hidden glass-effect border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] transform-gpu hover:rotate-y-12 hover:rotate-x-12 transition-transform duration-700 ease-out">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 mix-blend-overlay z-10"></div>
             <img
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1374&auto=format&fit=crop"
+              src="/om_portrait.jpg"
               alt="Portrait"
               className="w-full h-full object-cover filter grayscale-[50%] hover:grayscale-0 transition-all duration-700 scale-105 hover:scale-110"
             />
