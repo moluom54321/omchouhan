@@ -2,8 +2,8 @@ import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
 
-// ─── FormSubmit Config ─────────────────────────────────────────────
-const RECIPIENT_EMAIL = "shivayechouhan6@gmail.com";
+// ─── Formspree Config ──────────────────────────────────────────────
+const FORMSPREE_FORM_ID = "YOUR_FORMSPREE_FORM_ID"; // Update this with your Formspree Form ID
 // ──────────────────────────────────────────────────────────────────
 
 // ─── WhatsApp Config ──────────────────────────────────────────────
@@ -48,7 +48,7 @@ const Contact = () => {
     }
 
     try {
-      const response = await fetch(`https://formsubmit.co/ajax/${RECIPIENT_EMAIL}`, {
+      const response = await fetch(`https://formspree.io/f/${FORMSPREE_FORM_ID}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -58,18 +58,16 @@ const Contact = () => {
           name: form.name,
           email: form.email,
           subject: form.subject,
-          message: form.message,
-          _subject: `New Portfolio Message from ${form.name}`,
-          _template: "table"
+          message: form.message
         })
       });
 
       if (!response.ok) {
-        throw new Error("Failed to send message via FormSubmit");
+        throw new Error("Failed to send message via Formspree");
       }
 
       const result = await response.json();
-      console.log("FormSubmit SUCCESS:", result);
+      console.log("Formspree SUCCESS:", result);
 
       setLoading(false);
       setStatus("success");
