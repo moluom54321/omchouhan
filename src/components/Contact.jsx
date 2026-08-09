@@ -1,12 +1,9 @@
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import emailjs from "@emailjs/browser";
 import { FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
 
-// ─── EmailJS Config ───────────────────────────────────────────────
-const EMAILJS_SERVICE_ID  = "service_4kwtxsm";
-const EMAILJS_TEMPLATE_ID = "template_kq067we";
-const EMAILJS_PUBLIC_KEY  = "MS-ya8KoSx4IdgAko";
+// ─── FormSubmit Config ─────────────────────────────────────────────
+const RECIPIENT_EMAIL = "shivayechouhan6@gmail.com";
 // ──────────────────────────────────────────────────────────────────
 
 // ─── WhatsApp Config ──────────────────────────────────────────────
@@ -29,9 +26,6 @@ ${formData.message}
   return `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(msg)}`;
 };
 
-// Initialize EmailJS at module level (runs once)
-emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
-
 const Contact = () => {
   const formRef = useRef();
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
@@ -53,33 +47,30 @@ const Contact = () => {
       return;
     }
 
-    const now = new Date();
-    const timeString = now.toLocaleString("en-IN", {
-      timeZone: "Asia/Kolkata",
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-
-    // Template variables: {{name}}, {{time}}, {{message}} se match
-    const templateParams = {
-      name:    form.name,
-      time:    timeString,
-      message: `📧 Email   : ${form.email}\n📋 Subject : ${form.subject}\n\n💬 Message :\n${form.message}`,
-      reply_to: form.email,
-    };
-
     try {
-      const response = await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        templateParams,
-        { publicKey: EMAILJS_PUBLIC_KEY }
-      );
-      console.log("EmailJS SUCCESS:", response);
+      const response = await fetch(`https://formsubmit.co/ajax/${RECIPIENT_EMAIL}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          subject: form.subject,
+          message: form.message,
+          _subject: `New Portfolio Message from ${form.name}`,
+          _template: "table"
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send message via FormSubmit");
+      }
+
+      const result = await response.json();
+      console.log("FormSubmit SUCCESS:", result);
+
       setLoading(false);
       setStatus("success");
       const waURL = buildWhatsAppURL(form);
@@ -87,14 +78,10 @@ const Contact = () => {
       setForm({ name: "", email: "", subject: "", message: "" });
       setTimeout(() => setStatus(null), 15000);
     } catch (err) {
-      console.error("EmailJS FULL Error:", err);
-      console.error("Error text:", err?.text);
-      console.error("Error status:", err?.status);
+      console.error("FormSubmit Error:", err);
       setLoading(false);
       setStatus("error");
-      // Show actual error details
-      const errText = err?.text || err?.message || JSON.stringify(err);
-      setErrorMsg(errText);
+      setErrorMsg(err.message || "Failed to send message. Please try again.");
       setTimeout(() => setStatus(null), 15000);
     }
   };
