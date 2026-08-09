@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
 
 // ─── Web3Forms Config ──────────────────────────────────────────────
-const WEB3FORMS_ACCESS_KEY = "YOUR_ACCESS_KEY_HERE"; // Get your free key from https://web3forms.com/
+const WEB3FORMS_ACCESS_KEY = "4318b3e3-f170-4a59-9727-bd7037cb1828"; // Get your free key from https://web3forms.com/
 // ──────────────────────────────────────────────────────────────────
 
 // ─── WhatsApp Config ──────────────────────────────────────────────
