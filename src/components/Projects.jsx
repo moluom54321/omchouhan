@@ -19,7 +19,7 @@ const ProjectBlock = ({ project, index }) => {
     <div ref={ref} className={`flex flex-col ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-12 lg:gap-20 w-full mb-40 group`}>
       
       {/* Visual / 3D Mockup Container */}
-      <div className="w-full lg:w-[60%] relative h-[400px] lg:h-[600px] rounded-[2rem] overflow-hidden glass-effect border border-white/10 perspective-[1200px]">
+      <div className="w-full lg:w-[60%] relative h-[300px] lg:h-[600px] rounded-[2rem] overflow-hidden glass-effect border border-white/10 perspective-[1200px]">
         {/* Floating gradient orb behind the image */}
         <div className="absolute inset-0 bg-primary/20 blur-[100px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000 z-0"></div>
         

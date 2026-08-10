@@ -16,7 +16,7 @@ import Background from "../components/Background";
 const Home = () => {
   return (
     <ReactLenis root options={{ lerp: 0.05, smoothWheel: true }}>
-      <div className="text-white min-h-screen font-sans bg-transparent selection:bg-primary/30 selection:text-white">
+      <div className="text-white min-h-screen font-sans bg-transparent selection:bg-primary/30 selection:text-white overflow-x-hidden w-full">
         <Background />
         <Navbar />
         <main className="relative z-10 w-full overflow-hidden">

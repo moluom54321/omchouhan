@@ -45,7 +45,7 @@ const About = () => {
           </motion.div>
 
           {/* Right Side — Coding Video Background */}
-          <motion.div style={{ y: y2 }} className="w-full lg:w-1/2 relative h-[600px] rounded-3xl overflow-hidden border border-white/10 group shadow-2xl">
+          <motion.div style={{ y: y2 }} className="w-full lg:w-1/2 relative h-[350px] lg:h-[600px] rounded-3xl overflow-hidden border border-white/10 group shadow-2xl">
             
             {/* Video */}
             <video

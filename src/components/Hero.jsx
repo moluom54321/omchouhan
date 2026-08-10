@@ -54,7 +54,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <section ref={containerRef} id="home" className="relative w-full h-screen mx-auto flex flex-col md:flex-row items-center justify-center overflow-hidden pt-20">
+    <section ref={containerRef} id="home" className="relative w-full min-h-screen py-32 mx-auto flex flex-col md:flex-row items-center justify-center overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
         <Scene />
       </div>
@@ -114,7 +114,7 @@ const Hero = () => {
           transition={{ duration: 1.5, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
           className="w-full md:w-2/5 flex justify-center perspective-[1000px]"
         >
-          <div className="relative w-72 h-[400px] md:w-96 md:h-[500px] rounded-[2rem] overflow-hidden glass-effect border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] transform-gpu hover:rotate-y-12 hover:rotate-x-12 transition-transform duration-700 ease-out">
+          <div className="relative w-72 h-[300px] md:w-96 md:h-[500px] rounded-[2rem] overflow-hidden glass-effect border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] transform-gpu hover:rotate-y-12 hover:rotate-x-12 transition-transform duration-700 ease-out">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 mix-blend-overlay z-10"></div>
             <img
               src="/om_portrait.jpg"

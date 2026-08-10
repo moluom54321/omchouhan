@@ -38,7 +38,7 @@ const Experience = () => {
           </div>
 
           {/* Right — Image with Hover Effect */}
-          <div className="w-full lg:w-[55%] relative h-[500px] lg:h-[750px] rounded-[3rem] overflow-hidden border border-white/10 group cursor-pointer">
+          <div className="w-full lg:w-[55%] relative h-[350px] lg:h-[750px] rounded-[3rem] overflow-hidden border border-white/10 group cursor-pointer">
             
             {/* Subtle glow ring on hover */}
             <div className="absolute inset-0 rounded-[3rem] border-2 border-primary/0 group-hover:border-primary/40 transition-all duration-700 z-30 pointer-events-none"></div>
