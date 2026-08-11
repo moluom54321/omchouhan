@@ -81,10 +81,9 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
           >
-            <h1 className="sr-only">Om Prakash Chouhan — Full Stack Web Developer</h1>
-            <h2 className="text-2xl md:text-3xl font-light text-muted-text mb-6" aria-hidden="true">
-              I'm Om Prakash Chouhan, <br/> a <span ref={el} className="font-semibold text-white"></span>
-            </h2>
+            <h1 className="text-2xl md:text-3xl font-light text-muted-text mb-6">
+              I'm Om Prakash Chouhan, <br/> a <span ref={el} className="font-semibold text-white">Full Stack Web Developer</span>
+            </h1>
           </motion.div>
 
           <motion.div
