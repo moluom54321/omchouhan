@@ -26,10 +26,10 @@ const About = () => {
             <div className="w-full h-[1px] bg-gradient-to-r from-border-color to-transparent"></div>
             
             <p className="text-muted-text text-xl leading-relaxed font-light">
-              I am a passionate <strong className="text-white font-medium">Full Stack Web Developer</strong> with a strong foundation in building modern, scalable, and user-friendly web applications. With expertise in the MERN stack, I transform complex ideas into elegant digital products.
+              Hi, I'm Om Prakash Chouhan, a <strong className="text-white font-medium">Full Stack Web Developer</strong> focused on building modern, scalable, and user-friendly web applications. With deep expertise in the MERN stack (MongoDB, Express.js, React, Node.js), I transform complex ideas into elegant digital products.
             </p>
             <p className="text-muted-text text-xl leading-relaxed font-light">
-              My goal is to create premium experiences that not only look visually stunning but also perform exceptionally well under the hood. I am constantly learning and adapting to stay ahead in the tech landscape.
+              My goal is to create premium websites that not only look visually stunning but also perform exceptionally well under the hood. Whether it's crafting a beautiful frontend in React or designing a robust backend architecture, I provide full-stack development services tailored to your business needs.
             </p>
 
             <div className="flex gap-6 pt-8">

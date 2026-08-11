@@ -69,11 +69,11 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
-            <h1 className="text-6xl md:text-8xl font-bold text-white mb-6 tracking-tighter leading-[1.1]">
+            <div className="text-6xl md:text-8xl font-bold text-white mb-6 tracking-tighter leading-[1.1]">
               Crafting <br/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-secondary">Digital</span> <br/>
               Experiences
-            </h1>
+            </div>
           </motion.div>
 
           <motion.div
@@ -81,9 +81,9 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
           >
-            <h2 className="text-2xl md:text-3xl font-light text-muted-text mb-6">
+            <h1 className="text-2xl md:text-3xl font-light text-muted-text mb-6">
               I'm Om Prakash Chouhan, <br/> a <span ref={el} className="font-semibold text-white"></span>
-            </h2>
+            </h1>
           </motion.div>
 
           <motion.div
@@ -118,7 +118,7 @@ const Hero = () => {
             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 mix-blend-overlay z-10"></div>
             <img
               src="/om_portrait.jpg"
-              alt="Portrait"
+              alt="Om Prakash Chouhan - Full Stack Web Developer"
               className="w-full h-full object-cover filter grayscale-[50%] hover:grayscale-0 transition-all duration-700 scale-105 hover:scale-110"
             />
           </div>
