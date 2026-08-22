@@ -92,23 +92,23 @@ export const experience = [
 
 export const services = [
   {
-    title: "Frontend Development",
-    description: "Building responsive, interactive, and modern user interfaces using React, Vue, or Vanilla JS.",
+    title: "React Frontend Development",
+    description: "Building highly responsive, interactive, and modern user interfaces as a Freelance React Developer.",
     icon: MdDevices,
   },
   {
-    title: "Backend Development",
-    description: "Creating robust and scalable server-side logic and databases using Node.js, Express, and MongoDB.",
+    title: "Node.js Backend Architecture",
+    description: "Creating robust, scalable server-side logic and databases using Node.js, Express, and MongoDB.",
     icon: TbApi,
   },
   {
-    title: "Full Stack Development",
-    description: "End-to-end web application development, bridging the gap between frontend interfaces and backend databases.",
+    title: "Business Website Development",
+    description: "End-to-end custom business website development, providing modern web presence and premium UI/UX.",
     icon: FaReact,
   },
   {
-    title: "API Integration",
-    description: "Seamlessly connecting third-party services and APIs to enhance functionality and user experience.",
+    title: "MERN Stack Solutions",
+    description: "Delivering complete full-stack web development services utilizing MongoDB, Express, React, and Node.js.",
     icon: TbApi,
   },
 ];
