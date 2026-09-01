@@ -1,19 +1,17 @@
-# React + Vite
+# Om Chouhan - Developer Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A modern, high-performance personal developer portfolio built with React, Vite, Tailwind CSS, and Framer Motion. Showcasing full-stack and modern web engineering projects including luxury 3D Canvas scrollytelling experiences, full-stack web applications, and interactive digital products.
 
-Currently, two official plugins are available:
+## 🚀 Featured Projects
+- **Solis Estate** - 3D/Canvas Scrollytelling Luxury Real Estate Experience (Next.js 16, React 19, TypeScript, HTML5 Canvas, GSAP ScrollTrigger, Lenis)
+- **Fameflex** - Modern high-performance web platform
+- **Gym Website** - Fitness & workout platform
+- **Kenangan Coffee India** - Coffee brand showcase with sleek animations
+- **Music School of Delhi** - Full-stack academy management platform
+- **Porter Web App** - Logistics & delivery platform clone
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🛠️ Tech Stack
+- **Frontend:** React, Next.js, TypeScript, JavaScript (ES6+), HTML5 Canvas, Tailwind CSS, Framer Motion, GSAP, Lenis Smooth Scroll
+- **Backend:** Node.js, Express.js, REST APIs, MongoDB, JWT
+- **Tools & Deployment:** Git, GitHub, Vercel, Vite, FFmpeg
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for## Update
-
-- Chatbot component and related serverless endpoint have been fully removed from the project.
-n on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.

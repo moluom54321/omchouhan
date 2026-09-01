@@ -34,6 +34,15 @@ export const skills = [
 
 export const projects = [
   {
+    title: "Solis Estate",
+    description: "A luxury 3D scrollytelling real estate experience featuring 593 Full HD frames rendered on HTML5 Canvas for 0ms scrub latency, GSAP ScrollTrigger, Lenis smooth scrolling, DPR retina scaling, and an Apple/Awwwards-inspired luxury glassmorphic UI with live frame HUD.",
+    tech: ["Next.js 16", "React 19", "TypeScript", "GSAP", "HTML5 Canvas", "Lenis", "Tailwind CSS"],
+    github: "https://github.com",
+    live: "https://solis-estate.vercel.app/",
+    featured: true,
+    useIframe: true,
+  },
+  {
     title: "Fameflex",
     description: "A modern, high-performance web platform with premium UI/UX, integrated services, and smooth animations.",
     image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=1350&auto=format&fit=crop",
@@ -86,7 +95,7 @@ export const experience = [
     title: "Self-Taught Full Stack Web Developer",
     company: "Continuous Learning & Self-Study",
     date: "2024 - Present",
-    description: "Started learning modern web development in 2024 through continuous self-study. Built practical projects using HTML, CSS, JavaScript, React, Node.js, Express.js, and MongoDB. Learned from official documentation, online platforms, technical books, and real-world project practice. Focused on writing clean, responsive, and scalable applications following modern best practices. Received guidance and code reviews from experienced software engineers and mentors throughout the journey. Utilized AI tools like ChatGPT, Antigravity, Gemini, Claude AI, and GitHub Copilot responsibly to enhance productivity, debugging, and code quality while ensuring a solid grasp of underlying concepts. Currently building production-quality projects including a Music School Management System, Portfolio Website, Fameflex Platform, and other real-world applications.",
+    description: "Started learning modern web development in 2024 through continuous self-study. Built practical projects using HTML, CSS, JavaScript, React, Next.js, TypeScript, Node.js, Express.js, and MongoDB. Learned from official documentation, online platforms, technical books, and real-world project practice. Focused on writing clean, responsive, and scalable applications following modern best practices. Received guidance and code reviews from experienced software engineers and mentors throughout the journey. Utilized AI tools like ChatGPT, Antigravity, Gemini, Claude AI, and GitHub Copilot responsibly to enhance productivity, debugging, and code quality while ensuring a solid grasp of underlying concepts. Currently building production-quality projects including Solis Estate (3D Canvas Scrollytelling Platform), Music School Management System, Portfolio Website, Fameflex Platform, and other real-world applications.",
   },
 ];
 
