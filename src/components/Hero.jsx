@@ -87,11 +87,10 @@ const Hero = () => {
             transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight leading-[1.15]">
-              Full Stack Web Developer Building{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-secondary">
                 Modern Websites
               </span>{" "}
-              for Businesses
+              for Growing Businesses
             </h1>
           </motion.div>
 
@@ -147,7 +146,7 @@ const Hero = () => {
               className="w-full h-full object-cover filter grayscale-[20%] hover:grayscale-0 transition-all duration-700 scale-105 hover:scale-110"
             />
             <div className="absolute bottom-4 left-4 right-4 z-20 glass-effect px-4 py-3 rounded-2xl border border-white/10 backdrop-blur-md">
-              <p className="text-xs text-white/70 font-medium">Om Prakash Chouhan</p>
+              <p className="text-sm text-white font-bold">Om Prakash Chouhan</p>
               <p className="text-xs text-primary font-bold">Full Stack Web Developer & Solutions</p>
             </div>
           </div>
