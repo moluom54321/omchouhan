@@ -50,7 +50,7 @@ const WebDevelopmentService = () => {
         "Poor technical foundation with zero SEO readiness or Schema markup."
       ]}
       solutions={[
-        "Hand-crafted React and Next.js applications with zero bloated theme dependencies.",
+        "Hand-crafted React web applications with zero bloated theme dependencies.",
         "Custom, tailor-made UI/UX designed specifically around your brand identity and conversion goals.",
         "Fluid, mobile-first responsive design tested across real mobile and desktop viewports.",
         "Clean, modular, and maintainable component architecture following modern engineering best practices.",
@@ -58,8 +58,8 @@ const WebDevelopmentService = () => {
       ]}
       keyFeatures={[
         {
-          title: "Custom React & Next.js Architecture",
-          description: "High-performance frontend architecture utilizing React 19, Next.js, and modern JavaScript for instant client interactions."
+          title: "Custom React & Modern Web Architecture",
+          description: "High-performance frontend architecture utilizing React 19, Vite, and modern JavaScript for instant client interactions."
         },
         {
           title: "Mobile-First Responsive Engineering",

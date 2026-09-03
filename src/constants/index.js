@@ -296,7 +296,7 @@ export const projects = [
       "Location and store discovery integration",
       "Smooth Framer Motion transitions"
     ],
-    tech: ["Next.js", "Tailwind CSS", "Framer Motion", "Modern UI"],
+    tech: ["React", "Tailwind CSS", "Framer Motion", "Modern UI"],
     github: "https://github.com/moluom54321",
     live: "https://kangana-website-ccyv.vercel.app/",
     featured: true,
@@ -356,7 +356,7 @@ export const whyWorkWithMe = [
   {
     icon: FaCode,
     title: "Custom-Built, No Bloat",
-    description: "Every website is hand-crafted with clean, modern React, Next.js, and Tailwind CSS. No slow, heavy templates or unnecessary third-party bloat."
+    description: "Every website is hand-crafted with clean, modern React, Tailwind CSS, and optimized code. No slow, heavy templates or unnecessary third-party bloat."
   },
   {
     icon: FaMobileAlt,
@@ -400,7 +400,7 @@ export const developmentProcess = [
   {
     step: "03",
     title: "Clean Code Development",
-    description: "Building the website using modern React/Next.js, responsive Tailwind CSS, smooth animations, and robust backend integrations."
+    description: "Building the website using modern React, responsive Tailwind CSS, smooth animations, and robust backend integrations."
   },
   {
     step: "04",

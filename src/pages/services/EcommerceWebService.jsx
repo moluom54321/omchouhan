@@ -50,7 +50,7 @@ const EcommerceWebService = () => {
         "Lack of direct customer communication options like WhatsApp order confirmation and inquiries."
       ]}
       solutions={[
-        "Blazing-fast product catalogs powered by modern React/Next.js architecture with zero lag filtering.",
+        "Blazing-fast product catalogs powered by modern React architecture with zero lag filtering.",
         "Frictionless, one-page checkout and direct WhatsApp ordering options tailored for Indian and global buyers.",
         "High-end custom visual design with product feature breakdowns, customer reviews, and high-res imagery.",
         "Clean, custom code with zero unnecessary recurring third-party plugin fees.",
@@ -90,7 +90,7 @@ const EcommerceWebService = () => {
         },
         {
           question: "How fast will the online store load?",
-          answer: "Because we build with modern React/Next.js and optimized images instead of heavy Shopify/WooCommerce theme stacks, pages load almost instantly (<1 second), significantly boosting conversion rates."
+          answer: "Because we build with modern React and optimized images instead of heavy Shopify/WooCommerce theme stacks, pages load almost instantly (<1 second), significantly boosting conversion rates."
         },
         {
           question: "Can I manage inventory and add new products easily?",

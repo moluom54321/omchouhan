@@ -11,7 +11,7 @@ A modern, high-performance personal developer portfolio built with React, Vite, 
 - **Porter Web App** - Logistics & delivery platform clone
 
 ## 🛠️ Tech Stack
-- **Frontend:** React, Next.js, TypeScript, JavaScript (ES6+), HTML5 Canvas, Tailwind CSS, Framer Motion, GSAP, Lenis Smooth Scroll
+- **Frontend:** React 19, Vite, JavaScript (ES6+), HTML5 Canvas, Tailwind CSS, Three.js / React Three Fiber, Framer Motion, Lenis Smooth Scroll
 - **Backend:** Node.js, Express.js, REST APIs, MongoDB, JWT
 - **Tools & Deployment:** Git, GitHub, Vercel, Vite, FFmpeg
 

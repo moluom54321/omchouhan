@@ -78,7 +78,7 @@ const AboutPage = () => {
                     Hi, I'm <strong className="text-white font-medium">Om Prakash Chouhan</strong>, a dedicated Full Stack Web Developer based in Delhi, India. I specialize in building clean, modern, and high-converting web applications and websites for businesses, startups, and creative brands.
                   </p>
                   <p>
-                    My approach is centered around modern frontend architecture (React 19, Next.js, Tailwind CSS) paired with robust backend engineering (Node.js, Express.js, MongoDB). I believe that a great website isn't just about flashy visual flair—it must be fast, mobile-friendly, technically sound for search engines, and built to drive tangible business inquiries.
+                    My approach is centered around modern frontend architecture (React 19, Vite, Tailwind CSS) paired with robust backend engineering (Node.js, Express.js, MongoDB). I believe that a great website isn't just about flashy visual flair—it must be fast, mobile-friendly, technically sound for search engines, and built to drive tangible business inquiries.
                   </p>
                   <p>
                     Whether creating interactive scrollytelling experiences like Solis Estate, full-scale academy management platforms, or responsive restaurant and gym websites, I focus on delivering custom-crafted code with zero bloated templates.
