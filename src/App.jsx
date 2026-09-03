@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
 
 // Pages
@@ -7,6 +7,7 @@ import ServicesPage from "./pages/ServicesPage";
 import ProjectsPage from "./pages/ProjectsPage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 // Dedicated Service Pages
 import WebDevelopmentService from "./pages/services/WebDevelopmentService";
@@ -38,8 +39,8 @@ function App() {
         <Route path="/services/school-website-development" element={<SchoolWebService />} />
         <Route path="/services/website-maintenance" element={<WebsiteMaintenanceService />} />
 
-        {/* 404 Fallback Redirect */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        {/* 404 Fallback Route for non-existent paths */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>
   );
