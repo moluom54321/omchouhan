@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { Link } from "react-router-dom";
 import Typed from "typed.js";
 import { Canvas } from "@react-three/fiber";
 import { Float, MeshDistortMaterial, Sphere, Stars } from "@react-three/drei";
@@ -41,12 +42,13 @@ const Hero = () => {
   useEffect(() => {
     const typed = new Typed(el.current, {
       strings: [
-        "Full Stack Web Developer",
-        "Creative Technologist",
-        "Frontend Architect",
+        "Modern Business Websites",
+        "Restaurant & Cafe Portals",
+        "Gym & Fitness Platforms",
+        "Custom Full-Stack Apps",
       ],
-      typeSpeed: 50,
-      backSpeed: 50,
+      typeSpeed: 45,
+      backSpeed: 35,
       loop: true,
     });
 
@@ -54,7 +56,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <section ref={containerRef} id="home" className="relative w-full min-h-screen py-32 mx-auto flex flex-col md:flex-row items-center justify-center overflow-hidden">
+    <section ref={containerRef} id="home" className="relative w-full min-h-screen pt-36 pb-24 mx-auto flex flex-col md:flex-row items-center justify-center overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
         <Scene />
       </div>
@@ -64,63 +66,90 @@ const Hero = () => {
         className="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between w-full z-10 gap-12"
       >
         <div className="w-full md:w-3/5 flex flex-col items-start justify-center text-left">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <div className="text-6xl md:text-8xl font-bold text-white mb-6 tracking-tighter leading-[1.1]">
-              Crafting <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-secondary">Digital</span> <br/>
-              Experiences
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <h1 className="text-2xl md:text-3xl font-light text-muted-text mb-6">
-              I'm Om Prakash Chouhan, <br/> a <span ref={el} className="font-semibold text-white">Full Stack Web Developer</span>
-            </h1>
-          </motion.div>
-
+          
+          {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-wrap items-center gap-6 mt-8"
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="mb-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20"
           >
-            <a
-              href="#projects"
-              className="magnetic group relative px-8 py-4 rounded-full bg-white text-background font-bold uppercase tracking-widest text-sm overflow-hidden"
+            <span className="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
+            <span className="text-primary text-xs font-semibold tracking-wider uppercase">
+              Web Development Services in Delhi & Remote
+            </span>
+          </motion.div>
+
+          {/* Primary H1 */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight leading-[1.15]">
+              Full Stack Web Developer Building{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-secondary">
+                Modern Websites
+              </span>{" "}
+              for Businesses
+            </h1>
+          </motion.div>
+
+          {/* Supporting Text & Dynamic Typing */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <p className="text-lg md:text-xl text-muted-text font-light mb-4 leading-relaxed max-w-xl">
+              I design and develop fast, responsive and conversion-focused websites for restaurants, gyms, schools, startups, and small businesses.
+            </p>
+            <p className="text-sm font-medium text-white/80 mb-6 flex items-center gap-2">
+              <span>Specializing in:</span>
+              <span ref={el} className="text-primary font-bold"></span>
+            </p>
+          </motion.div>
+
+          {/* Call to Actions */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-wrap items-center gap-4 mt-4"
+          >
+            <Link
+              to="/contact"
+              className="magnetic group relative px-8 py-4 rounded-full bg-gradient-to-r from-primary to-accent text-background font-bold uppercase tracking-wider text-sm shadow-[0_0_25px_rgba(0,229,255,0.35)] hover:shadow-[0_0_35px_rgba(0,229,255,0.6)] hover:scale-105 transition-all duration-300"
             >
-              <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-primary to-accent scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-[0.16,1,0.3,1] z-0"></div>
-              <span className="relative z-10 group-hover:text-white transition-colors duration-500">Explore Work</span>
-            </a>
-            <a
-              href="/resume.pdf"
-              className="magnetic px-8 py-4 rounded-full border border-border-color glass-effect hover:border-primary/50 transition-all duration-300 text-white text-sm uppercase tracking-widest font-semibold"
+              Get a Quote
+            </Link>
+            <Link
+              to="/projects"
+              className="magnetic px-8 py-4 rounded-full border border-white/20 glass-effect hover:border-primary/50 text-white text-sm uppercase tracking-wider font-semibold transition-all duration-300 hover:scale-105"
             >
-              View Resume
-            </a>
+              View Projects
+            </Link>
           </motion.div>
         </div>
 
+        {/* Right Portrait & Visual */}
         <motion.div 
-          initial={{ opacity: 0, scale: 0.8, rotateY: 30 }}
+          initial={{ opacity: 0, scale: 0.85, rotateY: 20 }}
           animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-          transition={{ duration: 1.5, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
           className="w-full md:w-2/5 flex justify-center perspective-[1000px]"
         >
-          <div className="relative w-72 h-[300px] md:w-96 md:h-[500px] rounded-[2rem] overflow-hidden glass-effect border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] transform-gpu hover:rotate-y-12 hover:rotate-x-12 transition-transform duration-700 ease-out">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 mix-blend-overlay z-10"></div>
+          <div className="relative w-72 h-[340px] md:w-88 md:h-[480px] rounded-[2.5rem] overflow-hidden glass-effect border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.6)] transform-gpu hover:rotate-y-6 hover:rotate-x-6 transition-transform duration-700 ease-out">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-secondary/20 mix-blend-overlay z-10"></div>
             <img
               src="/om_portrait.jpg"
-              alt="Om Prakash Chouhan - Full Stack Web Developer"
-              className="w-full h-full object-cover filter grayscale-[50%] hover:grayscale-0 transition-all duration-700 scale-105 hover:scale-110"
+              alt="Om Prakash Chouhan - Full Stack Web Developer building modern websites"
+              className="w-full h-full object-cover filter grayscale-[20%] hover:grayscale-0 transition-all duration-700 scale-105 hover:scale-110"
             />
+            <div className="absolute bottom-4 left-4 right-4 z-20 glass-effect px-4 py-3 rounded-2xl border border-white/10 backdrop-blur-md">
+              <p className="text-xs text-white/70 font-medium">Om Prakash Chouhan</p>
+              <p className="text-xs text-primary font-bold">Full Stack Web Developer & Solutions</p>
+            </div>
           </div>
         </motion.div>
       </motion.div>
