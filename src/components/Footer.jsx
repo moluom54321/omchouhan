@@ -43,24 +43,16 @@ const Footer = () => {
               Web Services
             </h4>
             <ul className="space-y-2.5 text-sm text-muted-text">
-              {services.slice(0, 5).map((service) => (
+              {services.map((service) => (
                 <li key={service.id}>
                   <Link
-                    to={service.path}
+                    to={service.path.endsWith("/") ? service.path : `${service.path}/`}
                     className="hover:text-primary transition-colors block"
                   >
                     {service.shortTitle}
                   </Link>
                 </li>
               ))}
-              <li>
-                <Link
-                  to="/services"
-                  className="text-primary hover:underline text-xs font-medium inline-block pt-1"
-                >
-                  View All Services →
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -76,22 +68,22 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/services" className="hover:text-primary transition-colors">
+                <Link to="/services/" className="hover:text-primary transition-colors">
                   All Services
                 </Link>
               </li>
               <li>
-                <Link to="/projects" className="hover:text-primary transition-colors">
+                <Link to="/projects/" className="hover:text-primary transition-colors">
                   Featured Projects
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="hover:text-primary transition-colors">
+                <Link to="/about/" className="hover:text-primary transition-colors">
                   About Developer
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-primary transition-colors">
+                <Link to="/contact/" className="hover:text-primary transition-colors">
                   Get a Free Quote
                 </Link>
               </li>

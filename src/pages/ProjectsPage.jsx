@@ -28,6 +28,20 @@ const ProjectsPage = () => {
         "url": "https://omchouhan.vercel.app/projects/"
       },
       {
+        "@type": "ItemList",
+        "name": "Featured Web Development Projects",
+        "itemListElement": projects.map((p, idx) => ({
+          "@type": "ListItem",
+          "position": idx + 1,
+          "item": {
+            "@type": "CreativeWork",
+            "name": p.title,
+            "description": p.description,
+            "url": p.live || `https://omchouhan.vercel.app/projects/`
+          }
+        }))
+      },
+      {
         "@type": "BreadcrumbList",
         "itemListElement": [
           { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://omchouhan.vercel.app/" },
@@ -163,7 +177,7 @@ const ProjectsPage = () => {
                       </div>
 
                       {/* Actions */}
-                      <div className="flex items-center gap-4 pt-4">
+                      <div className="flex flex-wrap items-center gap-4 pt-4">
                         {project.live && (
                           <a
                             href={project.live}
@@ -184,6 +198,14 @@ const ProjectsPage = () => {
                             <FaGithub size={14} /> GitHub Code
                           </a>
                         )}
+                        {project.serviceSlug && (
+                          <Link
+                            to={`/services/${project.serviceSlug}/`}
+                            className="flex items-center gap-1.5 text-xs text-primary font-semibold hover:underline ml-auto"
+                          >
+                            View {project.industry} Service →
+                          </Link>
+                        )}
                       </div>
                     </div>
 
@@ -192,7 +214,7 @@ const ProjectsPage = () => {
                       {project.useIframe ? (
                         <iframe
                           src={project.live}
-                          title={project.title}
+                          title={`${project.title} - ${project.tagline || project.industry} Live Interactive Web Experience`}
                           className="w-full h-full object-cover scale-100 border-none bg-white"
                           sandbox="allow-scripts allow-same-origin"
                           loading="lazy"
@@ -200,7 +222,10 @@ const ProjectsPage = () => {
                       ) : (
                         <img
                           src={project.image}
-                          alt={project.title}
+                          alt={`${project.title} - ${project.tagline || project.industry} Web Development Case Study`}
+                          width="600"
+                          height="480"
+                          loading="lazy"
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                         />
                       )}

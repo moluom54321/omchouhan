@@ -21,17 +21,18 @@ const Navbar = () => {
 
   const navLinks = [
     { name: "Home", path: "/" },
-    { name: "Services", path: "/services" },
-    { name: "Projects", path: "/projects" },
-    { name: "About", path: "/about" },
-    { name: "Contact", path: "/contact" },
+    { name: "Services", path: "/services/" },
+    { name: "Projects", path: "/projects/" },
+    { name: "About", path: "/about/" },
+    { name: "Contact", path: "/contact/" },
   ];
 
   const isActive = (path) => {
     if (path === "/") {
       return location.pathname === "/";
     }
-    return location.pathname.startsWith(path);
+    const cleanPath = path.replace(/\/$/, "");
+    return location.pathname.startsWith(cleanPath);
   };
 
   return (

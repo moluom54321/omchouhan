@@ -143,6 +143,9 @@ const Hero = () => {
             <img
               src="/om_portrait.jpg"
               alt="Om Prakash Chouhan - Full Stack Web Developer building modern websites"
+              width="352"
+              height="480"
+              loading="eager"
               className="w-full h-full object-cover filter grayscale-[20%] hover:grayscale-0 transition-all duration-700 scale-105 hover:scale-110"
             />
             <div className="absolute bottom-4 left-4 right-4 z-20 glass-effect px-4 py-3 rounded-2xl border border-white/10 backdrop-blur-md">

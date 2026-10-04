@@ -31,13 +31,30 @@ const ServicePageLayout = ({
     setOpenFaqIndex(openFaqIndex === idx ? null : idx);
   };
 
+  const faqSchema = faqs && faqs.length > 0 ? {
+    "@type": "FAQPage",
+    "mainEntity": faqs.map((faq) => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  } : null;
+
+  const combinedSchema = schema ? {
+    ...schema,
+    "@graph": faqSchema ? [...(schema["@graph"] || []), faqSchema] : (schema["@graph"] || [])
+  } : null;
+
   return (
     <ReactLenis root options={{ lerp: 0.05, smoothWheel: true }}>
       <SEOHead
         title={seoTitle}
         description={seoDescription}
         canonicalPath={canonicalPath}
-        schema={schema}
+        schema={combinedSchema}
       />
       <div className="text-white min-h-screen font-sans bg-transparent selection:bg-primary/30 selection:text-white overflow-x-hidden w-full">
         <Background />

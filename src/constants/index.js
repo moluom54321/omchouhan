@@ -92,7 +92,7 @@ export const services = [
       "API integrations & custom backend solutions",
       "Technical SEO foundation built-in"
     ],
-    path: "/services/web-development"
+    path: "/services/web-development/"
   },
   {
     id: "restaurant-website-development",
@@ -110,7 +110,7 @@ export const services = [
       "Google Maps location & opening hours display",
       "Mouth-watering visual gallery & brand story"
     ],
-    path: "/services/restaurant-website-development"
+    path: "/services/restaurant-website-development/"
   },
   {
     id: "gym-website-development",
@@ -128,7 +128,7 @@ export const services = [
       "High-converting inquiry lead funnels",
       "Mobile-optimized for on-the-go members"
     ],
-    path: "/services/gym-website-development"
+    path: "/services/gym-website-development/"
   },
   {
     id: "small-business-website-development",
@@ -146,7 +146,7 @@ export const services = [
       "Local SEO optimization for Delhi and regional search",
       "Fast, lightweight, and zero monthly template bloat"
     ],
-    path: "/services/small-business-website-development"
+    path: "/services/small-business-website-development/"
   },
   {
     id: "ecommerce-website-development",
@@ -164,7 +164,7 @@ export const services = [
       "Fast page load speed for higher conversion rates",
       "Mobile-first checkout experience"
     ],
-    path: "/services/ecommerce-website-development"
+    path: "/services/ecommerce-website-development/"
   },
   {
     id: "school-website-development",
@@ -182,7 +182,7 @@ export const services = [
       "Notice board & event announcements",
       "Accessible and clean UI for parents and students"
     ],
-    path: "/services/school-website-development"
+    path: "/services/school-website-development/"
   },
   {
     id: "website-maintenance",
@@ -200,7 +200,7 @@ export const services = [
       "Security best practices and dependency updates",
       "Priority technical assistance when you need changes"
     ],
-    path: "/services/website-maintenance"
+    path: "/services/website-maintenance/"
   }
 ];
 

@@ -1,6 +1,11 @@
 import ServicePageLayout from "../../components/ServicePageLayout";
+import { projects } from "../../constants";
 
 const WebsiteMaintenanceService = () => {
+  const relevantProjects = projects.filter(
+    (p) => p.id === "fameflex" || p.id === "solis-estate"
+  );
+
   const schema = {
     "@context": "https://schema.org",
     "@graph": [
@@ -77,7 +82,7 @@ const WebsiteMaintenanceService = () => {
           description: "Direct WhatsApp and email channel with fast response times when you need urgent website changes."
         }
       ]}
-      relevantProjects={[]}
+      relevantProjects={relevantProjects}
       faqs={[
         {
           question: "Can you maintain a website that someone else built?",
