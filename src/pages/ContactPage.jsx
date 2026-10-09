@@ -83,8 +83,16 @@ const ContactPage = () => {
         })
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to send message via Web3Forms");
+      let data = null;
+      try {
+        data = await response.json();
+      } catch (parseErr) {
+        console.error("Failed to parse Web3Forms JSON response:", parseErr);
+      }
+
+      if (!response.ok || !data || !data.success) {
+        const errorDetail = data?.message || "Failed to send message via Web3Forms";
+        throw new Error(errorDetail);
       }
 
       setLoading(false);

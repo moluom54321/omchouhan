@@ -78,7 +78,7 @@ const Navbar = () => {
         {/* Action Button: Get a Quote */}
         <div className="hidden md:flex items-center space-x-4">
           <Link
-            to="/contact"
+            to="/contact/"
             className="magnetic relative group px-6 py-2.5 rounded-full bg-gradient-to-r from-primary to-accent text-background font-bold text-sm tracking-wider uppercase overflow-hidden shadow-[0_0_20px_rgba(0,229,255,0.3)] hover:shadow-[0_0_30px_rgba(0,229,255,0.5)] transition-all duration-300 hover:scale-105"
           >
             <span className="relative z-10">Get a Quote</span>
@@ -118,7 +118,7 @@ const Navbar = () => {
             ))}
             <li className="pt-3">
               <Link
-                to="/contact"
+                to="/contact/"
                 onClick={() => setMobileMenuOpen(false)}
                 className="block w-full text-center py-3.5 rounded-full bg-gradient-to-r from-primary to-accent text-background font-bold text-base tracking-wider uppercase shadow-[0_0_20px_rgba(0,229,255,0.4)]"
               >
