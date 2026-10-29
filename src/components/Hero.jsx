@@ -76,7 +76,7 @@ const Hero = () => {
           >
             <span className="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
             <span className="text-primary text-xs font-semibold tracking-wider uppercase">
-              Web Development Services in Delhi & Remote
+              Website Designer & Web Developer in Delhi NCR
             </span>
           </motion.div>
 
@@ -88,9 +88,9 @@ const Hero = () => {
           >
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight leading-[1.15]">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-secondary">
-                Modern Websites
+                Website Design & Development
               </span>{" "}
-              for Growing Businesses
+              for Businesses in Delhi
             </h1>
           </motion.div>
 
@@ -101,7 +101,7 @@ const Hero = () => {
             transition={{ duration: 0.9, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
           >
             <p className="text-lg md:text-xl text-muted-text font-light mb-4 leading-relaxed max-w-xl">
-              I design and develop fast, responsive and conversion-focused websites for restaurants, gyms, schools, startups, and small businesses.
+              I design and develop fast, responsive, and conversion-focused websites for businesses, restaurants, gyms, and startups in Delhi and Delhi NCR.
             </p>
             <p className="text-sm font-medium text-white/80 mb-6 flex items-center gap-2">
               <span>Specializing in:</span>
@@ -117,13 +117,13 @@ const Hero = () => {
             className="flex flex-wrap items-center gap-4 mt-4"
           >
             <Link
-              to="/contact"
+              to="/contact/"
               className="magnetic group relative px-8 py-4 rounded-full bg-gradient-to-r from-primary to-accent text-background font-bold uppercase tracking-wider text-sm shadow-[0_0_25px_rgba(0,229,255,0.35)] hover:shadow-[0_0_35px_rgba(0,229,255,0.6)] hover:scale-105 transition-all duration-300"
             >
               Get a Quote
             </Link>
             <Link
-              to="/projects"
+              to="/projects/"
               className="magnetic px-8 py-4 rounded-full border border-white/20 glass-effect hover:border-primary/50 text-white text-sm uppercase tracking-wider font-semibold transition-all duration-300 hover:scale-105"
             >
               View Projects
@@ -142,7 +142,7 @@ const Hero = () => {
             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-secondary/20 mix-blend-overlay z-10"></div>
             <img
               src="/om_portrait.jpg"
-              alt="Om Prakash Chouhan - Full Stack Web Developer building modern websites"
+              alt="Om Prakash Chouhan - Website Designer and Freelance Web Developer in Delhi"
               width="352"
               height="480"
               loading="eager"
@@ -150,7 +150,7 @@ const Hero = () => {
             />
             <div className="absolute bottom-4 left-4 right-4 z-20 glass-effect px-4 py-3 rounded-2xl border border-white/10 backdrop-blur-md">
               <p className="text-sm text-white font-bold">Om Prakash Chouhan</p>
-              <p className="text-xs text-primary font-bold">Full Stack Web Developer & Solutions</p>
+              <p className="text-xs text-primary font-bold">Website Designer & Web Developer • Delhi, India</p>
             </div>
           </div>
         </motion.div>

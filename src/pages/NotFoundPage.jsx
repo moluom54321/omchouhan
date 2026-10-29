@@ -51,7 +51,7 @@ const NotFoundPage = () => {
                 Go Back Home
               </Link>
               <Link
-                to="/services"
+                to="/services/"
                 className="inline-flex items-center gap-2.5 px-8 py-4 rounded-full glass-effect border border-white/20 text-white font-semibold text-sm uppercase tracking-wider hover:border-white transition-colors"
               >
                 <FaConciergeBell />

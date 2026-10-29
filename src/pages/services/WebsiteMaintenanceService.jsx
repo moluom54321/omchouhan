@@ -11,14 +11,14 @@ const WebsiteMaintenanceService = () => {
     "@graph": [
       {
         "@type": "Service",
-        "name": "Website Maintenance & Support Services",
-        "serviceType": "Website Maintenance & Technical Support",
+        "name": "Website Maintenance Services",
+        "serviceType": "Website Maintenance and Support Services",
         "provider": {
           "@type": "Person",
           "name": "Om Prakash Chouhan",
           "url": "https://omchouhan.vercel.app/"
         },
-        "description": "Professional website maintenance, speed optimization, regular content updates, security updates, and bug fixes for businesses in Delhi and worldwide.",
+        "description": "Professional website maintenance and support services. Regular content updates, bug fixing, page speed optimization, security monitoring, and priority technical assistance.",
         "areaServed": "Delhi, India & Worldwide"
       },
       {
@@ -34,12 +34,12 @@ const WebsiteMaintenanceService = () => {
 
   return (
     <ServicePageLayout
-      seoTitle="Website Maintenance Services | Website Support & Updates"
+      seoTitle="Website Maintenance Services | Updates & Support"
       seoDescription="Professional website maintenance and support services. Regular content updates, bug fixing, page speed optimization, security monitoring, and priority technical assistance."
       canonicalPath="/services/website-maintenance"
       serviceName="Website Maintenance & Support"
       heroBadge="Ongoing Technical Care"
-      heroHeading="Website Maintenance & Support Services"
+      heroHeading="Website Maintenance and Support Services"
       heroSubheading="Keep your website fast, secure, up-to-date, and glitch-free with reliable ongoing technical maintenance, content updates, and direct developer support."
       targetAudienceText="Business Owners, Agencies, E-commerce Stores, Restaurants, Educational Institutes"
       problems={[

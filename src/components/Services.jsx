@@ -88,7 +88,7 @@ const Services = () => {
         {/* View All CTA */}
         <div className="mt-14 text-center">
           <Link
-            to="/services"
+            to="/services/"
             className="inline-flex items-center gap-3 px-8 py-4 rounded-full glass-effect border border-white/10 text-white hover:border-primary text-sm font-semibold tracking-wider uppercase transition-all duration-300 hover:scale-105"
           >
             <span>View All Service Details & FAQs</span>

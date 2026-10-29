@@ -23,8 +23,8 @@ const ProjectsPage = () => {
     "@graph": [
       {
         "@type": "CollectionPage",
-        "name": "Web Development Projects & Case Studies | Om Chouhan",
-        "description": "Featured web development projects, scrollytelling canvas websites, and full-stack web applications built by Om Prakash Chouhan.",
+        "name": "Web Development Portfolio | Website Projects",
+        "description": "Featured web development projects, case studies, and business website solutions built by Om Prakash Chouhan.",
         "url": "https://omchouhan.vercel.app/projects/"
       },
       {
@@ -54,8 +54,8 @@ const ProjectsPage = () => {
   return (
     <ReactLenis root options={{ lerp: 0.05, smoothWheel: true }}>
       <SEOHead
-        title="Web Development Projects & Case Studies | Om Chouhan"
-        description="Explore real and concept web development projects built with React, Next.js, TypeScript, HTML5 Canvas, and MERN stack. Includes Solis Estate, Fameflex, Kenangan Coffee, and more."
+        title="Web Development Portfolio | Website Projects"
+        description="Explore web development projects and case studies built with React, Next.js, TypeScript, and modern web tools. Real business platforms and technical concept demos."
         canonicalPath="/projects"
         schema={schema}
       />
@@ -80,7 +80,7 @@ const ProjectsPage = () => {
                 Proven Engineering & Design Work
               </div>
               <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.1] mb-6">
-                Featured Projects &{" "}
+                Website Development Projects &{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-secondary">
                   Case Studies
                 </span>
@@ -247,13 +247,13 @@ const ProjectsPage = () => {
               </p>
               <div className="flex flex-wrap justify-center gap-4 relative z-10">
                 <Link
-                  to="/contact"
+                  to="/contact/"
                   className="px-8 py-4 rounded-full bg-gradient-to-r from-primary to-accent text-background font-bold text-sm tracking-wider uppercase shadow-[0_0_25px_rgba(0,229,255,0.4)] hover:scale-105 transition-all"
                 >
                   Get a Free Quote
                 </Link>
                 <Link
-                  to="/services"
+                  to="/services/"
                   className="px-8 py-4 rounded-full border border-white/20 text-white font-semibold text-sm tracking-wider uppercase hover:border-white transition-colors"
                 >
                   Explore Web Services

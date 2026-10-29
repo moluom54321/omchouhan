@@ -124,8 +124,8 @@ const ContactPage = () => {
     "@graph": [
       {
         "@type": "ContactPage",
-        "name": "Contact & Get a Quote | Om Chouhan",
-        "description": "Request a free quote or consultation for custom web development, restaurant websites, gym websites, or website maintenance.",
+        "name": "Get a Website Development Quote | Contact",
+        "description": "Contact Om Prakash Chouhan for a free web development consultation, project estimate, and custom website quote.",
         "url": "https://omchouhan.vercel.app/contact/"
       },
       {
@@ -141,8 +141,8 @@ const ContactPage = () => {
   return (
     <ReactLenis root options={{ lerp: 0.05, smoothWheel: true }}>
       <SEOHead
-        title="Get a Free Website Quote & Consultation | Om Chouhan"
-        description="Contact Om Prakash Chouhan for a free web development consultation and project quote. Fast response for business, restaurant, gym, school, and ecommerce websites."
+        title="Get a Website Development Quote | Contact"
+        description="Get a free website development quote for your project. Contact freelance web developer Om Prakash Chouhan in Delhi for custom, restaurant, gym, or business websites."
         canonicalPath="/contact"
         schema={schema}
       />
@@ -170,9 +170,9 @@ const ContactPage = () => {
                 </div>
 
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.15]">
-                  Let's Discuss Your{" "}
+                  Discuss Your{" "}
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-secondary">
-                    Website Goals
+                    Website Development Project
                   </span>
                 </h1>
 

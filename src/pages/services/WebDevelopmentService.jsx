@@ -11,14 +11,14 @@ const WebDevelopmentService = () => {
     "@graph": [
       {
         "@type": "Service",
-        "name": "Web Development Services",
-        "serviceType": "Custom Web Development",
+        "name": "Custom Web Development Services",
+        "serviceType": "Custom Web Development Services",
         "provider": {
           "@type": "Person",
           "name": "Om Prakash Chouhan",
           "url": "https://omchouhan.vercel.app/"
         },
-        "description": "Professional custom web development services in Delhi, building fast, responsive, and high-converting websites and React/Next.js web applications.",
+        "description": "Custom web development services for businesses. Fast, responsive, and scalable websites and web applications built with modern React and clean architecture.",
         "areaServed": "Delhi, India & Worldwide"
       },
       {
@@ -34,12 +34,12 @@ const WebDevelopmentService = () => {
 
   return (
     <ServicePageLayout
-      seoTitle="Web Development Services | Full Stack Web Developer"
-      seoDescription="Professional custom web development services in Delhi. Fast, responsive, and scalable websites and web applications built with modern React, Next.js, and MERN stack."
+      seoTitle="Custom Web Development Services | Business Websites"
+      seoDescription="Custom web development services for businesses. Fast, responsive, and scalable websites and web applications built from scratch with clean React and modern architecture."
       canonicalPath="/services/web-development"
       serviceName="Web Development"
       heroBadge="Core Engineering Service"
-      heroHeading="Web Development Services"
+      heroHeading="Custom Web Development for Your Business"
       heroSubheading="Custom-engineered websites and scalable web applications built from scratch to match your specific business requirements, workflows, and growth targets."
       targetAudienceText="Startups, Established Businesses, Tech Founders, Digital Agencies"
       problems={[

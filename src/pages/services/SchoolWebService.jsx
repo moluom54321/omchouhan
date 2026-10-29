@@ -11,14 +11,14 @@ const SchoolWebService = () => {
     "@graph": [
       {
         "@type": "Service",
-        "name": "School & Institute Website Development",
-        "serviceType": "Education & Academic Web Development",
+        "name": "Website for Schools and Institutions",
+        "serviceType": "School & Institute Website Development",
         "provider": {
           "@type": "Person",
           "name": "Om Prakash Chouhan",
           "url": "https://omchouhan.vercel.app/"
         },
-        "description": "Professional school, coaching institute, and academy website development in Delhi. Showcase curriculums, faculty, fee structures, and manage online admission inquiries.",
+        "description": "Professional website development for schools, coaching institutes, and academies in Delhi. Course curriculums, faculty showcases, and admission inquiry forms.",
         "areaServed": "Delhi, India & Worldwide"
       },
       {
@@ -34,12 +34,12 @@ const SchoolWebService = () => {
 
   return (
     <ServicePageLayout
-      seoTitle="School Website Development | Websites for Schools & Institutes"
+      seoTitle="School Website Development | School & Institute Websites"
       seoDescription="Professional school and coaching institute website development services in Delhi. Showcase academic courses, faculty credentials, notice boards, and capture online admission inquiries."
       canonicalPath="/services/school-website-development"
       serviceName="School & Institute Website Development"
       heroBadge="Education & Academies"
-      heroHeading="School & Institute Website Development"
+      heroHeading="Website Development for Schools and Institutes"
       heroSubheading="Informative, structured, and accessible websites for schools, coaching institutes, colleges, and music/art academies designed to build parent trust and streamline admission inquiries."
       targetAudienceText="Schools, Coaching Institutes, Music & Performing Arts Academies, Skill Centers, Tutors, Training Centers"
       problems={[

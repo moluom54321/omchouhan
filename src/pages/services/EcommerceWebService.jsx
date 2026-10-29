@@ -12,13 +12,13 @@ const EcommerceWebService = () => {
       {
         "@type": "Service",
         "name": "Ecommerce Website Development",
-        "serviceType": "Online Store & Ecommerce Development",
+        "serviceType": "Ecommerce Website Development & Online Stores",
         "provider": {
           "@type": "Person",
           "name": "Om Prakash Chouhan",
           "url": "https://omchouhan.vercel.app/"
         },
-        "description": "Professional ecommerce website development services. Custom product catalogs, frictionless shopping cart, WhatsApp checkout, fast mobile performance, and secure payments.",
+        "description": "Custom ecommerce website development services. Fast-loading online stores, clean product catalogs, WhatsApp ordering, and mobile-first checkout flows.",
         "areaServed": "Delhi, India & Worldwide"
       },
       {
@@ -39,7 +39,7 @@ const EcommerceWebService = () => {
       canonicalPath="/services/ecommerce-website-development"
       serviceName="Ecommerce Website Development"
       heroBadge="Online Retail & Direct-to-Consumer"
-      heroHeading="Ecommerce Website Development"
+      heroHeading="Ecommerce Website Development for Your Online Store"
       heroSubheading="Fast, secure, and conversion-optimized online stores designed to showcase your products beautifully, eliminate cart abandonment, and drive repeat customer purchases."
       targetAudienceText="Direct-to-Consumer (D2C) Brands, Boutique Retailers, Specialty Product Creators, Wholesalers"
       problems={[

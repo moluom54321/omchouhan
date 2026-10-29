@@ -9,8 +9,8 @@ const DEFAULT_IMAGE = `${BASE_URL}/og-image.png`;
  * and JSON-LD structured data for every individual page.
  */
 const SEOHead = ({
-  title = "Om Prakash Chouhan | Full Stack Web Developer",
-  description = "Om Prakash Chouhan is a Full Stack Web Developer building modern, fast, and SEO-friendly websites and web applications for businesses.",
+  title = "Website Designer in Delhi | Business Websites",
+  description = "Website designer and developer in Delhi building modern, fast, and responsive websites for small businesses, restaurants, gyms, and startups in Delhi NCR.",
   canonicalPath = "",
   ogType = "website",
   ogImage = DEFAULT_IMAGE,
@@ -81,10 +81,13 @@ const SEOHead = ({
           "@id": `${BASE_URL}/#person`,
           "name": "Om Prakash Chouhan",
           "url": BASE_URL,
-          "jobTitle": "Full Stack Web Developer",
-          "description": "Full Stack Web Developer specializing in custom web applications and business website development.",
+          "jobTitle": "Website Designer & Full Stack Web Developer",
+          "description": "Website designer and freelance web developer in Delhi building custom, responsive, and SEO-friendly websites for businesses in Delhi NCR.",
           "sameAs": ["https://github.com/moluom54321"],
           "knowsAbout": [
+            "Website Design",
+            "Web Development",
+            "Frontend Development",
             "Full Stack Web Development",
             "MERN Stack",
             "React.js",
@@ -101,7 +104,7 @@ const SEOHead = ({
           "@type": "WebSite",
           "@id": `${BASE_URL}/#website`,
           "url": BASE_URL,
-          "name": "Om Prakash Chouhan | Web Development Services",
+          "name": "Website Designer in Delhi | Om Prakash Chouhan",
           "publisher": {
             "@id": `${BASE_URL}/#person`
           }

@@ -120,7 +120,7 @@ const Projects = () => {
             </h2>
           </div>
           <Link
-            to="/projects"
+            to="/projects/"
             className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-white transition-colors group"
           >
             <span>View All Case Studies & Filter by Industry</span>
@@ -136,7 +136,7 @@ const Projects = () => {
 
         <div className="text-center pt-8">
           <Link
-            to="/projects"
+            to="/projects/"
             className="inline-flex items-center gap-3 px-8 py-4 rounded-full glass-effect border border-white/10 text-white hover:border-primary text-sm font-semibold tracking-wider uppercase transition-all duration-300 hover:scale-105"
           >
             <span>Explore All Projects with Problem/Solution Breakdowns</span>

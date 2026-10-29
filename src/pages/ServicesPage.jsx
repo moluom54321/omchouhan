@@ -14,13 +14,13 @@ const ServicesPage = () => {
     "@graph": [
       {
         "@type": "Service",
-        "name": "Website Development Services for Businesses",
+        "name": "Website Development Services in Delhi | Business Websites",
         "provider": {
           "@type": "Person",
           "name": "Om Prakash Chouhan",
           "url": "https://omchouhan.vercel.app/"
         },
-        "description": "Comprehensive web development services including custom React/Next.js applications, restaurant websites, gym websites, small business portals, ecommerce stores, and ongoing website maintenance.",
+        "description": "Comprehensive website development services in Delhi including custom business websites, restaurant websites, gym portals, ecommerce, and maintenance.",
         "areaServed": "Delhi, India & Worldwide"
       },
       {
@@ -36,8 +36,8 @@ const ServicesPage = () => {
   return (
     <ReactLenis root options={{ lerp: 0.05, smoothWheel: true }}>
       <SEOHead
-        title="Website Development Services for Businesses | Om Chouhan"
-        description="Explore professional website development services in Delhi. Custom web development, restaurant websites, gym websites, small business websites, ecommerce, school websites, and website maintenance."
+        title="Website Development Services in Delhi | Business Websites"
+        description="Professional website development services in Delhi. Custom business websites, responsive design, online ordering for restaurants, gym portals, and ongoing maintenance."
         canonicalPath="/services"
         schema={schema}
       />
@@ -169,13 +169,13 @@ const ServicesPage = () => {
               </p>
               <div className="flex flex-wrap justify-center gap-4 relative z-10">
                 <Link
-                  to="/contact"
+                  to="/contact/"
                   className="px-8 py-4 rounded-full bg-gradient-to-r from-primary to-accent text-background font-bold text-sm tracking-wider uppercase shadow-[0_0_25px_rgba(0,229,255,0.4)] hover:scale-105 transition-all"
                 >
                   Get a Free Quote
                 </Link>
                 <Link
-                  to="/projects"
+                  to="/projects/"
                   className="px-8 py-4 rounded-full border border-white/20 text-white font-semibold text-sm tracking-wider uppercase hover:border-white transition-colors"
                 >
                   View Featured Projects

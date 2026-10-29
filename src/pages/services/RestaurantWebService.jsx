@@ -11,14 +11,14 @@ const RestaurantWebService = () => {
     "@graph": [
       {
         "@type": "Service",
-        "name": "Restaurant Website Development",
-        "serviceType": "Restaurant & Cafe Web Development",
+        "name": "Restaurant Website Development in Delhi",
+        "serviceType": "Restaurant Website Design and Development",
         "provider": {
           "@type": "Person",
           "name": "Om Prakash Chouhan",
           "url": "https://omchouhan.vercel.app/"
         },
-        "description": "Professional restaurant and cafe website development services in Delhi. Featuring interactive digital menus, WhatsApp ordering, Google Maps integration, and table reservations.",
+        "description": "Professional restaurant website design and development services in Delhi. Featuring interactive digital menus, WhatsApp food ordering, Google Maps, and table reservations.",
         "areaServed": "Delhi, India & Worldwide"
       },
       {
@@ -34,12 +34,12 @@ const RestaurantWebService = () => {
 
   return (
     <ServicePageLayout
-      seoTitle="Restaurant Website Development in Delhi | Om Chouhan"
-      seoDescription="Professional restaurant and cafe website development. Get modern digital menus, WhatsApp food ordering, table reservation forms, Google Maps, and mobile-optimized dining experiences."
+      seoTitle="Restaurant Website Development in Delhi"
+      seoDescription="Restaurant website development in Delhi. Interactive digital menus, direct WhatsApp food ordering, table reservation forms, and Google Maps integration for dining brands."
       canonicalPath="/services/restaurant-website-development"
       serviceName="Restaurant Website Development"
       heroBadge="Hospitality & Food Brands"
-      heroHeading="Restaurant Website Development"
+      heroHeading="Restaurant Website Design and Development"
       heroSubheading="Captivating, mouth-watering websites designed for restaurants, cafes, cloud kitchens, and dining brands to showcase signature menus, drive table reservations, and capture direct customer inquiries."
       targetAudienceText="Fine Dining Restaurants, Cafes, Bakeries, Cloud Kitchens, Bistros, Lounge Bars"
       problems={[

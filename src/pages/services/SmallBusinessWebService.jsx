@@ -12,13 +12,13 @@ const SmallBusinessWebService = () => {
       {
         "@type": "Service",
         "name": "Small Business Website Development",
-        "serviceType": "Small & Local Business Web Development",
+        "serviceType": "Small Business Website Development",
         "provider": {
           "@type": "Person",
           "name": "Om Prakash Chouhan",
           "url": "https://omchouhan.vercel.app/"
         },
-        "description": "Professional website development for small businesses, consultants, and local service providers in Delhi. Build trust, establish credibility, and generate qualified customer leads.",
+        "description": "Professional small business website development in Delhi. Turn local searchers into clients with fast, clean, and conversion-focused business websites.",
         "areaServed": "Delhi, India & Worldwide"
       },
       {
@@ -34,12 +34,12 @@ const SmallBusinessWebService = () => {
 
   return (
     <ServicePageLayout
-      seoTitle="Small Business Website Development | Professional Business Websites"
-      seoDescription="Professional, conversion-focused small business website development services in Delhi. Build customer trust, showcase services clearly, and turn searchers into paying clients."
+      seoTitle="Small Business Website Development | Business Websites"
+      seoDescription="Professional small business website development services in Delhi. Build customer trust, showcase services clearly, and turn searchers into paying clients."
       canonicalPath="/services/small-business-website-development"
       serviceName="Small Business Website Development"
       heroBadge="Local & Service Businesses"
-      heroHeading="Small Business Website Development"
+      heroHeading="Website Development for Small Businesses"
       heroSubheading="Establish immediate digital authority, build consumer trust, and turn everyday local web searches into loyal, paying clients with a custom-engineered business website."
       targetAudienceText="Local Service Providers, Consultants, Legal & Financial Advisors, Medical Clinics, Real Estate Agents, B2B Companies"
       problems={[

@@ -80,13 +80,13 @@ const WhyChooseMe = () => {
           </p>
           <div className="flex flex-wrap justify-center gap-4 relative z-10">
             <Link
-              to="/contact"
+              to="/contact/"
               className="px-8 py-3.5 rounded-full bg-gradient-to-r from-primary to-accent text-background font-bold text-sm tracking-wider uppercase shadow-[0_0_20px_rgba(0,229,255,0.3)] hover:scale-105 transition-all"
             >
               Get a Free Quote
             </Link>
             <Link
-              to="/services"
+              to="/services/"
               className="px-8 py-3.5 rounded-full border border-white/20 hover:border-white text-white font-semibold text-sm tracking-wider uppercase transition-colors"
             >
               Explore Services

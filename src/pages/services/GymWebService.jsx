@@ -11,14 +11,14 @@ const GymWebService = () => {
     "@graph": [
       {
         "@type": "Service",
-        "name": "Gym Website Development",
-        "serviceType": "Gym & Fitness Web Development",
+        "name": "Gym Website Development in Delhi",
+        "serviceType": "Gym & Fitness Website Development",
         "provider": {
           "@type": "Person",
           "name": "Om Prakash Chouhan",
           "url": "https://omchouhan.vercel.app/"
         },
-        "description": "Professional gym, fitness club, and personal trainer website development in Delhi. High-converting membership pricing cards, trainer profiles, class schedules, and lead funnels.",
+        "description": "Professional gym and fitness website development services in Delhi. Membership tiers, trainer profiles, class schedules, and lead funnels.",
         "areaServed": "Delhi, India & Worldwide"
       },
       {
@@ -34,12 +34,12 @@ const GymWebService = () => {
 
   return (
     <ServicePageLayout
-      seoTitle="Gym Website Development in Delhi | Om Chouhan"
-      seoDescription="High-energy gym and fitness website development services. Showcase membership tiers, trainer profiles, workout programs, class schedules, and capture trial session leads."
+      seoTitle="Gym Website Development in Delhi | Fitness Websites"
+      seoDescription="Gym website development in Delhi. High-energy websites for gyms and fitness studios featuring membership pricing tiers, trainer profiles, class schedules, and trial lead capture."
       canonicalPath="/services/gym-website-development"
       serviceName="Gym Website Development"
       heroBadge="Fitness & Wellness"
-      heroHeading="Gym & Fitness Website Development"
+      heroHeading="Website Development for Gyms and Fitness Studios"
       heroSubheading="Dynamic, high-energy websites for gyms, CrossFit boxes, yoga studios, and personal trainers built to convert local fitness enthusiasts into active paying members."
       targetAudienceText="Gyms, Fitness Centers, CrossFit Boxes, Yoga & Pilates Studios, Personal Trainers"
       problems={[

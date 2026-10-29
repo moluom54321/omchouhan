@@ -15,14 +15,14 @@ const AboutPage = () => {
     "@graph": [
       {
         "@type": "AboutPage",
-        "name": "About Om Prakash Chouhan | Full Stack Web Developer",
-        "description": "Learn about Om Prakash Chouhan, a Full Stack Web Developer based in Delhi specializing in custom web applications, React, Next.js, and business websites.",
+        "name": "About Om Prakash Chouhan | Web Developer in Delhi",
+        "description": "Learn about Om Prakash Chouhan, a freelance website developer and full stack web engineer based in Delhi specializing in custom web applications and business websites.",
         "url": "https://omchouhan.vercel.app/about/"
       },
       {
         "@type": "Person",
         "name": "Om Prakash Chouhan",
-        "jobTitle": "Full Stack Web Developer",
+        "jobTitle": "Freelance Web Developer & Website Designer",
         "url": "https://omchouhan.vercel.app/",
         "sameAs": ["https://github.com/moluom54321"]
       },
@@ -39,8 +39,8 @@ const AboutPage = () => {
   return (
     <ReactLenis root options={{ lerp: 0.05, smoothWheel: true }}>
       <SEOHead
-        title="About Om Prakash Chouhan | Full Stack Web Developer in Delhi"
-        description="Learn about Om Prakash Chouhan, a Full Stack Web Developer building modern, responsive, and performance-focused websites for businesses and startups."
+        title="About Om Prakash Chouhan | Web Developer in Delhi"
+        description="Learn about Om Prakash Chouhan, a freelance web developer and website designer in Delhi building modern, responsive, and performance-focused websites for businesses."
         canonicalPath="/about"
         schema={schema}
       />
@@ -67,15 +67,15 @@ const AboutPage = () => {
                   Developer Profile & Background
                 </div>
                 <h1 className="text-4xl sm:text-6xl font-bold text-white tracking-tight leading-[1.1]">
-                  Engineering Precision &{" "}
+                  About Me —{" "}
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-secondary">
-                    Business Value
+                    Freelance Web Developer
                   </span>
                 </h1>
                 
                 <div className="space-y-4 text-muted-text text-base md:text-lg leading-relaxed font-light">
                   <p>
-                    Hi, I'm <strong className="text-white font-medium">Om Prakash Chouhan</strong>, a dedicated Full Stack Web Developer based in Delhi, India. I specialize in building clean, modern, and high-converting web applications and websites for businesses, startups, and creative brands.
+                    Hi, I'm <strong className="text-white font-medium">Om Prakash Chouhan</strong>, a freelance website developer and full stack web engineer based in Delhi, India. I specialize in building clean, modern, and high-converting web applications and websites for businesses, startups, and creative brands.
                   </p>
                   <p>
                     My approach is centered around modern frontend architecture (React 19, Vite, Tailwind CSS) paired with robust backend engineering (Node.js, Express.js, MongoDB). I believe that a great website isn't just about flashy visual flair—it must be fast, mobile-friendly, technically sound for search engines, and built to drive tangible business inquiries.
@@ -87,7 +87,7 @@ const AboutPage = () => {
 
                 <div className="flex flex-wrap gap-4 pt-4">
                   <Link
-                    to="/contact"
+                    to="/contact/"
                     className="px-8 py-4 rounded-full bg-gradient-to-r from-primary to-accent text-background font-bold text-sm tracking-wider uppercase shadow-[0_0_25px_rgba(0,229,255,0.35)] hover:scale-105 transition-all"
                   >
                     Get a Quote

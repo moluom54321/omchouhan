@@ -67,7 +67,7 @@ const ServicePageLayout = ({
             <nav className="flex items-center space-x-2 text-xs text-muted-text mb-8 uppercase tracking-wider">
               <Link to="/" className="hover:text-primary transition-colors">Home</Link>
               <span>/</span>
-              <Link to="/services" className="hover:text-primary transition-colors">Services</Link>
+              <Link to="/services/" className="hover:text-primary transition-colors">Services</Link>
               <span>/</span>
               <span className="text-primary font-semibold">{serviceName}</span>
             </nav>
@@ -94,7 +94,7 @@ const ServicePageLayout = ({
 
               <div className="flex flex-wrap items-center gap-4">
                 <Link
-                  to="/contact"
+                  to="/contact/"
                   className="px-8 py-4 rounded-full bg-gradient-to-r from-primary to-accent text-background font-bold text-sm uppercase tracking-wider shadow-[0_0_25px_rgba(0,229,255,0.35)] hover:scale-105 transition-all"
                 >
                   Get a Free Quote
@@ -216,7 +216,7 @@ const ServicePageLayout = ({
                     </p>
                   </div>
                   <Link
-                    to="/projects"
+                    to="/projects/"
                     className="text-primary text-sm font-semibold flex items-center gap-2 hover:underline"
                   >
                     <span>View Full Portfolio</span>
@@ -263,7 +263,7 @@ const ServicePageLayout = ({
                           </a>
                         )}
                         <Link
-                          to="/contact"
+                          to="/contact/"
                           className="text-primary text-xs font-semibold hover:underline"
                         >
                           Request Similar Website →
@@ -335,13 +335,13 @@ const ServicePageLayout = ({
               </p>
               <div className="flex flex-wrap justify-center gap-4 relative z-10">
                 <Link
-                  to="/contact"
+                  to="/contact/"
                   className="px-8 py-4 rounded-full bg-gradient-to-r from-primary to-accent text-background font-bold text-sm tracking-wider uppercase shadow-[0_0_25px_rgba(0,229,255,0.4)] hover:scale-105 transition-all"
                 >
                   Get a Free Quote
                 </Link>
                 <Link
-                  to="/services"
+                  to="/services/"
                   className="px-8 py-4 rounded-full border border-white/20 text-white font-semibold text-sm tracking-wider uppercase hover:border-white transition-colors"
                 >
                   Browse Other Services
