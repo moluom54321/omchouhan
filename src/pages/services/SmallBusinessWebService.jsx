@@ -1,4 +1,4 @@
-import ServicePageLayout from "../../components/ServicePageLayout";
+﻿import ServicePageLayout from "../../components/ServicePageLayout";
 import { projects } from "../../constants";
 
 const SmallBusinessWebService = () => {
@@ -19,7 +19,7 @@ const SmallBusinessWebService = () => {
           "url": "https://omchouhan.vercel.app/"
         },
         "description": "Professional small business website development in Delhi. Turn local searchers into clients with fast, clean, and conversion-focused business websites.",
-        "areaServed": "Delhi, India & Worldwide"
+        "areaServed": "Delhi NCR (Delhi, Noida, Gurugram), India & Worldwide"
       },
       {
         "@type": "BreadcrumbList",

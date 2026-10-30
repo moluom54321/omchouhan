@@ -16,7 +16,7 @@ const AboutPage = () => {
       {
         "@type": "AboutPage",
         "name": "About Om Prakash Chouhan | Web Developer in Delhi",
-        "description": "Learn about Om Prakash Chouhan, a freelance website developer and full stack web engineer based in Delhi specializing in custom web applications and business websites.",
+        "description": "Learn about Om Prakash Chouhan, a freelance website designer and web developer in Delhi NCR. I build modern, responsive, and SEO-friendly websites for businesses in Delhi, Noida, and Gurugram.",
         "url": "https://omchouhan.vercel.app/about/"
       },
       {
@@ -40,7 +40,7 @@ const AboutPage = () => {
     <ReactLenis root options={{ lerp: 0.05, smoothWheel: true }}>
       <SEOHead
         title="About Om Prakash Chouhan | Web Developer in Delhi"
-        description="Learn about Om Prakash Chouhan, a freelance web developer and website designer in Delhi building modern, responsive, and performance-focused websites for businesses."
+        description="Learn about Om Prakash Chouhan, a freelance website designer and web developer in Delhi NCR. I build modern, responsive, and SEO-friendly websites for businesses in Delhi, Noida, and Gurugram."
         canonicalPath="/about"
         schema={schema}
       />
@@ -64,7 +64,7 @@ const AboutPage = () => {
               <div className="lg:col-span-7 space-y-6">
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold tracking-wider uppercase mb-2">
                   <span className="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
-                  Developer Profile & Background
+                  Developer Profile & Background — Delhi NCR
                 </div>
                 <h1 className="text-4xl sm:text-6xl font-bold text-white tracking-tight leading-[1.1]">
                   About Me —{" "}
@@ -75,14 +75,29 @@ const AboutPage = () => {
                 
                 <div className="space-y-4 text-muted-text text-base md:text-lg leading-relaxed font-light">
                   <p>
-                    Hi, I'm <strong className="text-white font-medium">Om Prakash Chouhan</strong>, a freelance website developer and full stack web engineer based in Delhi, India. I specialize in building clean, modern, and high-converting web applications and websites for businesses, startups, and creative brands.
+                    Hi, I'm <strong className="text-white font-medium">Om Prakash Chouhan</strong>, a freelance website designer and full stack web developer based in Delhi, India. I specialize in designing and building clean, modern, and high-converting websites for businesses, startups, restaurants, gyms, and schools across Delhi and Delhi NCR — including Noida and Gurugram.
                   </p>
                   <p>
-                    My approach is centered around modern frontend architecture (React 19, Vite, Tailwind CSS) paired with robust backend engineering (Node.js, Express.js, MongoDB). I believe that a great website isn't just about flashy visual flair—it must be fast, mobile-friendly, technically sound for search engines, and built to drive tangible business inquiries.
+                    My approach combines modern frontend architecture (React 19, Vite, Tailwind CSS) with solid backend engineering (Node.js, Express.js, MongoDB). I believe a great website must be fast, mobile-friendly, technically optimized for search engines, and built to drive real business inquiries — not just look impressive.
                   </p>
                   <p>
-                    Whether creating interactive scrollytelling experiences like Solis Estate, full-scale academy management platforms, or responsive restaurant and gym websites, I focus on delivering custom-crafted code with zero bloated templates.
+                    Whether you need a restaurant website with an online menu, a gym membership portal, a school or academy platform, or a custom full-stack web application — I deliver custom-coded solutions with zero bloated templates, built to perform and rank.
                   </p>
+                </div>
+
+                <div className="flex flex-wrap gap-4 pt-2">
+                  <Link
+                    to="/services/"
+                    className="text-sm text-primary font-semibold hover:underline underline-offset-4 transition-colors"
+                  >
+                    → View All Services
+                  </Link>
+                  <Link
+                    to="/projects/"
+                    className="text-sm text-primary font-semibold hover:underline underline-offset-4 transition-colors"
+                  >
+                    → View My Projects
+                  </Link>
                 </div>
 
                 <div className="flex flex-wrap gap-4 pt-4">
@@ -107,7 +122,7 @@ const AboutPage = () => {
                 <div className="relative w-full max-w-md h-[480px] rounded-[2.5rem] overflow-hidden glass-effect border border-white/10 shadow-2xl">
                   <img
                     src="/om_portrait.jpg"
-                    alt="Om Prakash Chouhan - Full Stack Web Developer"
+                    alt="Om Prakash Chouhan - Website Designer and Freelance Web Developer in Delhi NCR"
                     width="448"
                     height="480"
                     loading="lazy"
@@ -116,7 +131,7 @@ const AboutPage = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
                   <div className="absolute bottom-6 left-6 right-6 glass-effect p-4 rounded-2xl border border-white/10 backdrop-blur-md">
                     <p className="text-white font-bold text-base">Om Prakash Chouhan</p>
-                    <p className="text-primary text-xs">Full Stack Web Developer • Delhi, India</p>
+                    <p className="text-primary text-xs">Website Designer & Web Developer • Delhi NCR, India</p>
                   </div>
                 </div>
               </div>

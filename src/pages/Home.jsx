@@ -57,8 +57,8 @@ const Home = () => {
   return (
     <ReactLenis root options={{ lerp: 0.05, smoothWheel: true }}>
       <SEOHead
-        title="Website Designer in Delhi | Business Websites"
-        description="Website designer and developer in Delhi building modern, fast, and responsive websites for small businesses, restaurants, gyms, and startups in Delhi NCR."
+        title="Website Designer in Delhi | Om Prakash Chouhan"
+        description="I'm Om Prakash Chouhan, a freelance website designer and developer in Delhi. I create modern, responsive and SEO-friendly websites for businesses, restaurants, gyms and startups across Delhi NCR."
         canonicalPath="/"
         schema={homepageSchema}
       />

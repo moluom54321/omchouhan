@@ -1,4 +1,4 @@
-import ServicePageLayout from "../../components/ServicePageLayout";
+﻿import ServicePageLayout from "../../components/ServicePageLayout";
 import { projects } from "../../constants";
 
 const RestaurantWebService = () => {
@@ -19,7 +19,7 @@ const RestaurantWebService = () => {
           "url": "https://omchouhan.vercel.app/"
         },
         "description": "Professional restaurant website design and development services in Delhi. Featuring interactive digital menus, WhatsApp food ordering, Google Maps, and table reservations.",
-        "areaServed": "Delhi, India & Worldwide"
+        "areaServed": "Delhi NCR (Delhi, Noida, Gurugram), India & Worldwide"
       },
       {
         "@type": "BreadcrumbList",

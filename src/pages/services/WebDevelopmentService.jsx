@@ -1,4 +1,4 @@
-import ServicePageLayout from "../../components/ServicePageLayout";
+﻿import ServicePageLayout from "../../components/ServicePageLayout";
 import { projects } from "../../constants";
 
 const WebDevelopmentService = () => {
@@ -19,7 +19,7 @@ const WebDevelopmentService = () => {
           "url": "https://omchouhan.vercel.app/"
         },
         "description": "Custom web development services for businesses. Fast, responsive, and scalable websites and web applications built with modern React and clean architecture.",
-        "areaServed": "Delhi, India & Worldwide"
+        "areaServed": "Delhi NCR (Delhi, Noida, Gurugram), India & Worldwide"
       },
       {
         "@type": "BreadcrumbList",

@@ -21,7 +21,7 @@ const Services = () => {
             What I Offer
           </span>
           <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tight mt-6 mb-4">
-            Web Development <span className="text-primary">Services</span>
+            Website Design &amp; Development <span className="text-primary">Services in Delhi</span>
           </h2>
           <p className="text-muted-text text-base md:text-lg font-light leading-relaxed">
             High-performance, custom website solutions engineered to elevate your brand presence, attract qualified inquiries, and drive business growth.

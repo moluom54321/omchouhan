@@ -88,9 +88,9 @@ const Hero = () => {
           >
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight leading-[1.15]">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-secondary">
-                Website Design & Development
+                Website Designer in Delhi
               </span>{" "}
-              for Businesses in Delhi
+              for Growing Businesses
             </h1>
           </motion.div>
 
@@ -101,7 +101,7 @@ const Hero = () => {
             transition={{ duration: 0.9, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
           >
             <p className="text-lg md:text-xl text-muted-text font-light mb-4 leading-relaxed max-w-xl">
-              I design and develop fast, responsive, and conversion-focused websites for businesses, restaurants, gyms, and startups in Delhi and Delhi NCR.
+              I'm Om Prakash Chouhan, a freelance website designer and developer in Delhi. I create modern, responsive and SEO-friendly websites for businesses, restaurants, gyms and startups across Delhi NCR.
             </p>
             <p className="text-sm font-medium text-white/80 mb-6 flex items-center gap-2">
               <span>Specializing in:</span>

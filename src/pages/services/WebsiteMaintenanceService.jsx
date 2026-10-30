@@ -1,4 +1,4 @@
-import ServicePageLayout from "../../components/ServicePageLayout";
+﻿import ServicePageLayout from "../../components/ServicePageLayout";
 import { projects } from "../../constants";
 
 const WebsiteMaintenanceService = () => {
@@ -19,7 +19,7 @@ const WebsiteMaintenanceService = () => {
           "url": "https://omchouhan.vercel.app/"
         },
         "description": "Professional website maintenance and support services. Regular content updates, bug fixing, page speed optimization, security monitoring, and priority technical assistance.",
-        "areaServed": "Delhi, India & Worldwide"
+        "areaServed": "Delhi NCR (Delhi, Noida, Gurugram), India & Worldwide"
       },
       {
         "@type": "BreadcrumbList",

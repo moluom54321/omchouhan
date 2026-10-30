@@ -1,4 +1,4 @@
-import ServicePageLayout from "../../components/ServicePageLayout";
+﻿import ServicePageLayout from "../../components/ServicePageLayout";
 import { projects } from "../../constants";
 
 const EcommerceWebService = () => {
@@ -19,7 +19,7 @@ const EcommerceWebService = () => {
           "url": "https://omchouhan.vercel.app/"
         },
         "description": "Custom ecommerce website development services. Fast-loading online stores, clean product catalogs, WhatsApp ordering, and mobile-first checkout flows.",
-        "areaServed": "Delhi, India & Worldwide"
+        "areaServed": "Delhi NCR (Delhi, Noida, Gurugram), India & Worldwide"
       },
       {
         "@type": "BreadcrumbList",

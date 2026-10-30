@@ -1,4 +1,4 @@
-import ServicePageLayout from "../../components/ServicePageLayout";
+﻿import ServicePageLayout from "../../components/ServicePageLayout";
 import { projects } from "../../constants";
 
 const GymWebService = () => {
@@ -19,7 +19,7 @@ const GymWebService = () => {
           "url": "https://omchouhan.vercel.app/"
         },
         "description": "Professional gym and fitness website development services in Delhi. Membership tiers, trainer profiles, class schedules, and lead funnels.",
-        "areaServed": "Delhi, India & Worldwide"
+        "areaServed": "Delhi NCR (Delhi, Noida, Gurugram), India & Worldwide"
       },
       {
         "@type": "BreadcrumbList",

@@ -9,8 +9,8 @@ const DEFAULT_IMAGE = `${BASE_URL}/og-image.png`;
  * and JSON-LD structured data for every individual page.
  */
 const SEOHead = ({
-  title = "Website Designer in Delhi | Business Websites",
-  description = "Website designer and developer in Delhi building modern, fast, and responsive websites for small businesses, restaurants, gyms, and startups in Delhi NCR.",
+  title = "Website Designer in Delhi | Om Prakash Chouhan",
+  description = "I'm Om Prakash Chouhan, a freelance website designer and developer in Delhi. I create modern, responsive and SEO-friendly websites for businesses, restaurants, gyms and startups across Delhi NCR.",
   canonicalPath = "",
   ogType = "website",
   ogImage = DEFAULT_IMAGE,
@@ -56,7 +56,7 @@ const SEOHead = ({
     updateMeta("property", "og:url", canonicalUrl);
     updateMeta("property", "og:type", ogType);
     updateMeta("property", "og:image", ogImage);
-    updateMeta("property", "og:site_name", "Om Prakash Chouhan | Web Development Services");
+    updateMeta("property", "og:site_name", "Website Designer in Delhi | Om Prakash Chouhan");
 
     // 5. Twitter Card Meta Tags
     updateMeta("name", "twitter:card", "summary_large_image");

@@ -1,4 +1,4 @@
-import ServicePageLayout from "../../components/ServicePageLayout";
+﻿import ServicePageLayout from "../../components/ServicePageLayout";
 import { projects } from "../../constants";
 
 const SchoolWebService = () => {
@@ -19,7 +19,7 @@ const SchoolWebService = () => {
           "url": "https://omchouhan.vercel.app/"
         },
         "description": "Professional website development for schools, coaching institutes, and academies in Delhi. Course curriculums, faculty showcases, and admission inquiry forms.",
-        "areaServed": "Delhi, India & Worldwide"
+        "areaServed": "Delhi NCR (Delhi, Noida, Gurugram), India & Worldwide"
       },
       {
         "@type": "BreadcrumbList",
