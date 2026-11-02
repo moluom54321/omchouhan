@@ -1,36 +1,16 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, lazy, Suspense } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import Typed from "typed.js";
-import { Canvas } from "@react-three/fiber";
-import { Float, MeshDistortMaterial, Sphere, Stars } from "@react-three/drei";
 
-const Scene = () => {
-  return (
-    <Canvas camera={{ position: [0, 0, 5], fov: 45 }} className="w-full h-full absolute inset-0 -z-10 opacity-60 pointer-events-none">
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[10, 10, 5]} intensity={1} />
-      <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-      
-      <Float speed={2} rotationIntensity={2} floatIntensity={2}>
-        <Sphere args={[1, 64, 64]} position={[-2, 1, -2]} scale={1.5}>
-          <MeshDistortMaterial color="#00E5FF" attach="material" distort={0.5} speed={2} roughness={0} metalness={0.8} />
-        </Sphere>
-      </Float>
-
-      <Float speed={1.5} rotationIntensity={1.5} floatIntensity={1.5}>
-        <Sphere args={[1, 64, 64]} position={[2, -1, -1]} scale={1.2}>
-          <MeshDistortMaterial color="#6C63FF" attach="material" distort={0.6} speed={1.5} roughness={0} metalness={0.8} />
-        </Sphere>
-      </Float>
-    </Canvas>
-  );
-};
+// Three.js Canvas is lazily loaded AFTER hero text paints
+// This eliminates the 3,050ms LCP render delay caused by WebGL init
+const ThreeScene = lazy(() => import("./HeroScene"));
 
 const Hero = () => {
   const el = useRef(null);
   const containerRef = useRef(null);
-  
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"]
@@ -57,16 +37,19 @@ const Hero = () => {
 
   return (
     <section ref={containerRef} id="home" className="relative w-full min-h-screen pt-36 pb-24 mx-auto flex flex-col md:flex-row items-center justify-center overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none">
-        <Scene />
+      {/* 3D Canvas — deferred via Suspense so it does NOT block hero text paint */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <Suspense fallback={null}>
+          <ThreeScene />
+        </Suspense>
       </div>
 
-      <motion.div 
+      <motion.div
         style={{ y, opacity }}
         className="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between w-full z-10 gap-12"
       >
         <div className="w-full md:w-3/5 flex flex-col items-start justify-center text-left">
-          
+
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -132,7 +115,7 @@ const Hero = () => {
         </div>
 
         {/* Right Portrait & Visual */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.85, rotateY: 20 }}
           animate={{ opacity: 1, scale: 1, rotateY: 0 }}
           transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}

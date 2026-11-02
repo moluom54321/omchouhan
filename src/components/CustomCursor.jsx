@@ -6,8 +6,14 @@ const CustomCursor = () => {
   const [isHovering, setIsHovering] = useState(false);
 
   useEffect(() => {
+    // Only initialize on devices with a fine pointer (mouse).
+    // Touch/mobile devices: no event listeners, no GSAP, no DOM manipulation.
+    const isFinePointer = window.matchMedia("(pointer: fine)").matches;
+    if (!isFinePointer) return;
+
     const cursor = cursorRef.current;
-    
+    if (!cursor) return;
+
     const onMouseMove = (e) => {
       gsap.to(cursor, {
         x: e.clientX,
@@ -16,15 +22,15 @@ const CustomCursor = () => {
         ease: "power2.out"
       });
     };
-    
+
     const handleMouseOver = (e) => {
       const isInteractable = e.target.closest("a") || e.target.closest("button") || e.target.closest(".magnetic");
       setIsHovering(!!isInteractable);
     };
 
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mouseover", handleMouseOver);
-    
+    window.addEventListener("mousemove", onMouseMove, { passive: true });
+    window.addEventListener("mouseover", handleMouseOver, { passive: true });
+
     return () => {
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseover", handleMouseOver);

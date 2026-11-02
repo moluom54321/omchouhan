@@ -54,6 +54,9 @@ const Experience = () => {
               <img
                 src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1470&auto=format&fit=crop"
                 alt="Code setup"
+                width="1470"
+                height="980"
+                loading="lazy"
                 className="w-full h-full object-cover object-center
                            scale-105 group-hover:scale-100
                            filter brightness-75 group-hover:brightness-100

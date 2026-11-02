@@ -47,13 +47,16 @@ const About = () => {
           {/* Right Side — Coding Video Background */}
           <motion.div style={{ y: y2 }} className="w-full lg:w-1/2 relative h-[350px] lg:h-[600px] rounded-3xl overflow-hidden border border-white/10 group shadow-2xl">
             
-            {/* Video */}
+            {/* Video — preload="none" prevents 7MB download until section is visible.
+                poster shows a static fallback frame immediately. */}
             <video
               src="/coding-bg.mp4"
               autoPlay
               loop
               muted
               playsInline
+              preload="none"
+              poster="/om_portrait.jpg"
               className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-[2s] ease-out"
             />
 

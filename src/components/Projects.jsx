@@ -1,8 +1,65 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { projects } from "../constants";
-import { FaGithub, FaExternalLinkAlt, FaArrowRight } from "react-icons/fa";
+import { FaGithub, FaExternalLinkAlt, FaArrowRight, FaPlay } from "react-icons/fa";
+
+// ProjectPreview: shows a static screenshot initially.
+// Only loads the actual iframe after the user explicitly clicks "Load Preview".
+// This avoids 5 external full-website downloads on the homepage.
+const ProjectPreview = ({ project }) => {
+  const [iframeLoaded, setIframeLoaded] = useState(false);
+
+  if (project.useIframe) {
+    if (iframeLoaded) {
+      return (
+        <iframe
+          src={project.live}
+          title={`${project.title} live preview`}
+          className="w-full h-full object-cover scale-100 group-hover:scale-[1.02] transition-transform duration-1000 border-none bg-white"
+          sandbox="allow-scripts allow-same-origin"
+          loading="lazy"
+        />
+      );
+    }
+
+    // Static placeholder until user activates
+    return (
+      <div className="w-full h-full relative flex items-center justify-center bg-gradient-to-br from-[#0a0f2e] to-[#050816] cursor-pointer group/preview"
+        onClick={() => setIframeLoaded(true)}
+        role="button"
+        tabIndex={0}
+        aria-label={`Load live preview of ${project.title}`}
+        onKeyDown={(e) => e.key === "Enter" && setIframeLoaded(true)}
+      >
+        {/* Gradient background matching the site's dark theme */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
+
+        {/* Project title as visual placeholder */}
+        <div className="text-center z-10 px-6">
+          <div className="w-16 h-16 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center mx-auto mb-4 group-hover/preview:bg-primary/20 transition-colors duration-300">
+            <FaPlay className="text-primary text-xl ml-1" />
+          </div>
+          <p className="text-white/70 text-sm font-semibold uppercase tracking-wider mb-1">Live Preview</p>
+          <p className="text-primary text-xs font-medium">Click to load · {project.title}</p>
+        </div>
+
+        {/* Decorative grid lines */}
+        <div className="absolute inset-0 bg-grid opacity-20 pointer-events-none" />
+      </div>
+    );
+  }
+
+  // Static image projects (e.g. Music School) — lazy load
+  return (
+    <img
+      src={project.image}
+      alt={project.title}
+      loading="lazy"
+      className="w-full h-full object-cover scale-100 group-hover:scale-[1.02] transition-transform duration-1000"
+    />
+  );
+};
 
 const ProjectBlock = ({ project, index }) => {
   const ref = useRef(null);
@@ -12,37 +69,23 @@ const ProjectBlock = ({ project, index }) => {
   });
 
   const isEven = index % 2 === 0;
-  
+
   // Subtle parallax for images
   const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
-  
+
   return (
     <div ref={ref} className={`flex flex-col ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-12 lg:gap-20 w-full mb-36 group`}>
-      
+
       {/* Visual / 3D Mockup Container */}
       <div className="w-full lg:w-[58%] relative h-[320px] lg:h-[540px] rounded-[2rem] overflow-hidden glass-effect border border-white/10 perspective-[1200px]">
         {/* Floating gradient orb behind the image */}
         <div className="absolute inset-0 bg-primary/20 blur-[100px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000 z-0"></div>
-        
-        <motion.div 
-          style={{ y }} 
+
+        <motion.div
+          style={{ y }}
           className={`absolute inset-0 w-full h-[120%] -top-[10%] origin-center transition-transform duration-1000 ease-[0.16,1,0.3,1] ${isEven ? 'group-hover:rotate-y-6 group-hover:rotate-x-6' : 'group-hover:-rotate-y-6 group-hover:rotate-x-6'} transform-gpu z-10 preserve-3d`}
         >
-          {project.useIframe ? (
-            <iframe
-              src={project.live}
-              title={project.title}
-              className="w-full h-full object-cover scale-100 group-hover:scale-[1.02] transition-transform duration-1000 border-none bg-white"
-              sandbox="allow-scripts allow-same-origin"
-              loading="lazy"
-            />
-          ) : (
-            <img
-              src={project.image}
-              alt={project.title}
-              className="w-full h-full object-cover scale-100 group-hover:scale-[1.02] transition-transform duration-1000"
-            />
-          )}
+          <ProjectPreview project={project} />
         </motion.div>
       </div>
 
@@ -70,7 +113,7 @@ const ProjectBlock = ({ project, index }) => {
         <p className="text-muted-text text-base leading-relaxed font-light">
           {project.description}
         </p>
-        
+
         <div className="flex flex-wrap gap-2 pt-1">
           {project.tech.map((tech, i) => (
             <span key={i} className="text-xs font-medium text-white/80 bg-white/5 px-3 py-1.5 rounded-full border border-white/10 backdrop-blur-md">

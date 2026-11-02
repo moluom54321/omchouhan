@@ -1,47 +1,55 @@
+import { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
 
-// Pages
+// Homepage loads eagerly — it is the first thing users see
 import Home from "./pages/Home";
-import ServicesPage from "./pages/ServicesPage";
-import ProjectsPage from "./pages/ProjectsPage";
-import AboutPage from "./pages/AboutPage";
-import ContactPage from "./pages/ContactPage";
-import NotFoundPage from "./pages/NotFoundPage";
 
-// Dedicated Service Pages
-import WebDevelopmentService from "./pages/services/WebDevelopmentService";
-import RestaurantWebService from "./pages/services/RestaurantWebService";
-import GymWebService from "./pages/services/GymWebService";
-import SmallBusinessWebService from "./pages/services/SmallBusinessWebService";
-import EcommerceWebService from "./pages/services/EcommerceWebService";
-import SchoolWebService from "./pages/services/SchoolWebService";
-import WebsiteMaintenanceService from "./pages/services/WebsiteMaintenanceService";
+// All other pages lazy-loaded — only fetched when user navigates there
+const ServicesPage             = lazy(() => import("./pages/ServicesPage"));
+const ProjectsPage             = lazy(() => import("./pages/ProjectsPage"));
+const AboutPage                = lazy(() => import("./pages/AboutPage"));
+const ContactPage              = lazy(() => import("./pages/ContactPage"));
+const NotFoundPage             = lazy(() => import("./pages/NotFoundPage"));
+const WebDevelopmentService    = lazy(() => import("./pages/services/WebDevelopmentService"));
+const RestaurantWebService     = lazy(() => import("./pages/services/RestaurantWebService"));
+const GymWebService            = lazy(() => import("./pages/services/GymWebService"));
+const SmallBusinessWebService  = lazy(() => import("./pages/services/SmallBusinessWebService"));
+const EcommerceWebService      = lazy(() => import("./pages/services/EcommerceWebService"));
+const SchoolWebService         = lazy(() => import("./pages/services/SchoolWebService"));
+const WebsiteMaintenanceService = lazy(() => import("./pages/services/WebsiteMaintenanceService"));
+
+// Minimal fallback — keeps background color consistent, no spinner flash
+const PageFallback = () => (
+  <div style={{ minHeight: "100vh", background: "#050816" }} aria-hidden="true" />
+);
 
 function App() {
   return (
     <Router>
       <ScrollToTop />
-      <Routes>
-        {/* Main Routes */}
-        <Route path="/" element={<Home />} />
-        <Route path="/services" element={<ServicesPage />} />
-        <Route path="/projects" element={<ProjectsPage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/contact" element={<ContactPage />} />
+      <Suspense fallback={<PageFallback />}>
+        <Routes>
+          {/* Main Routes */}
+          <Route path="/"          element={<Home />} />
+          <Route path="/services"  element={<ServicesPage />} />
+          <Route path="/projects"  element={<ProjectsPage />} />
+          <Route path="/about"     element={<AboutPage />} />
+          <Route path="/contact"   element={<ContactPage />} />
 
-        {/* Dedicated Service Routes */}
-        <Route path="/services/web-development" element={<WebDevelopmentService />} />
-        <Route path="/services/restaurant-website-development" element={<RestaurantWebService />} />
-        <Route path="/services/gym-website-development" element={<GymWebService />} />
-        <Route path="/services/small-business-website-development" element={<SmallBusinessWebService />} />
-        <Route path="/services/ecommerce-website-development" element={<EcommerceWebService />} />
-        <Route path="/services/school-website-development" element={<SchoolWebService />} />
-        <Route path="/services/website-maintenance" element={<WebsiteMaintenanceService />} />
+          {/* Dedicated Service Routes */}
+          <Route path="/services/web-development"                  element={<WebDevelopmentService />} />
+          <Route path="/services/restaurant-website-development"   element={<RestaurantWebService />} />
+          <Route path="/services/gym-website-development"          element={<GymWebService />} />
+          <Route path="/services/small-business-website-development" element={<SmallBusinessWebService />} />
+          <Route path="/services/ecommerce-website-development"    element={<EcommerceWebService />} />
+          <Route path="/services/school-website-development"       element={<SchoolWebService />} />
+          <Route path="/services/website-maintenance"              element={<WebsiteMaintenanceService />} />
 
-        {/* 404 Fallback Route for non-existent paths */}
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+          {/* 404 Fallback Route for non-existent paths */}
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Suspense>
     </Router>
   );
 }
