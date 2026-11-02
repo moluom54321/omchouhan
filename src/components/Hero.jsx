@@ -1,15 +1,16 @@
-import { useEffect, useRef, lazy, Suspense } from "react";
+import { useEffect, useRef, useState, lazy, Suspense } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import Typed from "typed.js";
 
-// Three.js Canvas is lazily loaded AFTER hero text paints
-// This eliminates the 3,050ms LCP render delay caused by WebGL init
+// Three.js Canvas is strictly lazy-loaded on idle for desktop ONLY.
+// On mobile/touch devices, WebGL is skipped completely to avoid 887KB download and 8s+ TBT.
 const ThreeScene = lazy(() => import("./HeroScene"));
 
 const Hero = () => {
   const el = useRef(null);
   const containerRef = useRef(null);
+  const [loadScene, setLoadScene] = useState(false);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -19,6 +20,7 @@ const Hero = () => {
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
+  // Typed text initialization
   useEffect(() => {
     const typed = new Typed(el.current, {
       strings: [
@@ -35,13 +37,39 @@ const Hero = () => {
     return () => typed.destroy();
   }, []);
 
+  // Defer 3D Scene loading: desktop-only and strictly on idle
+  useEffect(() => {
+    const isDesktop =
+      typeof window !== "undefined" &&
+      window.innerWidth >= 1024 &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches &&
+      !("ontouchstart" in window);
+
+    if (!isDesktop) return;
+
+    if ("requestIdleCallback" in window) {
+      const handle = window.requestIdleCallback(() => setLoadScene(true), { timeout: 4000 });
+      return () => window.cancelIdleCallback(handle);
+    } else {
+      const timer = setTimeout(() => setLoadScene(true), 3500);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
   return (
     <section ref={containerRef} id="home" className="relative w-full min-h-screen pt-36 pb-24 mx-auto flex flex-col md:flex-row items-center justify-center overflow-hidden">
-      {/* 3D Canvas — deferred via Suspense so it does NOT block hero text paint */}
+      {/* 3D Canvas on desktop idle; lightweight CSS glow fallback on mobile / initial load */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <Suspense fallback={null}>
-          <ThreeScene />
-        </Suspense>
+        {loadScene ? (
+          <Suspense fallback={null}>
+            <ThreeScene />
+          </Suspense>
+        ) : (
+          <div className="w-full h-full absolute inset-0 -z-10 opacity-40">
+            <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-[#00E5FF]/20 rounded-full blur-[80px]" />
+            <div className="absolute bottom-1/3 right-1/4 w-72 h-72 bg-[#6C63FF]/20 rounded-full blur-[80px]" />
+          </div>
+        )}
       </div>
 
       <motion.div
@@ -50,39 +78,26 @@ const Hero = () => {
       >
         <div className="w-full md:w-3/5 flex flex-col items-start justify-center text-left">
 
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="mb-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20"
-          >
+          {/* Badge - visible immediately */}
+          <div className="mb-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20">
             <span className="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
             <span className="text-primary text-xs font-semibold tracking-wider uppercase">
               Website Designer & Web Developer in Delhi NCR
             </span>
-          </motion.div>
+          </div>
 
-          {/* Primary H1 */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight leading-[1.15]">
+          {/* Primary H1 - Immediately visible, no initial opacity: 0 delay for instant LCP */}
+          <div className="mb-6">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.15]">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-secondary">
                 Website Designer in Delhi
               </span>{" "}
               for Growing Businesses
             </h1>
-          </motion.div>
+          </div>
 
-          {/* Supporting Text & Dynamic Typing */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          >
+          {/* Supporting Text & Dynamic Typing - Immediately visible, no delay */}
+          <div>
             <p className="text-lg md:text-xl text-muted-text font-light mb-4 leading-relaxed max-w-xl">
               I'm Om Prakash Chouhan, a freelance website designer and developer in Delhi. I create modern, responsive and SEO-friendly websites for businesses, restaurants, gyms and startups across Delhi NCR.
             </p>
@@ -90,15 +105,10 @@ const Hero = () => {
               <span>Specializing in:</span>
               <span ref={el} className="text-primary font-bold"></span>
             </p>
-          </motion.div>
+          </div>
 
           {/* Call to Actions */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-wrap items-center gap-4 mt-4"
-          >
+          <div className="flex flex-wrap items-center gap-4 mt-4">
             <Link
               to="/contact/"
               className="magnetic group relative px-8 py-4 rounded-full bg-gradient-to-r from-primary to-accent text-background font-bold uppercase tracking-wider text-sm shadow-[0_0_25px_rgba(0,229,255,0.35)] hover:shadow-[0_0_35px_rgba(0,229,255,0.6)] hover:scale-105 transition-all duration-300"
@@ -111,16 +121,11 @@ const Hero = () => {
             >
               View Projects
             </Link>
-          </motion.div>
+          </div>
         </div>
 
         {/* Right Portrait & Visual */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.85, rotateY: 20 }}
-          animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-          transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full md:w-2/5 flex justify-center perspective-[1000px]"
-        >
+        <div className="w-full md:w-2/5 flex justify-center perspective-[1000px]">
           <div className="relative w-72 h-[340px] md:w-88 md:h-[480px] rounded-[2.5rem] overflow-hidden glass-effect border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.6)] transform-gpu hover:rotate-y-6 hover:rotate-x-6 transition-transform duration-700 ease-out">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-secondary/20 mix-blend-overlay z-10"></div>
             <img
@@ -136,7 +141,7 @@ const Hero = () => {
               <p className="text-xs text-primary font-bold">Website Designer & Web Developer • Delhi, India</p>
             </div>
           </div>
-        </motion.div>
+        </div>
       </motion.div>
     </section>
   );

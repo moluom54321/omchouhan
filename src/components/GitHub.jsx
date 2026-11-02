@@ -1,46 +1,65 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { fadeIn, staggerContainer } from "../utils/animations";
 import { FaStar, FaCodeBranch, FaGithub } from "react-icons/fa";
 
+// List of specific repositories to showcase with optional custom descriptions
+const REPOS = [
+  {
+    path: "moluom54321/kangana-website",
+    description: "A beautifully designed and responsive website featuring modern UI/UX, smooth animations, and a seamless user experience."
+  }
+];
+
 const GitHub = () => {
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const sectionRef = useRef(null);
+  const hasFetchedRef = useRef(false);
 
-  // List of specific repositories to showcase with optional custom descriptions
-  const REPOS = [
-    {
-      path: "moluom54321/kangana-website",
-      description: "A beautifully designed and responsive website featuring modern UI/UX, smooth animations, and a seamless user experience."
-    }
-  ];
-
+  // Defer GitHub API fetch until the user scrolls within 300px of this section
+  // Avoids unnecessary external network request and execution during initial homepage paint
   useEffect(() => {
-    const fetchRepos = async () => {
-      try {
-        const repoPromises = REPOS.map(async (item) => {
-          const res = await fetch(`https://api.github.com/repos/${item.path}`);
-          const data = await res.json();
-          // Add custom description to the data object
-          data.customDescription = item.description;
-          return data;
-        });
-        const data = await Promise.all(repoPromises);
-        // Filter out any errors or repos that weren't found
-        const validRepos = data.filter(repo => !repo.message);
-        setRepos(validRepos);
-      } catch (error) {
-        console.error("Error fetching GitHub repos:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting && !hasFetchedRef.current) {
+          hasFetchedRef.current = true;
 
-    fetchRepos();
+          const fetchRepos = async () => {
+            try {
+              const repoPromises = REPOS.map(async (item) => {
+                const res = await fetch(`https://api.github.com/repos/${item.path}`);
+                const data = await res.json();
+                data.customDescription = item.description;
+                return data;
+              });
+              const data = await Promise.all(repoPromises);
+              const validRepos = data.filter((repo) => !repo.message);
+              setRepos(validRepos);
+            } catch (error) {
+              console.error("Error fetching GitHub repos:", error);
+            } finally {
+              setLoading(false);
+            }
+          };
+
+          fetchRepos();
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "300px" }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <section className="py-24 relative z-10 bg-background/50">
+    <section ref={sectionRef} className="py-24 relative z-10 bg-background/50">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <motion.div
           variants={fadeIn("up", "tween", 0.2, 1)}

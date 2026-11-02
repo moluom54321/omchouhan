@@ -2,26 +2,39 @@ import { useEffect, useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { fadeIn } from "../utils/animations";
 
-const Counter = ({ end, duration = 2, label }) => {
+const Counter = ({ end, duration = 1.5, label }) => {
   const [count, setCount] = useState(0);
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.5 });
+  const isInView = useInView(ref, { once: true, amount: 0.3 });
 
   useEffect(() => {
-    if (isInView) {
-      let start = 0;
-      const increment = end / (duration * 60);
-      const timer = setInterval(() => {
-        start += increment;
-        if (start >= end) {
-          clearInterval(timer);
-          setCount(end);
-        } else {
-          setCount(Math.floor(start));
-        }
-      }, 1000 / 60);
-      return () => clearInterval(timer);
+    if (!isInView) return;
+
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      setCount(end);
+      return;
     }
+
+    let start = 0;
+    // Step every 40ms (~25fps) — visually indistinguishable, reduces state re-renders by 60%
+    const steps = Math.min(end, Math.round((duration * 1000) / 40));
+    const increment = end / steps;
+    const intervalTime = (duration * 1000) / steps;
+
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= end) {
+        clearInterval(timer);
+        setCount(end);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, intervalTime);
+
+    return () => clearInterval(timer);
   }, [isInView, end, duration]);
 
   return (

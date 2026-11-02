@@ -1,9 +1,12 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 
 const About = () => {
   const containerRef = useRef(null);
-  
+  const videoWrapperRef = useRef(null);
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+  const videoRef = useRef(null);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"]
@@ -12,19 +15,53 @@ const About = () => {
   const y1 = useTransform(scrollYProgress, [0, 1], ["10%", "-10%"]);
   const y2 = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
 
+  // Lazy-attach video source only when About section approaches viewport
+  // Completely eliminates 7.14 MB download on initial homepage load
+  useEffect(() => {
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReducedMotion) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setShouldLoadVideo(true);
+            if (videoRef.current) {
+              videoRef.current.play().catch(() => {});
+            }
+          } else {
+            if (videoRef.current) {
+              videoRef.current.pause();
+            }
+          }
+        });
+      },
+      { rootMargin: "250px" }
+    );
+
+    if (videoWrapperRef.current) {
+      observer.observe(videoWrapperRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section id="about" ref={containerRef} className="py-32 relative z-10 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        
+
         <div className="flex flex-col lg:flex-row items-center gap-20">
-          
+
           {/* Left Text Asymmetric */}
           <motion.div style={{ y: y1 }} className="w-full lg:w-1/2 space-y-8">
             <h2 className="text-5xl md:text-7xl font-bold text-white tracking-tighter leading-tight">
               Engineering <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary to-accent">Precision</span>
             </h2>
             <div className="w-full h-[1px] bg-gradient-to-r from-border-color to-transparent"></div>
-            
+
             <p className="text-muted-text text-xl leading-relaxed font-light">
               Hi, I'm Om Prakash Chouhan, a <strong className="text-white font-medium">Website Designer & Freelance Web Developer</strong> in Delhi, focused on building modern, fast, and conversion-friendly websites and web applications. With deep expertise in React, Next.js, and the MERN stack, I transform business concepts into high-performing digital platforms.
             </p>
@@ -44,21 +81,34 @@ const About = () => {
             </div>
           </motion.div>
 
-          {/* Right Side — Coding Video Background */}
-          <motion.div style={{ y: y2 }} className="w-full lg:w-1/2 relative h-[350px] lg:h-[600px] rounded-3xl overflow-hidden border border-white/10 group shadow-2xl">
-            
-            {/* Video — preload="none" prevents 7MB download until section is visible.
-                poster shows a static fallback frame immediately. */}
-            <video
-              src="/coding-bg.mp4"
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="none"
-              poster="/om_portrait.jpg"
-              className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-[2s] ease-out"
-            />
+          {/* Right Side — Coding Video Background with on-demand viewport loading */}
+          <motion.div
+            ref={videoWrapperRef}
+            style={{ y: y2 }}
+            className="w-full lg:w-1/2 relative h-[350px] lg:h-[600px] rounded-3xl overflow-hidden border border-white/10 group shadow-2xl bg-[#0a0f2e]"
+          >
+            {/* When not yet in viewport, show the static poster image to prevent 7.14 MB video download */}
+            {shouldLoadVideo ? (
+              <video
+                ref={videoRef}
+                src="/coding-bg.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                poster="/om_portrait.jpg"
+                className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-[2s] ease-out"
+              />
+            ) : (
+              <img
+                src="/om_portrait.jpg"
+                alt="Om Prakash Chouhan - Coding in progress"
+                width="600"
+                height="600"
+                loading="lazy"
+                className="absolute inset-0 w-full h-full object-cover scale-110 filter brightness-75"
+              />
+            )}
 
             {/* Dark overlay for readability */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10 z-10" />
@@ -79,7 +129,7 @@ const About = () => {
             <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-secondary/30 blur-[60px] rounded-full z-0 pointer-events-none" />
             <div className="absolute -top-10 -right-10 w-40 h-40 bg-primary/20 blur-[60px] rounded-full z-0 pointer-events-none" />
           </motion.div>
-          
+
         </div>
       </div>
     </section>

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { ReactLenis } from "lenis/react";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
@@ -15,6 +16,22 @@ import Background from "../components/Background";
 import SEOHead from "../components/SEOHead";
 
 const Home = () => {
+  const [enableLenis, setEnableLenis] = useState(false);
+
+  // Disable Lenis on touch/mobile devices — use hardware-accelerated native momentum scrolling
+  // Only enable on desktop with mouse pointer to avoid TBT and RAF overhead
+  useEffect(() => {
+    const isTouchOrMobile =
+      typeof window !== "undefined" &&
+      ("ontouchstart" in window ||
+        window.innerWidth < 1024 ||
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+    if (!isTouchOrMobile) {
+      setEnableLenis(true);
+    }
+  }, []);
+
   const homepageSchema = {
     "@context": "https://schema.org",
     "@graph": [
@@ -54,32 +71,42 @@ const Home = () => {
     ]
   };
 
+  const pageContent = (
+    <div className="text-white min-h-screen font-sans bg-transparent selection:bg-primary/30 selection:text-white overflow-x-hidden w-full">
+      <Background />
+      <Navbar />
+      <main className="relative z-10 w-full overflow-hidden">
+        <Hero />
+        <Services />
+        <Projects />
+        <WhyChooseMe />
+        <About />
+        <Skills />
+        <Experience />
+        <GitHub />
+        <Achievements />
+        <Contact />
+      </main>
+      <Footer />
+    </div>
+  );
+
   return (
-    <ReactLenis root options={{ lerp: 0.05, smoothWheel: true }}>
+    <>
       <SEOHead
         title="Website Designer in Delhi | Om Prakash Chouhan"
         description="I'm Om Prakash Chouhan, a freelance website designer and developer in Delhi. I create modern, responsive and SEO-friendly websites for businesses, restaurants, gyms and startups across Delhi NCR."
         canonicalPath="/"
         schema={homepageSchema}
       />
-      <div className="text-white min-h-screen font-sans bg-transparent selection:bg-primary/30 selection:text-white overflow-x-hidden w-full">
-        <Background />
-        <Navbar />
-        <main className="relative z-10 w-full overflow-hidden">
-          <Hero />
-          <Services />
-          <Projects />
-          <WhyChooseMe />
-          <About />
-          <Skills />
-          <Experience />
-          <GitHub />
-          <Achievements />
-          <Contact />
-        </main>
-        <Footer />
-      </div>
-    </ReactLenis>
+      {enableLenis ? (
+        <ReactLenis root options={{ lerp: 0.08, smoothWheel: true }}>
+          {pageContent}
+        </ReactLenis>
+      ) : (
+        pageContent
+      )}
+    </>
   );
 };
 
