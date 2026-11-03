@@ -38,7 +38,7 @@ const ServicesPage = () => {
       <SEOHead
         title="Website Development Services in Delhi | Business Websites"
         description="Professional website development services in Delhi. Custom business websites, responsive design, online ordering for restaurants, gym portals, and ongoing maintenance."
-        canonicalPath="/services"
+        canonicalPath="/services/"
         schema={schema}
       />
       <div className="text-white min-h-screen font-sans bg-transparent selection:bg-primary/30 selection:text-white overflow-x-hidden w-full">

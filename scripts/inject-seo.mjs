@@ -43,10 +43,33 @@ const ROUTES = [
   {
     outDir: "services",
     canonical: `${BASE_URL}/services/`,
-    title: "Web Design & Development Services in Delhi | Om Prakash Chouhan",
+    title: "Website Development Services in Delhi | Business Websites",
     description:
-      "Professional web design and development services in Delhi NCR. Restaurant, gym, school, e-commerce and custom business websites. Get a free quote today.",
+      "Professional website development services in Delhi. Custom business websites, responsive design, online ordering for restaurants, gym portals, and ongoing maintenance.",
     ogImage: `${BASE_URL}/og-image.png`,
+    schema: {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Service",
+          "name": "Website Development Services in Delhi | Business Websites",
+          "provider": {
+            "@type": "Person",
+            "name": "Om Prakash Chouhan",
+            "url": "https://omchouhan.vercel.app/"
+          },
+          "description": "Comprehensive website development services in Delhi including custom business websites, restaurant websites, gym portals, ecommerce, and maintenance.",
+          "areaServed": "Delhi, India & Worldwide"
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://omchouhan.vercel.app/" },
+            { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://omchouhan.vercel.app/services/" }
+          ]
+        }
+      ]
+    }
   },
   {
     outDir: "contact",
@@ -174,6 +197,15 @@ function patchCanonical(html, newCanonical) {
   );
 }
 
+/**
+ * Replace JSON-LD schema in <script id="page-structured-data">
+ */
+function patchSchema(html, newSchema) {
+  if (!newSchema) return html;
+  const re = /(<script\s+id="page-structured-data"\s+type="application\/ld\+json">)([\s\S]*?)(<\/script>)/i;
+  return html.replace(re, `$1\n    ${JSON.stringify(newSchema, null, 2)}\n    $3`);
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 const baseHtml = fs.readFileSync(path.join(DIST, "index.html"), "utf-8");
@@ -181,7 +213,7 @@ const baseHtml = fs.readFileSync(path.join(DIST, "index.html"), "utf-8");
 let errorCount = 0;
 
 for (const route of ROUTES) {
-  const { outDir, canonical, title, description, ogImage } = route;
+  const { outDir, canonical, title, description, ogImage, schema } = route;
 
   let html = baseHtml;
 
@@ -205,6 +237,11 @@ for (const route of ROUTES) {
   html = patchMeta(html, "name", "twitter:description", description);
   html = patchMeta(html, "name", "twitter:image", ogImage);
   html = patchMeta(html, "name", "twitter:url", canonical);
+
+  // Patch structured data JSON-LD if route has specific schema
+  if (schema) {
+    html = patchSchema(html, schema);
+  }
 
   // Verify canonical was actually patched (sanity check)
   if (!html.includes(`href="${canonical}"`)) {
