@@ -30,21 +30,32 @@ function App() {
       <ScrollToTop />
       <Suspense fallback={<PageFallback />}>
         <Routes>
-          {/* Main Routes */}
-          <Route path="/"          element={<Home />} />
-          <Route path="/services"  element={<ServicesPage />} />
-          <Route path="/projects"  element={<ProjectsPage />} />
-          <Route path="/about"     element={<AboutPage />} />
-          <Route path="/contact"   element={<ContactPage />} />
+          {/* Main Routes — both with and without trailing slash for React Router compatibility */}
+          <Route path="/"           element={<Home />} />
+          <Route path="/services"   element={<ServicesPage />} />
+          <Route path="/services/"  element={<ServicesPage />} />
+          <Route path="/projects"   element={<ProjectsPage />} />
+          <Route path="/projects/"  element={<ProjectsPage />} />
+          <Route path="/about"      element={<AboutPage />} />
+          <Route path="/about/"     element={<AboutPage />} />
+          <Route path="/contact"    element={<ContactPage />} />
+          <Route path="/contact/"   element={<ContactPage />} />
 
           {/* Dedicated Service Routes */}
-          <Route path="/services/web-development"                  element={<WebDevelopmentService />} />
-          <Route path="/services/restaurant-website-development"   element={<RestaurantWebService />} />
-          <Route path="/services/gym-website-development"          element={<GymWebService />} />
-          <Route path="/services/small-business-website-development" element={<SmallBusinessWebService />} />
-          <Route path="/services/ecommerce-website-development"    element={<EcommerceWebService />} />
-          <Route path="/services/school-website-development"       element={<SchoolWebService />} />
-          <Route path="/services/website-maintenance"              element={<WebsiteMaintenanceService />} />
+          <Route path="/services/web-development"                   element={<WebDevelopmentService />} />
+          <Route path="/services/web-development/"                  element={<WebDevelopmentService />} />
+          <Route path="/services/restaurant-website-development"    element={<RestaurantWebService />} />
+          <Route path="/services/restaurant-website-development/"   element={<RestaurantWebService />} />
+          <Route path="/services/gym-website-development"           element={<GymWebService />} />
+          <Route path="/services/gym-website-development/"          element={<GymWebService />} />
+          <Route path="/services/small-business-website-development"  element={<SmallBusinessWebService />} />
+          <Route path="/services/small-business-website-development/" element={<SmallBusinessWebService />} />
+          <Route path="/services/ecommerce-website-development"     element={<EcommerceWebService />} />
+          <Route path="/services/ecommerce-website-development/"    element={<EcommerceWebService />} />
+          <Route path="/services/school-website-development"        element={<SchoolWebService />} />
+          <Route path="/services/school-website-development/"       element={<SchoolWebService />} />
+          <Route path="/services/website-maintenance"               element={<WebsiteMaintenanceService />} />
+          <Route path="/services/website-maintenance/"              element={<WebsiteMaintenanceService />} />
 
           {/* 404 Fallback Route for non-existent paths */}
           <Route path="*" element={<NotFoundPage />} />

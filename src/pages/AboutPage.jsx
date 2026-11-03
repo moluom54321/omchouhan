@@ -41,7 +41,7 @@ const AboutPage = () => {
       <SEOHead
         title="About Om Prakash Chouhan | Web Developer in Delhi"
         description="Learn about Om Prakash Chouhan, a freelance website designer and web developer in Delhi NCR. I build modern, responsive, and SEO-friendly websites for businesses in Delhi, Noida, and Gurugram."
-        canonicalPath="/about"
+        canonicalPath="/about/"
         schema={schema}
       />
       <div className="text-white min-h-screen font-sans bg-transparent selection:bg-primary/30 selection:text-white overflow-x-hidden w-full">
