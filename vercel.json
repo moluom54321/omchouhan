@@ -4,18 +4,26 @@
     { "source": "/services", "destination": "/services/", "permanent": true },
     { "source": "/projects", "destination": "/projects/", "permanent": true },
     { "source": "/contact",  "destination": "/contact/",  "permanent": true },
-    { "source": "/services/web-development",                   "destination": "/services/web-development/",                   "permanent": true },
-    { "source": "/services/restaurant-website-development",    "destination": "/services/restaurant-website-development/",    "permanent": true },
-    { "source": "/services/gym-website-development",           "destination": "/services/gym-website-development/",           "permanent": true },
-    { "source": "/services/small-business-website-development","destination": "/services/small-business-website-development/","permanent": true },
-    { "source": "/services/ecommerce-website-development",     "destination": "/services/ecommerce-website-development/",     "permanent": true },
-    { "source": "/services/school-website-development",        "destination": "/services/school-website-development/",        "permanent": true },
-    { "source": "/services/website-maintenance",               "destination": "/services/website-maintenance/",               "permanent": true }
+    { "source": "/services/web-development",                    "destination": "/services/web-development/",                    "permanent": true },
+    { "source": "/services/restaurant-website-development",     "destination": "/services/restaurant-website-development/",     "permanent": true },
+    { "source": "/services/gym-website-development",            "destination": "/services/gym-website-development/",            "permanent": true },
+    { "source": "/services/small-business-website-development", "destination": "/services/small-business-website-development/", "permanent": true },
+    { "source": "/services/ecommerce-website-development",      "destination": "/services/ecommerce-website-development/",      "permanent": true },
+    { "source": "/services/school-website-development",         "destination": "/services/school-website-development/",         "permanent": true },
+    { "source": "/services/website-maintenance",                "destination": "/services/website-maintenance/",                "permanent": true }
   ],
   "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
+    { "source": "/about/",                                    "destination": "/about/index.html" },
+    { "source": "/projects/",                                 "destination": "/projects/index.html" },
+    { "source": "/services/",                                 "destination": "/services/index.html" },
+    { "source": "/contact/",                                  "destination": "/contact/index.html" },
+    { "source": "/services/web-development/",                 "destination": "/services/web-development/index.html" },
+    { "source": "/services/restaurant-website-development/",  "destination": "/services/restaurant-website-development/index.html" },
+    { "source": "/services/gym-website-development/",         "destination": "/services/gym-website-development/index.html" },
+    { "source": "/services/small-business-website-development/", "destination": "/services/small-business-website-development/index.html" },
+    { "source": "/services/ecommerce-website-development/",   "destination": "/services/ecommerce-website-development/index.html" },
+    { "source": "/services/school-website-development/",      "destination": "/services/school-website-development/index.html" },
+    { "source": "/services/website-maintenance/",             "destination": "/services/website-maintenance/index.html" },
+    { "source": "/(.*)",                                      "destination": "/index.html" }
   ]
 }

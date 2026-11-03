@@ -41,7 +41,13 @@ const SEOHead = ({
     updateMeta("name", "robots", "index, follow");
     updateMeta("name", "author", "Om Prakash Chouhan");
 
-    // 3. Canonical Link
+    // 3. Canonical Link — remove all existing canonical tags first to prevent
+    //    duplicates when navigating between pre-rendered per-route index.html
+    //    files (each bakes in its own canonical) and the React-managed one.
+    const existingCanonicals = document.querySelectorAll('link[rel="canonical"]');
+    existingCanonicals.forEach((el, i) => {
+      if (i > 0) el.remove(); // keep only the first; update it below
+    });
     let canonicalLink = document.querySelector('link[rel="canonical"]');
     if (!canonicalLink) {
       canonicalLink = document.createElement("link");
