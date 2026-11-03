@@ -69,6 +69,7 @@ const SEOHead = ({
     updateMeta("name", "twitter:title", title);
     updateMeta("name", "twitter:description", description);
     updateMeta("name", "twitter:image", ogImage);
+    updateMeta("name", "twitter:url", canonicalUrl);
 
     // 6. JSON-LD Structured Data
     let schemaScript = document.getElementById("page-structured-data");

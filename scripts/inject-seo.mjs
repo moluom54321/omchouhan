@@ -204,6 +204,7 @@ for (const route of ROUTES) {
   html = patchMeta(html, "name", "twitter:title", title);
   html = patchMeta(html, "name", "twitter:description", description);
   html = patchMeta(html, "name", "twitter:image", ogImage);
+  html = patchMeta(html, "name", "twitter:url", canonical);
 
   // Verify canonical was actually patched (sanity check)
   if (!html.includes(`href="${canonical}"`)) {
