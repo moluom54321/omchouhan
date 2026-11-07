@@ -57,6 +57,50 @@
     <!-- Botpress Webchat -->
     <script src="https://cdn.botpress.cloud/webchat/v5.0/inject.js"></script>
     <script src="https://files.bpcontent.cloud/2026/11/06/11/20261106112844-1MDXWVL1.js" defer></script>
+    <script>
+      (function() {
+        var mobileCss = '@media (max-width: 768px) {' +
+          '.bpFabWrapper { bottom: 16px !important; right: 16px !important; }' +
+          '.bpFab { width: 52px !important; height: 52px !important; }' +
+          '.bpWebchat { width: calc(100vw - 20px) !important; max-width: 380px !important; height: min(560px, calc(100dvh - 30px)) !important; max-height: calc(100dvh - 30px) !important; bottom: 12px !important; right: 10px !important; border-radius: 20px !important; box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45) !important; }' +
+          '.bpMessagePreview { width: calc(100vw - 32px) !important; max-width: 320px !important; right: 16px !important; bottom: 76px !important; }' +
+          ':where(.bpReset) { --bpFontSize-scale: 0.9 !important; }' +
+        '}';
+
+        function injectShadowStyle(rootEl) {
+          if (!rootEl || !rootEl.shadowRoot) return;
+          if (rootEl.shadowRoot.getElementById('bp-mobile-style')) return;
+          var style = document.createElement('style');
+          style.id = 'bp-mobile-style';
+          style.textContent = mobileCss;
+          rootEl.shadowRoot.appendChild(style);
+        }
+
+        function checkAndInject() {
+          ['fab-root', 'webchat-root'].forEach(function(id) {
+            injectShadowStyle(document.getElementById(id));
+          });
+          var container = document.querySelector('.bpChatContainer');
+          if (container && container.childNodes) {
+            container.childNodes.forEach(function(node) {
+              if (node && node.shadowRoot) injectShadowStyle(node);
+            });
+          }
+        }
+
+        var observer = new MutationObserver(checkAndInject);
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+
+        var interval = setInterval(checkAndInject, 250);
+        setTimeout(function() { clearInterval(interval); }, 10000);
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', checkAndInject);
+        } else {
+          checkAndInject();
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

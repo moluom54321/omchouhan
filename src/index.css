@@ -89,3 +89,11 @@ body {
 .animate-float-slow-alt {
   animation: float-slow 45s ease-in-out infinite 5s;
 }
+
+/* Botpress Webchat Mobile Size Optimization */
+@media (max-width: 768px) {
+  :root {
+    --bpFontSize-scale: 0.9;
+  }
+}
+
