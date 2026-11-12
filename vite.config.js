@@ -22,7 +22,10 @@ export default defineConfig({
           if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/') || id.includes('react-router-dom')) {
             return 'vendor-react';
           }
-          if (id.includes('gsap') || id.includes('lenis') || id.includes('typed.js') || id.includes('clsx') || id.includes('tailwind-merge')) {
+          if (id.includes('react-icons')) {
+            return 'vendor-icons';
+          }
+          if (id.includes('lenis') || id.includes('typed.js')) {
             return 'vendor-misc';
           }
         },

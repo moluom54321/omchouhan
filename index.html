@@ -54,9 +54,7 @@
     }
     </script>
 
-    <!-- Botpress Webchat -->
-    <script src="https://cdn.botpress.cloud/webchat/v5.0/inject.js"></script>
-    <script src="https://files.bpcontent.cloud/2026/11/09/14/20261109140645-5QK94I08.js" defer></script>
+    <!-- Botpress Webchat (Deferred to window load & idle to eliminate render-blocking) -->
     <script>
       (function() {
         var mobileCss = '@media (max-width: 768px) {' +
@@ -91,13 +89,31 @@
         var observer = new MutationObserver(checkAndInject);
         observer.observe(document.documentElement, { childList: true, subtree: true });
 
-        var interval = setInterval(checkAndInject, 250);
-        setTimeout(function() { clearInterval(interval); }, 10000);
+        function loadBotpress() {
+          var schedule = window.requestIdleCallback || function(cb) { setTimeout(cb, 1200); };
+          schedule(function() {
+            var s1 = document.createElement('script');
+            s1.src = "https://cdn.botpress.cloud/webchat/v5.0/inject.js";
+            s1.async = true;
+            s1.onload = function() {
+              var s2 = document.createElement('script');
+              s2.src = "https://files.bpcontent.cloud/2026/11/09/14/20261109140645-5QK94I08.js";
+              s2.async = true;
+              s2.onload = function() {
+                checkAndInject();
+                var interval = setInterval(checkAndInject, 250);
+                setTimeout(function() { clearInterval(interval); }, 15000);
+              };
+              document.body.appendChild(s2);
+            };
+            document.body.appendChild(s1);
+          });
+        }
 
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', checkAndInject);
+        if (document.readyState === 'complete') {
+          loadBotpress();
         } else {
-          checkAndInject();
+          window.addEventListener('load', loadBotpress);
         }
       })();
     </script>

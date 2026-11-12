@@ -1,19 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { ReactLenis } from "lenis/react";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
-import Services from "../components/Services";
-import Projects from "../components/Projects";
-import WhyChooseMe from "../components/WhyChooseMe";
-import About from "../components/About";
-import Skills from "../components/Skills";
-import Experience from "../components/Experience";
-import GitHub from "../components/GitHub";
-import Achievements from "../components/Achievements";
-import Contact from "../components/Contact";
-import Footer from "../components/Footer";
 import Background from "../components/Background";
 import SEOHead from "../components/SEOHead";
+
+// Below-the-fold sections are lazy-loaded to optimize initial bundle size and mobile FCP/LCP
+const Services     = lazy(() => import("../components/Services"));
+const Projects     = lazy(() => import("../components/Projects"));
+const WhyChooseMe  = lazy(() => import("../components/WhyChooseMe"));
+const About        = lazy(() => import("../components/About"));
+const Skills       = lazy(() => import("../components/Skills"));
+const Experience   = lazy(() => import("../components/Experience"));
+const GitHub       = lazy(() => import("../components/GitHub"));
+const Achievements = lazy(() => import("../components/Achievements"));
+const Contact      = lazy(() => import("../components/Contact"));
+const Footer       = lazy(() => import("../components/Footer"));
 
 const Home = () => {
   const [enableLenis, setEnableLenis] = useState(false);
@@ -77,17 +79,21 @@ const Home = () => {
       <Navbar />
       <main className="relative z-10 w-full overflow-hidden">
         <Hero />
-        <Services />
-        <Projects />
-        <WhyChooseMe />
-        <About />
-        <Skills />
-        <Experience />
-        <GitHub />
-        <Achievements />
-        <Contact />
+        <Suspense fallback={<div className="min-h-[300px]" aria-hidden="true" />}>
+          <Services />
+          <Projects />
+          <WhyChooseMe />
+          <About />
+          <Skills />
+          <Experience />
+          <GitHub />
+          <Achievements />
+          <Contact />
+        </Suspense>
       </main>
-      <Footer />
+      <Suspense fallback={null}>
+        <Footer />
+      </Suspense>
     </div>
   );
 
