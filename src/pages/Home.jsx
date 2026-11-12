@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from "react";
+import { useState, lazy, Suspense } from "react";
 import { ReactLenis } from "lenis/react";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
@@ -18,21 +18,16 @@ const Contact      = lazy(() => import("../components/Contact"));
 const Footer       = lazy(() => import("../components/Footer"));
 
 const Home = () => {
-  const [enableLenis, setEnableLenis] = useState(false);
-
-  // Disable Lenis on touch/mobile devices — use hardware-accelerated native momentum scrolling
-  // Only enable on desktop with mouse pointer to avoid TBT and RAF overhead
-  useEffect(() => {
+  // Synchronously initialize Lenis on desktop only to avoid an extra component re-render pass
+  // On mobile/touch or reduced motion, Lenis remains disabled to preserve native momentum scroll
+  const [enableLenis] = useState(() => {
+    if (typeof window === "undefined") return false;
     const isTouchOrMobile =
-      typeof window !== "undefined" &&
-      ("ontouchstart" in window ||
-        window.innerWidth < 1024 ||
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-
-    if (!isTouchOrMobile) {
-      setEnableLenis(true);
-    }
-  }, []);
+      "ontouchstart" in window ||
+      window.innerWidth < 1024 ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    return !isTouchOrMobile;
+  });
 
   const homepageSchema = {
     "@context": "https://schema.org",

@@ -90,30 +90,68 @@
         observer.observe(document.documentElement, { childList: true, subtree: true });
 
         function loadBotpress() {
-          var schedule = window.requestIdleCallback || function(cb) { setTimeout(cb, 1200); };
-          schedule(function() {
-            var s1 = document.createElement('script');
-            s1.src = "https://cdn.botpress.cloud/webchat/v5.0/inject.js";
-            s1.async = true;
-            s1.onload = function() {
-              var s2 = document.createElement('script');
-              s2.src = "https://files.bpcontent.cloud/2026/11/09/14/20261109140645-5QK94I08.js";
-              s2.async = true;
-              s2.onload = function() {
-                checkAndInject();
-                var interval = setInterval(checkAndInject, 250);
-                setTimeout(function() { clearInterval(interval); }, 15000);
-              };
-              document.body.appendChild(s2);
+          var s1 = document.createElement('script');
+          s1.src = "https://cdn.botpress.cloud/webchat/v5.0/inject.js";
+          s1.async = true;
+          s1.onerror = function() {
+            // Fail gracefully if CDN is blocked or unreachable
+            console.warn("Botpress webchat inject failed to load.");
+          };
+          s1.onload = function() {
+            var s2 = document.createElement('script');
+            s2.src = "https://files.bpcontent.cloud/2026/11/09/14/20261109140645-5QK94I08.js";
+            s2.async = true;
+            s2.onerror = function() {
+              console.warn("Botpress config failed to load.");
             };
-            document.body.appendChild(s1);
-          });
+            s2.onload = function() {
+              checkAndInject();
+              // Adaptive interval: stops as soon as both roots are styled, max 6 attempts (3s)
+              var attempts = 0;
+              var interval = setInterval(function() {
+                checkAndInject();
+                attempts++;
+                var fabRoot = document.getElementById('fab-root');
+                var chatRoot = document.getElementById('webchat-root');
+                var fabDone = fabRoot && fabRoot.shadowRoot && fabRoot.shadowRoot.getElementById('bp-mobile-style');
+                var chatDone = chatRoot && chatRoot.shadowRoot && chatRoot.shadowRoot.getElementById('bp-mobile-style');
+                if ((fabDone && chatDone) || attempts >= 6) {
+                  clearInterval(interval);
+                }
+              }, 500);
+            };
+            document.body.appendChild(s2);
+          };
+          document.body.appendChild(s1);
         }
 
-        if (document.readyState === 'complete') {
+        var botpressTriggered = false;
+        function triggerBotpress() {
+          if (botpressTriggered) return;
+          botpressTriggered = true;
+          cleanup();
           loadBotpress();
+        }
+
+        function cleanup() {
+          window.removeEventListener('scroll', triggerBotpress);
+          window.removeEventListener('mousemove', triggerBotpress);
+          window.removeEventListener('touchstart', triggerBotpress);
+          window.removeEventListener('keydown', triggerBotpress);
+        }
+
+        window.addEventListener('scroll', triggerBotpress, { once: true, passive: true });
+        window.addEventListener('mousemove', triggerBotpress, { once: true, passive: true });
+        window.addEventListener('touchstart', triggerBotpress, { once: true, passive: true });
+        window.addEventListener('keydown', triggerBotpress, { once: true, passive: true });
+
+        // Idle fallback if user sits without interaction
+        if ('requestIdleCallback' in window) {
+          window.requestIdleCallback(function() {
+            setTimeout(triggerBotpress, 3000);
+          }, { timeout: 5000 });
         } else {
-          window.addEventListener('load', loadBotpress);
+          setTimeout(triggerBotpress, 4500);
         }
       })();
     </script>

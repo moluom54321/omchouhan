@@ -37,7 +37,7 @@ const Hero = () => {
     return () => typed.destroy();
   }, []);
 
-  // Defer 3D Scene loading: desktop-only and strictly on idle
+  // Defer 3D Scene loading: desktop-only, on user interaction with idle fallback
   useEffect(() => {
     const isDesktop =
       typeof window !== "undefined" &&
@@ -47,12 +47,43 @@ const Hero = () => {
 
     if (!isDesktop) return;
 
+    let hasLoaded = false;
+    const triggerScene = () => {
+      if (hasLoaded) return;
+      hasLoaded = true;
+      cleanup();
+      setLoadScene(true);
+    };
+
+    const cleanup = () => {
+      window.removeEventListener("mousemove", triggerScene);
+      window.removeEventListener("scroll", triggerScene);
+      window.removeEventListener("keydown", triggerScene);
+      window.removeEventListener("wheel", triggerScene);
+      window.removeEventListener("touchstart", triggerScene);
+    };
+
+    // User interaction triggers (keyboard, mouse, trackpad, touch)
+    window.addEventListener("mousemove", triggerScene, { once: true, passive: true });
+    window.addEventListener("scroll", triggerScene, { once: true, passive: true });
+    window.addEventListener("keydown", triggerScene, { once: true, passive: true });
+    window.addEventListener("wheel", triggerScene, { once: true, passive: true });
+    window.addEventListener("touchstart", triggerScene, { once: true, passive: true });
+
+    // Idle fallback if user sits without interaction
+    let timer;
     if ("requestIdleCallback" in window) {
-      const handle = window.requestIdleCallback(() => setLoadScene(true), { timeout: 4000 });
-      return () => window.cancelIdleCallback(handle);
+      const handle = window.requestIdleCallback(() => triggerScene(), { timeout: 6000 });
+      return () => {
+        cleanup();
+        window.cancelIdleCallback(handle);
+      };
     } else {
-      const timer = setTimeout(() => setLoadScene(true), 3500);
-      return () => clearTimeout(timer);
+      timer = setTimeout(triggerScene, 5000);
+      return () => {
+        cleanup();
+        clearTimeout(timer);
+      };
     }
   }, []);
 

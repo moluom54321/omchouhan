@@ -39,7 +39,7 @@ const Background = () => {
       {/* 2. Glowing Aurora Blobs — optimized blur radius on mobile for GPU efficiency */}
       <motion.div
         style={{ x, y }}
-        className="absolute inset-0 w-full h-full z-0"
+        className="absolute inset-0 w-full h-full z-0 transform-gpu pointer-events-none"
       >
         {/* Top Right - Cyan blob */}
         <div className="absolute top-[-10%] right-[-10%] w-[55vw] h-[55vw] rounded-full bg-[#00E5FF] filter blur-[60px] md:blur-[100px] opacity-[0.20] animate-float-slow mix-blend-screen"></div>
