@@ -36,7 +36,7 @@ const RestaurantWebService = () => {
     <ServicePageLayout
       seoTitle="Restaurant Website Development in Delhi"
       seoDescription="Restaurant website development in Delhi. Interactive digital menus, direct WhatsApp food ordering, table reservation forms, and Google Maps integration for dining brands."
-      canonicalPath="/services/restaurant-website-development"
+      canonicalPath="/services/restaurant-website-development/"
       serviceName="Restaurant Website Development"
       heroBadge="Hospitality & Food Brands"
       heroHeading="Restaurant Website Design and Development"

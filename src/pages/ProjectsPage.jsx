@@ -56,7 +56,7 @@ const ProjectsPage = () => {
       <SEOHead
         title="Web Development Portfolio | Website Projects"
         description="Explore web development projects and case studies built with React, Next.js, TypeScript, and modern web tools. Real business platforms and technical concept demos."
-        canonicalPath="/projects"
+        canonicalPath="/projects/"
         schema={schema}
       />
       <div className="text-white min-h-screen font-sans bg-transparent selection:bg-primary/30 selection:text-white overflow-x-hidden w-full">
