@@ -86,16 +86,19 @@
           }
         }
 
-        var observer = new MutationObserver(checkAndInject);
-        observer.observe(document.documentElement, { childList: true, subtree: true });
-
         function loadBotpress() {
+          // P3-B: MutationObserver starts INSIDE loadBotpress — not at page load.
+          // This avoids observing every React hydration DOM mutation before chatbot exists.
+          var observer = new MutationObserver(checkAndInject);
+          observer.observe(document.documentElement, { childList: true, subtree: true });
+
           var s1 = document.createElement('script');
           s1.src = "https://cdn.botpress.cloud/webchat/v5.0/inject.js";
           s1.async = true;
           s1.onerror = function() {
             // Fail gracefully if CDN is blocked or unreachable
             console.warn("Botpress webchat inject failed to load.");
+            observer.disconnect();
           };
           s1.onload = function() {
             var s2 = document.createElement('script');
@@ -103,6 +106,7 @@
             s2.async = true;
             s2.onerror = function() {
               console.warn("Botpress config failed to load.");
+              observer.disconnect();
             };
             s2.onload = function() {
               checkAndInject();
@@ -117,6 +121,7 @@
                 var chatDone = chatRoot && chatRoot.shadowRoot && chatRoot.shadowRoot.getElementById('bp-mobile-style');
                 if ((fabDone && chatDone) || attempts >= 6) {
                   clearInterval(interval);
+                  observer.disconnect();
                 }
               }, 500);
             };
@@ -125,34 +130,18 @@
           document.body.appendChild(s1);
         }
 
-        var botpressTriggered = false;
-        function triggerBotpress() {
-          if (botpressTriggered) return;
-          botpressTriggered = true;
-          cleanup();
-          loadBotpress();
-        }
-
-        function cleanup() {
-          window.removeEventListener('scroll', triggerBotpress);
-          window.removeEventListener('mousemove', triggerBotpress);
-          window.removeEventListener('touchstart', triggerBotpress);
-          window.removeEventListener('keydown', triggerBotpress);
-        }
-
-        window.addEventListener('scroll', triggerBotpress, { once: true, passive: true });
-        window.addEventListener('mousemove', triggerBotpress, { once: true, passive: true });
-        window.addEventListener('touchstart', triggerBotpress, { once: true, passive: true });
-        window.addEventListener('keydown', triggerBotpress, { once: true, passive: true });
-
-        // Idle fallback if user sits without interaction
-        if ('requestIdleCallback' in window) {
-          window.requestIdleCallback(function() {
-            setTimeout(triggerBotpress, 3000);
-          }, { timeout: 5000 });
-        } else {
-          setTimeout(triggerBotpress, 4500);
-        }
+        // P3-B: Use window.load + requestIdleCallback only.
+        // Removes scroll/mousemove/touchstart/keydown interaction listeners.
+        // Lighthouse desktop fires those events synthetically at ~600ms, which caused
+        // Botpress to load during the TBT measurement window and worsen TBT.
+        // window.load fires after the page is fully painted — Lighthouse cannot advance this.
+        window.addEventListener('load', function() {
+          if ('requestIdleCallback' in window) {
+            requestIdleCallback(loadBotpress, { timeout: 8000 });
+          } else {
+            setTimeout(loadBotpress, 7000);
+          }
+        });
       })();
     </script>
   </head>

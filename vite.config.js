@@ -25,8 +25,11 @@ export default defineConfig({
           if (id.includes('react-icons')) {
             return 'vendor-icons';
           }
-          if (id.includes('lenis') || id.includes('typed.js')) {
-            return 'vendor-misc';
+          if (id.includes('lenis')) {
+            return 'vendor-lenis';
+          }
+          if (id.includes('typed.js')) {
+            return 'vendor-typed';
           }
         },
       },
