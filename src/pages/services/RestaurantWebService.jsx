@@ -1,7 +1,9 @@
-﻿import ServicePageLayout from "../../components/ServicePageLayout";
+import ServicePageLayout from "../../components/ServicePageLayout";
 import { projects } from "../../constants";
+import { getSeoRoute } from "../../constants/seo";
 
 const RestaurantWebService = () => {
+  const pageSeo = getSeoRoute("services/restaurant-website-development");
   const relevantProjects = projects.filter(
     (p) => p.id === "kenangan-coffee"
   );
@@ -11,15 +13,12 @@ const RestaurantWebService = () => {
     "@graph": [
       {
         "@type": "Service",
+                "@id": "https://omchouhan.vercel.app/services/restaurant-website-development/#service",
         "name": "Restaurant Website Development in Delhi",
         "serviceType": "Restaurant Website Design and Development",
-        "provider": {
-          "@type": "Person",
-          "name": "Om Prakash Chouhan",
-          "url": "https://omchouhan.vercel.app/"
-        },
+        "provider": { "@id": "https://omchouhan.vercel.app/#person" },
         "description": "Professional restaurant website design and development services in Delhi. Featuring interactive digital menus, WhatsApp food ordering, Google Maps, and table reservations.",
-        "areaServed": "Delhi NCR (Delhi, Noida, Gurugram), India & Worldwide"
+        "areaServed": "Delhi NCR, India"
       },
       {
         "@type": "BreadcrumbList",
@@ -34,14 +33,16 @@ const RestaurantWebService = () => {
 
   return (
     <ServicePageLayout
-      seoTitle="Restaurant Website Development in Delhi"
-      seoDescription="Restaurant website development in Delhi. Interactive digital menus, direct WhatsApp food ordering, table reservation forms, and Google Maps integration for dining brands."
-      canonicalPath="/services/restaurant-website-development/"
+      seoTitle={pageSeo.title}
+      seoDescription={pageSeo.description}
+      canonicalPath={pageSeo.canonicalPath}
       serviceName="Restaurant Website Development"
       heroBadge="Hospitality & Food Brands"
       heroHeading="Restaurant Website Design and Development"
       heroSubheading="Captivating, mouth-watering websites designed for restaurants, cafes, cloud kitchens, and dining brands to showcase signature menus, drive table reservations, and capture direct customer inquiries."
       targetAudienceText="Fine Dining Restaurants, Cafes, Bakeries, Cloud Kitchens, Bistros, Lounge Bars"
+      
+      serviceOverview="For a restaurant or cafe in Delhi NCR, the website should help guests quickly find the menu, location, opening hours and contact options. The page structure can bring menus, food photography, branch details, map links, reservation requests and WhatsApp contact together in a mobile-friendly experience."
       problems={[
         "Menus uploaded as unreadable PDF files or blurry photo images that frustrate smartphone users.",
         "High commission fees from 3rd-party delivery aggregators eating away your profits.",
@@ -54,7 +55,7 @@ const RestaurantWebService = () => {
         "Direct WhatsApp ordering integration allowing customers to order directly with 0% third-party commission.",
         "Embedded interactive Google Maps with one-tap navigation directions and clear opening hours.",
         "Appetizing visual gallery showcasing signature dishes, chef specials, and dining ambiance.",
-        "Frictionless table reservation forms sending instant notifications to your restaurant management."
+        "Table reservation enquiry forms that can notify the configured restaurant contact."
       ]}
       keyFeatures={[
         {
@@ -94,7 +95,7 @@ const RestaurantWebService = () => {
         },
         {
           question: "Will the menu look good on mobile phones?",
-          answer: "Absolutely. More than 80% of restaurant customers look up menus on their phones while on the go. The menu is engineered for instant scrolling, clear typography, and zero pinching or zooming required."
+          answer: "Yes. The menu can use a responsive layout with readable text, clear categories and tap-friendly navigation so guests can browse it on a phone without needing to zoom."
         },
         {
           question: "Can you include our Zomato, Swiggy, and Instagram links?",

@@ -1,7 +1,9 @@
-﻿import ServicePageLayout from "../../components/ServicePageLayout";
+import ServicePageLayout from "../../components/ServicePageLayout";
 import { projects } from "../../constants";
+import { getSeoRoute } from "../../constants/seo";
 
 const SmallBusinessWebService = () => {
+  const pageSeo = getSeoRoute("services/small-business-website-development");
   const relevantProjects = projects.filter(
     (p) => p.id === "fameflex" || p.id === "porter-clone"
   );
@@ -11,15 +13,12 @@ const SmallBusinessWebService = () => {
     "@graph": [
       {
         "@type": "Service",
+                "@id": "https://omchouhan.vercel.app/services/small-business-website-development/#service",
         "name": "Small Business Website Development",
         "serviceType": "Small Business Website Development",
-        "provider": {
-          "@type": "Person",
-          "name": "Om Prakash Chouhan",
-          "url": "https://omchouhan.vercel.app/"
-        },
+        "provider": { "@id": "https://omchouhan.vercel.app/#person" },
         "description": "Professional small business website development in Delhi. Turn local searchers into clients with fast, clean, and conversion-focused business websites.",
-        "areaServed": "Delhi NCR (Delhi, Noida, Gurugram), India & Worldwide"
+        "areaServed": "Delhi NCR, India"
       },
       {
         "@type": "BreadcrumbList",
@@ -34,14 +33,16 @@ const SmallBusinessWebService = () => {
 
   return (
     <ServicePageLayout
-      seoTitle="Small Business Website Development | Business Websites"
-      seoDescription="Professional small business website development services in Delhi. Build customer trust, showcase services clearly, and turn searchers into paying clients."
-      canonicalPath="/services/small-business-website-development"
+      seoTitle={pageSeo.title}
+      seoDescription={pageSeo.description}
+      canonicalPath={pageSeo.canonicalPath}
       serviceName="Small Business Website Development"
       heroBadge="Local & Service Businesses"
       heroHeading="Website Development for Small Businesses"
       heroSubheading="Establish immediate digital authority, build consumer trust, and turn everyday local web searches into loyal, paying clients with a custom-engineered business website."
       targetAudienceText="Local Service Providers, Consultants, Legal & Financial Advisors, Medical Clinics, Real Estate Agents, B2B Companies"
+      
+      serviceOverview="For a local business in Delhi NCR, the website should make its offering, service area and next step clear. We can organise individual service pages, work examples, customer questions, contact details and enquiry forms around the decisions a prospective customer needs to make."
       problems={[
         "Relying solely on social media pages where competitors distract your audience and algorithms limit reach.",
         "Outdated websites that give potential clients a negative first impression of your business credibility.",
@@ -50,11 +51,11 @@ const SmallBusinessWebService = () => {
         "High ongoing maintenance fees from generic agencies with slow turnaround on simple updates."
       ]}
       solutions={[
-        "A dedicated digital asset owned 100% by you, engineered to convert visitors into direct phone and email inquiries.",
+        "A business website that you can manage as your own digital channel, with clear paths for visitors to call, email or send an enquiry.",
         "Polished, modern UI/UX that positions your small business as an established, trustworthy market leader.",
         "Local SEO foundation, fast page load speeds, and structured schema to maximize regional search discovery.",
-        "Crystal-clear service breakdowns, FAQs, client guarantees, and transparent process walkthroughs.",
-        "Direct communication with a single developer with zero hidden agency markups or slow support queues."
+        "Clear service breakdowns, useful FAQs, project scope and a transparent explanation of the working process.",
+        "Direct communication with a single developer with direct communication and a clearly agreed project scope."
       ]}
       keyFeatures={[
         {
@@ -78,7 +79,7 @@ const SmallBusinessWebService = () => {
           description: "On-page metadata, local schema markup, and Google Business Profile integration for maximum local search visibility."
         },
         {
-          title: "Zero Monthly Template Bloat",
+          title: "Lean Custom Website Architecture",
           description: "Clean custom code running on high-speed global cloud hosting with no expensive recurring plugin subscriptions."
         }
       ]}
@@ -86,11 +87,11 @@ const SmallBusinessWebService = () => {
       faqs={[
         {
           question: "Why does my small business need a custom website instead of just an Instagram or Facebook page?",
-          answer: "Social media platforms don't rank for commercial Google search intent (like 'commercial web developer in Delhi' or 'legal advisor near me'). A dedicated website provides full ownership, ranks on Google, displays your comprehensive service portfolio, and builds significantly greater corporate trust."
+          answer: "Social media profiles can help people discover a business, but they do not replace the structure and control of a dedicated website. A website gives you space to explain services, publish useful information, show work examples and provide clear contact options. Search visibility depends on relevance, content quality, competition and technical accessibility; rankings are not guaranteed."
         },
         {
           question: "How much does a small business website cost?",
-          answer: "Pricing is transparent and customized based on the number of pages, custom features, and timeline. I provide fixed-price quotes with zero surprise fees."
+          answer: "Pricing depends on the number of pages, required features and timeline. I outline the agreed scope and provide a project quote before development begins."
         },
         {
           question: "Will you help me connect my domain name (.com / .in)?",

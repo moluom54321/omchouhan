@@ -6,6 +6,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Background from "../components/Background";
 import SEOHead from "../components/SEOHead";
+import { getSeoRoute } from "../constants/seo";
 import { services } from "../constants";
 import { FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
 
@@ -33,6 +34,7 @@ ${formData.message}
 };
 
 const ContactPage = () => {
+  const pageSeo = getSeoRoute("contact");
   const formRef = useRef();
   const [form, setForm] = useState({
     name: "",
@@ -124,8 +126,9 @@ const ContactPage = () => {
     "@graph": [
       {
         "@type": "ContactPage",
-        "name": "Get a Website Development Quote | Contact",
-        "description": "Contact Om Prakash Chouhan for a free web development consultation, project estimate, and custom website quote.",
+        "@id": "https://omchouhan.vercel.app/contact/#webpage",
+        "name": "Contact Om Prakash Chouhan | Website Development in Delhi",
+        "description": "Discuss a website or web application project with Om Prakash Chouhan, a freelance website designer and developer based in Delhi, India.",
         "url": "https://omchouhan.vercel.app/contact/"
       },
       {
@@ -140,12 +143,7 @@ const ContactPage = () => {
 
   return (
     <ReactLenis root options={{ lerp: 0.05, smoothWheel: true }}>
-      <SEOHead
-        title="Get a Website Development Quote | Contact"
-        description="Get a free website development quote for your project. Contact freelance web developer Om Prakash Chouhan in Delhi for custom, restaurant, gym, or business websites."
-        canonicalPath="/contact"
-        schema={schema}
-      />
+      <SEOHead {...pageSeo} schema={schema} />
       <div className="text-white min-h-screen font-sans bg-transparent selection:bg-primary/30 selection:text-white overflow-x-hidden w-full">
         <Background />
         <Navbar />
@@ -177,7 +175,7 @@ const ContactPage = () => {
                 </h1>
 
                 <p className="text-muted-text text-base md:text-lg leading-relaxed font-light">
-                  Whether you need a brand-new website, an interactive digital menu, or performance maintenance on an existing site, fill out the form or reach out directly on WhatsApp for an instant response.
+                  Whether you need a brand-new website, an interactive digital menu, or performance maintenance on an existing site, fill out the form or reach out directly on WhatsApp to discuss the project and next steps.
                 </p>
 
                 {/* Direct Contact Methods */}
@@ -215,7 +213,7 @@ const ContactPage = () => {
                     </div>
                     <div>
                       <h4 className="text-white text-sm font-bold">Location & Availability</h4>
-                      <p className="text-xs text-muted-text">Delhi, India (Serving Clients Worldwide)</p>
+                      <p className="text-xs text-muted-text">Delhi, India (Delhi NCR and remote projects by arrangement)</p>
                     </div>
                   </div>
                 </div>

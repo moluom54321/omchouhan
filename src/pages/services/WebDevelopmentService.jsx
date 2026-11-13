@@ -1,7 +1,9 @@
-﻿import ServicePageLayout from "../../components/ServicePageLayout";
+import ServicePageLayout from "../../components/ServicePageLayout";
 import { projects } from "../../constants";
+import { getSeoRoute } from "../../constants/seo";
 
 const WebDevelopmentService = () => {
+  const pageSeo = getSeoRoute("services/web-development");
   const relevantProjects = projects.filter(
     (p) => p.id === "solis-estate" || p.id === "porter-clone" || p.id === "fameflex"
   );
@@ -11,15 +13,12 @@ const WebDevelopmentService = () => {
     "@graph": [
       {
         "@type": "Service",
+                "@id": "https://omchouhan.vercel.app/services/web-development/#service",
         "name": "Custom Web Development Services",
         "serviceType": "Custom Web Development Services",
-        "provider": {
-          "@type": "Person",
-          "name": "Om Prakash Chouhan",
-          "url": "https://omchouhan.vercel.app/"
-        },
+        "provider": { "@id": "https://omchouhan.vercel.app/#person" },
         "description": "Custom web development services for businesses. Fast, responsive, and scalable websites and web applications built with modern React and clean architecture.",
-        "areaServed": "Delhi NCR (Delhi, Noida, Gurugram), India & Worldwide"
+        "areaServed": "Delhi NCR, India"
       },
       {
         "@type": "BreadcrumbList",
@@ -34,14 +33,16 @@ const WebDevelopmentService = () => {
 
   return (
     <ServicePageLayout
-      seoTitle="Custom Web Development Services | Business Websites"
-      seoDescription="Custom web development services for businesses. Fast, responsive, and scalable websites and web applications built from scratch with clean React and modern architecture."
-      canonicalPath="/services/web-development"
+      seoTitle={pageSeo.title}
+      seoDescription={pageSeo.description}
+      canonicalPath={pageSeo.canonicalPath}
       serviceName="Web Development"
       heroBadge="Core Engineering Service"
       heroHeading="Custom Web Development for Your Business"
       heroSubheading="Custom-engineered websites and scalable web applications built from scratch to match your specific business requirements, workflows, and growth targets."
       targetAudienceText="Startups, Established Businesses, Tech Founders, Digital Agencies"
+      
+      serviceOverview="A web development project for a Delhi NCR business should start with the task the website or application needs to perform. I work with you to define key user journeys, page structure, integrations and content before choosing the frontend and backend approach. The scope can range from a focused marketing website to a data-driven application with accounts, dashboards or custom workflows."
       problems={[
         "Slow, bloated website templates that take 5+ seconds to load and lose potential customers.",
         "Generic designs that look identical to competitors and fail to build brand authority.",
@@ -59,7 +60,7 @@ const WebDevelopmentService = () => {
       keyFeatures={[
         {
           title: "Custom React & Modern Web Architecture",
-          description: "High-performance frontend architecture utilizing React 19, Vite, and modern JavaScript for instant client interactions."
+          description: "Modern frontend architecture using React, Vite and JavaScript for responsive client-side interactions."
         },
         {
           title: "Mobile-First Responsive Engineering",
@@ -86,7 +87,7 @@ const WebDevelopmentService = () => {
       faqs={[
         {
           question: "Do you use WordPress or custom code?",
-          answer: "I specialize in custom code using React, Next.js, Tailwind CSS, and Node.js. Custom-coded websites are significantly faster, more secure, and offer complete design freedom without being constrained by heavy WordPress plugins or vulnerabilities."
+          answer: "I specialize in custom code using React, Next.js, Tailwind CSS, and Node.js. Custom-coded websites offer control over the interface and codebase. Performance and security still depend on implementation, hosting, updates and ongoing maintenance; the right platform depends on your project requirements."
         },
         {
           question: "How long does it take to develop a custom website?",
@@ -94,7 +95,7 @@ const WebDevelopmentService = () => {
         },
         {
           question: "Will my website be mobile-friendly and fast?",
-          answer: "Yes, 100%. Every website is developed with a mobile-first philosophy, optimized image assets, and clean code to ensure top scores on Google PageSpeed Insights and smooth performance on all devices."
+          answer: "Every website is developed with a mobile-first philosophy, optimized image assets, and clean code to check responsive behaviour and review performance using tools such as Google PageSpeed Insights. Actual scores depend on page content, hosting, devices and third-party services."
         },
         {
           question: "Do you provide post-launch support and revisions?",

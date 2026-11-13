@@ -14,6 +14,7 @@ const SEOHead = ({
   canonicalPath = "",
   ogType = "website",
   ogImage = DEFAULT_IMAGE,
+  robots = "index, follow, max-image-preview:large",
   schema = null,
 }) => {
   const location = useLocation();
@@ -21,7 +22,8 @@ const SEOHead = ({
   const canonicalUrl = `${BASE_URL}${currentPath === "/" ? "" : currentPath.replace(/\/$/, "")}/`;
 
   useEffect(() => {
-    // 1. Update Title
+    // 1. Update document language and title
+    document.documentElement.lang = "en-IN";
     document.title = title;
 
     // Helper to update or create meta tags
@@ -38,7 +40,7 @@ const SEOHead = ({
 
     // 2. Primary Meta Tags
     updateMeta("name", "description", description);
-    updateMeta("name", "robots", "index, follow");
+    updateMeta("name", "robots", robots);
     updateMeta("name", "author", "Om Prakash Chouhan");
 
     // 3. Canonical Link — remove all existing canonical tags first to prevent
@@ -62,7 +64,9 @@ const SEOHead = ({
     updateMeta("property", "og:url", canonicalUrl);
     updateMeta("property", "og:type", ogType);
     updateMeta("property", "og:image", ogImage);
-    updateMeta("property", "og:site_name", "Website Designer in Delhi | Om Prakash Chouhan");
+    updateMeta("property", "og:site_name", "Om Prakash Chouhan");
+    updateMeta("property", "og:locale", "en_IN");
+    updateMeta("property", "og:image:alt", "Om Prakash Chouhan - Website Designer and Web Developer");
 
     // 5. Twitter Card Meta Tags
     updateMeta("name", "twitter:card", "summary_large_image");
@@ -80,51 +84,56 @@ const SEOHead = ({
       document.head.appendChild(schemaScript);
     }
 
-    const defaultSchema = {
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "Person",
-          "@id": `${BASE_URL}/#person`,
-          "name": "Om Prakash Chouhan",
-          "url": BASE_URL,
-          "jobTitle": "Website Designer & Full Stack Web Developer",
-          "description": "Website designer and freelance web developer in Delhi building custom, responsive, and SEO-friendly websites for businesses in Delhi NCR.",
-          "sameAs": ["https://github.com/moluom54321"],
-          "knowsAbout": [
-            "Website Design",
-            "Web Development",
-            "Frontend Development",
-            "Full Stack Web Development",
-            "MERN Stack",
-            "React.js",
-            "Next.js",
-            "Node.js",
-            "Express.js",
-            "MongoDB",
-            "Tailwind CSS",
-            "JavaScript",
-            "TypeScript"
-          ]
-        },
-        {
-          "@type": "WebSite",
-          "@id": `${BASE_URL}/#website`,
-          "url": BASE_URL,
-          "name": "Website Designer in Delhi | Om Prakash Chouhan",
-          "publisher": {
-            "@id": `${BASE_URL}/#person`
-          }
-        }
-      ]
-    };
+    const personId = `${BASE_URL}/#person`;
+    const websiteId = `${BASE_URL}/#website`;
+    const commonGraph = [
+      {
+        "@type": "Person",
+        "@id": personId,
+        name: "Om Prakash Chouhan",
+        url: `${BASE_URL}/`,
+        jobTitle: "Website Designer and Web Developer",
+        description: "Freelance website designer and web developer based in Delhi, India.",
+        sameAs: ["https://github.com/moluom54321"],
+        knowsAbout: [
+          "Website Design", "Web Development", "Frontend Development",
+          "Full Stack Web Development", "React", "Next.js", "Node.js",
+          "Express.js", "MongoDB", "Tailwind CSS", "Technical SEO"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": websiteId,
+        url: `${BASE_URL}/`,
+        name: "Om Prakash Chouhan - Website Designer and Web Developer",
+        publisher: { "@id": personId },
+        inLanguage: "en-IN"
+      },
+      {
+        "@type": "WebPage",
+        "@id": `${canonicalUrl}#webpage`,
+        url: canonicalUrl,
+        name: title,
+        description,
+        isPartOf: { "@id": websiteId },
+        about: { "@id": personId },
+        inLanguage: "en-IN"
+      }
+    ];
 
-    if (schema) {
-      schemaScript.textContent = JSON.stringify(schema);
-    } else {
-      schemaScript.textContent = JSON.stringify(defaultSchema);
-    }
-  }, [title, description, canonicalUrl, ogType, ogImage, schema]);
+    const suppliedGraph = schema
+      ? (Array.isArray(schema["@graph"]) ? schema["@graph"] : [schema])
+      : [];
+    const suppliedIds = new Set(suppliedGraph.map((item) => item && item["@id"]).filter(Boolean));
+    const mergedGraph = [
+      ...commonGraph.filter((item) => !suppliedIds.has(item["@id"])),
+      ...suppliedGraph
+    ];
+    schemaScript.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": mergedGraph
+    });
+  }, [title, description, canonicalUrl, ogType, ogImage, robots, schema]);
 
   return null;
 };

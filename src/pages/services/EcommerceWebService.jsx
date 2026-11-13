@@ -1,7 +1,9 @@
-﻿import ServicePageLayout from "../../components/ServicePageLayout";
+import ServicePageLayout from "../../components/ServicePageLayout";
 import { projects } from "../../constants";
+import { getSeoRoute } from "../../constants/seo";
 
 const EcommerceWebService = () => {
+  const pageSeo = getSeoRoute("services/ecommerce-website-development");
   const relevantProjects = projects.filter(
     (p) => p.id === "kenangan-coffee" || p.id === "fameflex"
   );
@@ -11,15 +13,12 @@ const EcommerceWebService = () => {
     "@graph": [
       {
         "@type": "Service",
+                "@id": "https://omchouhan.vercel.app/services/ecommerce-website-development/#service",
         "name": "Ecommerce Website Development",
         "serviceType": "Ecommerce Website Development & Online Stores",
-        "provider": {
-          "@type": "Person",
-          "name": "Om Prakash Chouhan",
-          "url": "https://omchouhan.vercel.app/"
-        },
+        "provider": { "@id": "https://omchouhan.vercel.app/#person" },
         "description": "Custom ecommerce website development services. Fast-loading online stores, clean product catalogs, WhatsApp ordering, and mobile-first checkout flows.",
-        "areaServed": "Delhi NCR (Delhi, Noida, Gurugram), India & Worldwide"
+        "areaServed": "Delhi NCR, India"
       },
       {
         "@type": "BreadcrumbList",
@@ -34,14 +33,16 @@ const EcommerceWebService = () => {
 
   return (
     <ServicePageLayout
-      seoTitle="Ecommerce Website Development | Online Store Development"
-      seoDescription="Custom ecommerce website development services. Fast-loading online stores, clean product catalogs, shopping carts, WhatsApp ordering, and mobile-first checkout flows."
-      canonicalPath="/services/ecommerce-website-development"
+      seoTitle={pageSeo.title}
+      seoDescription={pageSeo.description}
+      canonicalPath={pageSeo.canonicalPath}
       serviceName="Ecommerce Website Development"
       heroBadge="Online Retail & Direct-to-Consumer"
       heroHeading="Ecommerce Website Development for Your Online Store"
-      heroSubheading="Fast, secure, and conversion-optimized online stores designed to showcase your products beautifully, eliminate cart abandonment, and drive repeat customer purchases."
+      heroSubheading="Mobile-friendly online stores planned around your catalogue, product details, cart flow and customer support needs. The final scope is shaped by your products, fulfilment process and chosen payment setup."
       targetAudienceText="Direct-to-Consumer (D2C) Brands, Boutique Retailers, Specialty Product Creators, Wholesalers"
+      
+      serviceOverview="For a brand or retailer in Delhi NCR, an online store needs more than a product grid. The project scope should account for product categories, variants, product information, cart behaviour, delivery and return information, and the payment or assisted-order flow that fits the business. These details are planned before implementation so shoppers understand each step."
       problems={[
         "Slow-loading e-commerce templates that cause frustrated mobile shoppers to bounce before checkout.",
         "Complicated, multi-step checkout processes that lead to high cart abandonment rates.",
@@ -50,7 +51,7 @@ const EcommerceWebService = () => {
         "Lack of direct customer communication options like WhatsApp order confirmation and inquiries."
       ]}
       solutions={[
-        "Blazing-fast product catalogs powered by modern React architecture with zero lag filtering.",
+        "Responsive product catalogues with clear categories, filters and product information, with performance considered during implementation.",
         "Frictionless, one-page checkout and direct WhatsApp ordering options tailored for Indian and global buyers.",
         "High-end custom visual design with product feature breakdowns, customer reviews, and high-res imagery.",
         "Clean, custom code with zero unnecessary recurring third-party plugin fees.",
@@ -59,7 +60,7 @@ const EcommerceWebService = () => {
       keyFeatures={[
         {
           title: "Structured Product Catalogs",
-          description: "Clean category organization, variant selectors (size, color, weight), search bar, and instant filter tags."
+          description: "Clear category organisation, variant selectors (size, colour, weight), search and product filters."
         },
         {
           title: "Frictionless Cart & Checkout",
@@ -67,7 +68,7 @@ const EcommerceWebService = () => {
         },
         {
           title: "Direct WhatsApp Order Checkout",
-          description: "Allow shoppers to submit their cart directly via WhatsApp with auto-calculated totals for instant personal service."
+          description: "Allow shoppers to share their selected items and order details through a WhatsApp message, when this ordering flow suits the store."
         },
         {
           title: "Mobile-First Shopping Experience",
@@ -86,11 +87,11 @@ const EcommerceWebService = () => {
       faqs={[
         {
           question: "Can customers order via WhatsApp instead of entering credit cards?",
-          answer: "Yes! For many boutique Indian brands and D2C startups, WhatsApp ordering has a much higher conversion rate. Customers add items to their cart, click 'Order on WhatsApp', and send a structured order message directly to you."
+          answer: "Yes! WhatsApp ordering can be useful when customers prefer to confirm product details or delivery before paying. Whether it is suitable depends on the products and order process. Customers can review their selected items and send an order enquiry through a pre-filled WhatsApp message, if that flow is included in the project."
         },
         {
           question: "How fast will the online store load?",
-          answer: "Because we build with modern React and optimized images instead of heavy Shopify/WooCommerce theme stacks, pages load almost instantly (<1 second), significantly boosting conversion rates."
+          answer: "Because we build with modern React and optimized images instead of heavy Shopify/WooCommerce theme stacks, loading performance depends on the final content, integrations, hosting and third-party scripts. I test the built pages and address avoidable bottlenecks before launch."
         },
         {
           question: "Can I manage inventory and add new products easily?",

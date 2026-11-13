@@ -15,3 +15,14 @@ A modern, high-performance personal developer portfolio built with React, Vite, 
 - **Backend:** Node.js, Express.js, REST APIs, MongoDB, JWT
 - **Tools & Deployment:** Git, GitHub, Vercel, Vite, FFmpeg
 
+
+## 🔎 SEO configuration
+
+- Route titles, descriptions and canonical paths are maintained in `src/constants/seo.js`.
+- React uses the same route configuration for client-side navigation metadata.
+- `npm run build` runs `scripts/inject-seo.mjs` after the Vite build to generate route-specific HTML metadata and JSON-LD for the service, portfolio, about and contact routes.
+- Keep `public/sitemap.xml` in sync with the canonical paths in `src/constants/seo.js`. The build script checks that every configured route is present in the sitemap.
+- Canonical URLs use trailing slashes. `vercel.json` redirects the non-trailing-slash versions to the canonical URLs.
+- After deploying meaningful page changes, inspect the live URLs and sitemap in Google Search Console. Request indexing only for canonical pages that are intended to appear in search.
+
+SEO changes help search engines interpret the site, but they do not guarantee rankings, clicks or rich results. Review query and page performance in Search Console over time.

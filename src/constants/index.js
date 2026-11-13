@@ -88,7 +88,7 @@ export const services = [
     features: [
       "Custom React / Next.js architecture",
       "Mobile-first responsive engineering",
-      "Blazing-fast load times & 0ms lag UX",
+      "Responsive interactions and performance-conscious implementation",
       "API integrations & custom backend solutions",
       "Technical SEO foundation built-in"
     ],
@@ -144,7 +144,7 @@ export const services = [
       "Direct call-to-actions and consultation booking",
       "Service breakdown with transparent offerings",
       "Local SEO optimization for Delhi and regional search",
-      "Fast, lightweight, and zero monthly template bloat"
+      "Lightweight implementation with a clear view of hosting and platform costs"
     ],
     path: "/services/small-business-website-development/"
   },
@@ -161,7 +161,7 @@ export const services = [
       "Product catalog with categories & filtering",
       "Smooth shopping cart and checkout flows",
       "WhatsApp inquiry and direct order confirmation",
-      "Fast page load speed for higher conversion rates",
+      "Performance-conscious pages that make key information easier to access",
       "Mobile-first checkout experience"
     ],
     path: "/services/ecommerce-website-development/"
@@ -214,15 +214,15 @@ export const projects = [
     category: "Real Estate",
     serviceSlug: "web-development",
     tagline: "3D / Canvas Scrollytelling Real Estate Experience",
-    description: "A luxury 3D scrollytelling real estate web experience featuring 593 Full HD frames rendered on HTML5 Canvas for 0ms scrub latency, GSAP ScrollTrigger, Lenis smooth scrolling, DPR retina scaling, and an Apple/Awwwards-inspired luxury glassmorphic UI.",
-    problem: "Traditional video tags on websites stutter, buffer, and exhibit 200-500ms input latency when scrubbing on scroll, breaking the immersive storytelling experience for luxury brands.",
-    solution: "Extracted 593 sequential 1080p frames using FFmpeg and drew them directly onto a hardware-accelerated 2D HTML5 Canvas synchronized with GSAP ScrollTrigger and Lenis inertial momentum, achieving instant 0ms scrubbing response.",
+    description: "A luxury 3D scrollytelling real estate web experience featuring 593 Full HD frames rendered on HTML5 Canvas, GSAP ScrollTrigger, Lenis smooth scrolling, DPR retina scaling, and a luxury glassmorphic interface.",
+    problem: "Traditional video playback can buffer or feel less responsive during scroll-driven interactions, which can interrupt an immersive storytelling experience.",
+    solution: "Extracted 593 sequential 1080p frames using FFmpeg and drew them directly onto a hardware-accelerated 2D HTML5 Canvas synchronized with GSAP ScrollTrigger and Lenis inertial momentum, for responsive frame updates during scroll-driven interaction.",
     features: [
       "593 Full HD video frames rendered on HTML5 Canvas",
-      "0ms scrubbing delay on forward & reverse scroll",
+      "Scroll-synchronised frame playback in forward and reverse directions",
       "GSAP ScrollTrigger & Lenis smooth scrolling integration",
       "Aspect-ratio cover-fit & HiDPI / Retina DPR scaling",
-      "Nearest-frame fallback ensuring zero visual freezing",
+      "Nearest-frame fallback to help maintain visual continuity",
       "Live frame counter HUD (FRAME 0145 / 0593)"
     ],
     tech: ["Next.js 16", "React 19", "TypeScript", "GSAP ScrollTrigger", "HTML5 Canvas", "Lenis", "Tailwind CSS"],
@@ -246,7 +246,7 @@ export const projects = [
       "Modern dark luxury glassmorphism UI",
       "Responsive layout optimized across mobile & desktop",
       "Integrated business service presentations",
-      "Optimized static asset delivery and instant interactions"
+      "Optimized static asset delivery and responsive interactions"
     ],
     tech: ["React", "Tailwind CSS", "Modern UI", "Vite"],
     github: "https://github.com/moluom54321",
@@ -341,7 +341,7 @@ export const projects = [
       "Vehicle category selection and fare estimation UI",
       "Multi-step pickup and drop location booking flow",
       "Responsive mobile drawer and map simulation",
-      "Clean component architecture and instant client reactivity"
+      "Clean component architecture and responsive client-side interactions"
     ],
     tech: ["React", "Tailwind CSS", "Modern UI", "Vite"],
     github: "https://github.com/moluom54321",
@@ -360,13 +360,13 @@ export const whyWorkWithMe = [
   },
   {
     icon: FaMobileAlt,
-    title: "100% Mobile-First Responsive",
-    description: "Over 70% of your customers visit from mobile devices. Your website will look stunning and function seamlessly across all screen sizes."
+    title: "Mobile-First Responsive Design",
+    description: "Customers may visit from a range of devices. Layouts are designed and tested for common mobile, tablet and desktop screen sizes."
   },
   {
     icon: FaRocket,
     title: "High Performance & Speed",
-    description: "Optimized code, compressed assets, and modern bundling ensure instant page loads, reducing bounce rates and keeping visitors engaged."
+    description: "Optimized code, compressed assets, and modern bundling help reduce unnecessary page weight and support a responsive browsing experience. Actual load times depend on content, hosting, network and third-party services."
   },
   {
     icon: FaSearchDollar,

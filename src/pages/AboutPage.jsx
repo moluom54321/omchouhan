@@ -4,10 +4,12 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Background from "../components/Background";
 import SEOHead from "../components/SEOHead";
+import { getSeoRoute } from "../constants/seo";
 import WhyChooseMe from "../components/WhyChooseMe";
 import { categorizedSkills, experience } from "../constants";
 
 const AboutPage = () => {
+  const pageSeo = getSeoRoute("about");
   const exp = experience[0];
 
   const schema = {
@@ -15,12 +17,14 @@ const AboutPage = () => {
     "@graph": [
       {
         "@type": "AboutPage",
+        "@id": "https://omchouhan.vercel.app/about/#webpage",
         "name": "About Om Prakash Chouhan | Web Developer in Delhi",
-        "description": "Learn about Om Prakash Chouhan, a freelance website designer and web developer in Delhi NCR. I build modern, responsive, and SEO-friendly websites for businesses in Delhi, Noida, and Gurugram.",
+        "description": "Meet Om Prakash Chouhan, a freelance web developer and website designer based in Delhi, India. Explore his approach, technical skills and selected web projects.",
         "url": "https://omchouhan.vercel.app/about/"
       },
       {
         "@type": "Person",
+        "@id": "https://omchouhan.vercel.app/#person",
         "name": "Om Prakash Chouhan",
         "jobTitle": "Freelance Web Developer & Website Designer",
         "url": "https://omchouhan.vercel.app/",
@@ -38,12 +42,7 @@ const AboutPage = () => {
 
   return (
     <ReactLenis root options={{ lerp: 0.05, smoothWheel: true }}>
-      <SEOHead
-        title="About Om Prakash Chouhan | Web Developer in Delhi"
-        description="Learn about Om Prakash Chouhan, a freelance website designer and web developer in Delhi NCR. I build modern, responsive, and SEO-friendly websites for businesses in Delhi, Noida, and Gurugram."
-        canonicalPath="/about/"
-        schema={schema}
-      />
+      <SEOHead {...pageSeo} schema={schema} />
       <div className="text-white min-h-screen font-sans bg-transparent selection:bg-primary/30 selection:text-white overflow-x-hidden w-full">
         <Background />
         <Navbar />

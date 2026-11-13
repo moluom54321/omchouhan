@@ -1,7 +1,9 @@
-﻿import ServicePageLayout from "../../components/ServicePageLayout";
+import ServicePageLayout from "../../components/ServicePageLayout";
 import { projects } from "../../constants";
+import { getSeoRoute } from "../../constants/seo";
 
 const WebsiteMaintenanceService = () => {
+  const pageSeo = getSeoRoute("services/website-maintenance");
   const relevantProjects = projects.filter(
     (p) => p.id === "fameflex" || p.id === "solis-estate"
   );
@@ -11,15 +13,12 @@ const WebsiteMaintenanceService = () => {
     "@graph": [
       {
         "@type": "Service",
+                "@id": "https://omchouhan.vercel.app/services/website-maintenance/#service",
         "name": "Website Maintenance Services",
         "serviceType": "Website Maintenance and Support Services",
-        "provider": {
-          "@type": "Person",
-          "name": "Om Prakash Chouhan",
-          "url": "https://omchouhan.vercel.app/"
-        },
+        "provider": { "@id": "https://omchouhan.vercel.app/#person" },
         "description": "Professional website maintenance and support services. Regular content updates, bug fixing, page speed optimization, security monitoring, and priority technical assistance.",
-        "areaServed": "Delhi NCR (Delhi, Noida, Gurugram), India & Worldwide"
+        "areaServed": "Delhi NCR, India"
       },
       {
         "@type": "BreadcrumbList",
@@ -34,14 +33,16 @@ const WebsiteMaintenanceService = () => {
 
   return (
     <ServicePageLayout
-      seoTitle="Website Maintenance Services | Updates & Support"
-      seoDescription="Professional website maintenance and support services. Regular content updates, bug fixing, page speed optimization, security monitoring, and priority technical assistance."
-      canonicalPath="/services/website-maintenance"
+      seoTitle={pageSeo.title}
+      seoDescription={pageSeo.description}
+      canonicalPath={pageSeo.canonicalPath}
       serviceName="Website Maintenance & Support"
       heroBadge="Ongoing Technical Care"
       heroHeading="Website Maintenance and Support Services"
       heroSubheading="Keep your website fast, secure, up-to-date, and glitch-free with reliable ongoing technical maintenance, content updates, and direct developer support."
       targetAudienceText="Business Owners, Agencies, E-commerce Stores, Restaurants, Educational Institutes"
+      
+      serviceOverview="For a business in Delhi NCR, website maintenance begins with understanding the current website, its hosting and the tools it depends on. Support can then be scoped around content changes, bug investigation, form testing, dependency updates, backups where available, broken-link checks and periodic technical reviews."
       problems={[
         "Broken layouts, outdated pricing, or expired promotional banners hurting customer trust.",
         "Websites slowing down over time, failing Google Core Web Vitals, and losing SEO positions.",
@@ -53,7 +54,7 @@ const WebsiteMaintenanceService = () => {
         "Prompt, on-demand content and image updates handled directly by an experienced developer.",
         "Routine speed audits, asset optimization, and Core Web Vitals maintenance for peak performance.",
         "Active form verification and email deliverability checks ensuring you never miss a lead.",
-        "Transparent, flexible maintenance support with zero hidden contract traps or slow ticketing queues.",
+        "Transparent, flexible maintenance support with clear scope and an agreed support process.",
         "Regular dependency updates, HTTPS SSL monitoring, and technical troubleshooting."
       ]}
       keyFeatures={[
@@ -67,11 +68,11 @@ const WebsiteMaintenanceService = () => {
         },
         {
           title: "Speed & Performance Optimization",
-          description: "Continual compression of media assets, script minification, and caching checks to maintain <1s load times."
+          description: "Continual compression of media assets, script minification, and caching checks to review and improve loading performance."
         },
         {
           title: "Lead Form & Inquiry Testing",
-          description: "Regular testing of contact forms, WhatsApp links, and checkout flows to guarantee zero lead loss."
+          description: "Regular testing of contact forms, WhatsApp links, and checkout flows to help identify issues that could interrupt enquiries."
         },
         {
           title: "SEO Health & Link Checks",

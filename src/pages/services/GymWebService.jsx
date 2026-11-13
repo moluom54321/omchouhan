@@ -1,7 +1,9 @@
-﻿import ServicePageLayout from "../../components/ServicePageLayout";
+import ServicePageLayout from "../../components/ServicePageLayout";
 import { projects } from "../../constants";
+import { getSeoRoute } from "../../constants/seo";
 
 const GymWebService = () => {
+  const pageSeo = getSeoRoute("services/gym-website-development");
   const relevantProjects = projects.filter(
     (p) => p.id === "gym-website"
   );
@@ -11,15 +13,12 @@ const GymWebService = () => {
     "@graph": [
       {
         "@type": "Service",
+                "@id": "https://omchouhan.vercel.app/services/gym-website-development/#service",
         "name": "Gym Website Development in Delhi",
         "serviceType": "Gym & Fitness Website Development",
-        "provider": {
-          "@type": "Person",
-          "name": "Om Prakash Chouhan",
-          "url": "https://omchouhan.vercel.app/"
-        },
+        "provider": { "@id": "https://omchouhan.vercel.app/#person" },
         "description": "Professional gym and fitness website development services in Delhi. Membership tiers, trainer profiles, class schedules, and lead funnels.",
-        "areaServed": "Delhi NCR (Delhi, Noida, Gurugram), India & Worldwide"
+        "areaServed": "Delhi NCR, India"
       },
       {
         "@type": "BreadcrumbList",
@@ -34,14 +33,16 @@ const GymWebService = () => {
 
   return (
     <ServicePageLayout
-      seoTitle="Gym Website Development in Delhi | Fitness Websites"
-      seoDescription="Gym website development in Delhi. High-energy websites for gyms and fitness studios featuring membership pricing tiers, trainer profiles, class schedules, and trial lead capture."
-      canonicalPath="/services/gym-website-development"
+      seoTitle={pageSeo.title}
+      seoDescription={pageSeo.description}
+      canonicalPath={pageSeo.canonicalPath}
       serviceName="Gym Website Development"
       heroBadge="Fitness & Wellness"
       heroHeading="Website Development for Gyms and Fitness Studios"
       heroSubheading="Dynamic, high-energy websites for gyms, CrossFit boxes, yoga studios, and personal trainers built to convert local fitness enthusiasts into active paying members."
       targetAudienceText="Gyms, Fitness Centers, CrossFit Boxes, Yoga & Pilates Studios, Personal Trainers"
+      
+      serviceOverview="For a gym or fitness studio in Delhi NCR, the website should explain the experience before someone visits. Membership options, class timings, trainer information, facilities and trial-session details can be organised so prospective members can compare options and contact the gym."
       problems={[
         "Prospective members leaving the site because membership pricing and plan differences are confusing.",
         "No simple way for visitors to book a free trial workout or contact the front desk on WhatsApp.",
@@ -51,10 +52,10 @@ const GymWebService = () => {
       ]}
       solutions={[
         "Clear, high-contrast membership comparison tables (Monthly, Quarterly, Annual) with transparent benefits.",
-        "Prominent 'Book a Free Trial' and instant WhatsApp inquiry capture buttons on every key section.",
+        "Prominent 'Book a Free Trial' and WhatsApp enquiry options in relevant sections.",
         "Trainer showcase profiles with certifications, specialties (Weight Loss, Muscle Gain, Rehab), and social proof.",
         "Bold, dark-themed fitness aesthetic with motivational imagery, facility tour photos, and video embeds.",
-        "Local Delhi search optimization helping nearby fitness seekers find your gym address and timing instantly."
+        "Clear location, contact and opening-hour information, supported by relevant on-page content and links to your business profiles."
       ]}
       keyFeatures={[
         {
@@ -63,7 +64,7 @@ const GymWebService = () => {
         },
         {
           title: "Free Trial & Lead Capture Funnels",
-          description: "High-converting forms designed to capture visitor name, phone number, and preferred workout time."
+          description: "Clear enquiry forms designed to capture visitor name, contact details and preferred workout time."
         },
         {
           title: "Class Schedules & Timetables",
@@ -86,7 +87,7 @@ const GymWebService = () => {
       faqs={[
         {
           question: "Can prospective members book a free day pass or trial class?",
-          answer: "Yes. I implement a dedicated Free Trial booking form that collects member details and notifies you immediately via email and WhatsApp so your sales team can follow up instantly."
+          answer: "Yes. I implement a dedicated Free Trial booking form that collects member details and notifies you immediately via email and WhatsApp so your team can follow up using the configured notification channel."
         },
         {
           question: "Can we display different plans for general gym vs personal training?",

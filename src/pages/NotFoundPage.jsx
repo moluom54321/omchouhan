@@ -12,7 +12,8 @@ const NotFoundPage = () => {
       <SEOHead
         title="404: Page Not Found | Om Chouhan"
         description="The page you are looking for does not exist or has been moved."
-        canonicalPath="/404"
+        canonicalPath="/404/"
+        robots="noindex, follow"
       />
       <div className="text-white min-h-screen font-sans bg-transparent selection:bg-primary/30 selection:text-white overflow-x-hidden w-full flex flex-col justify-between">
         <Background />

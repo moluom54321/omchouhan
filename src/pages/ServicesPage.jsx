@@ -4,24 +4,23 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Background from "../components/Background";
 import SEOHead from "../components/SEOHead";
+import { getSeoRoute } from "../constants/seo";
 import WhyChooseMe from "../components/WhyChooseMe";
 import { services, developmentProcess } from "../constants";
 import { FaArrowRight, FaCheck } from "react-icons/fa";
 
 const ServicesPage = () => {
+  const pageSeo = getSeoRoute("services");
   const schema = {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "Service",
-        "name": "Website Development Services in Delhi | Business Websites",
-        "provider": {
-          "@type": "Person",
-          "name": "Om Prakash Chouhan",
-          "url": "https://omchouhan.vercel.app/"
-        },
-        "description": "Comprehensive website development services in Delhi including custom business websites, restaurant websites, gym portals, ecommerce, and maintenance.",
-        "areaServed": "Delhi, India & Worldwide"
+        "@id": "https://omchouhan.vercel.app/services/#service",
+        "name": "Website Development Services in Delhi | Om Prakash Chouhan",
+        "provider": { "@id": "https://omchouhan.vercel.app/#person" },
+        "description": "Explore website development services in Delhi NCR: custom business websites, restaurant and gym websites, school platforms, online stores and website maintenance.",
+        "areaServed": "Delhi NCR, India"
       },
       {
         "@type": "BreadcrumbList",
@@ -35,12 +34,7 @@ const ServicesPage = () => {
 
   return (
     <ReactLenis root options={{ lerp: 0.05, smoothWheel: true }}>
-      <SEOHead
-        title="Website Development Services in Delhi | Business Websites"
-        description="Professional website development services in Delhi. Custom business websites, responsive design, online ordering for restaurants, gym portals, and ongoing maintenance."
-        canonicalPath="/services/"
-        schema={schema}
-      />
+      <SEOHead {...pageSeo} schema={schema} />
       <div className="text-white min-h-screen font-sans bg-transparent selection:bg-primary/30 selection:text-white overflow-x-hidden w-full">
         <Background />
         <Navbar />
@@ -68,7 +62,7 @@ const ServicesPage = () => {
                 </span>
               </h1>
               <p className="text-lg md:text-xl text-muted-text font-light leading-relaxed max-w-2xl">
-                I build fast, responsive, and conversion-focused websites engineered around your business goals. From local brand showcases to custom full-stack web applications, discover the right service for your business.
+                I design and develop responsive websites for businesses in Delhi NCR, from clear service and industry websites to custom full-stack web applications. Explore the available services and choose the scope that fits your audience, content and business goals.
               </p>
             </div>
 

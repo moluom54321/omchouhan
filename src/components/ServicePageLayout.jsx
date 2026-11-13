@@ -18,6 +18,7 @@ const ServicePageLayout = ({
   heroHeading,
   heroSubheading,
   targetAudienceText,
+  serviceOverview,
   problems = [],
   solutions = [],
   keyFeatures = [],
@@ -110,6 +111,19 @@ const ServicePageLayout = ({
               </div>
             </div>
 
+            {serviceOverview && (
+              <section className="glass-effect rounded-3xl border border-white/10 p-7 md:p-10 mb-24" aria-labelledby="service-overview-heading">
+                <div className="max-w-4xl">
+                  <h2 id="service-overview-heading" className="text-2xl md:text-3xl font-bold text-white mb-4">
+                    A practical approach to {serviceName.toLowerCase()}
+                  </h2>
+                  <p className="text-muted-text text-base md:text-lg leading-relaxed font-light">
+                    {serviceOverview}
+                  </p>
+                </div>
+              </section>
+            )}
+
             {/* ── Common Problems vs Our Solutions ── */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-28">
               
@@ -154,7 +168,7 @@ const ServicePageLayout = ({
                   Key Features & <span className="text-primary">Deliverables</span>
                 </h2>
                 <p className="text-muted-text text-sm md:text-base font-light">
-                  Everything you need to launch a high-converting, reliable website with zero hidden headaches.
+                  A clear outline of the features and deliverables that can be included in your project scope.
                 </p>
               </div>
 

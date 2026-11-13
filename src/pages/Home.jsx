@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import Background from "../components/Background";
 import SEOHead from "../components/SEOHead";
+import { HOME_SEO } from "../constants/seo";
 
 // Below-the-fold sections are lazy-loaded to optimize initial bundle size and mobile FCP/LCP
 const Services     = lazy(() => import("../components/Services"));
@@ -94,12 +95,7 @@ const Home = () => {
 
   return (
     <>
-      <SEOHead
-        title="Website Designer in Delhi | Om Prakash Chouhan"
-        description="I'm Om Prakash Chouhan, a freelance website designer and developer in Delhi. I create modern, responsive and SEO-friendly websites for businesses, restaurants, gyms and startups across Delhi NCR."
-        canonicalPath="/"
-        schema={homepageSchema}
-      />
+      <SEOHead {...HOME_SEO} schema={homepageSchema} />
       {enableLenis ? (
         <ReactLenis root options={{ lerp: 0.08, smoothWheel: true }}>
           {pageContent}

@@ -6,12 +6,14 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Background from "../components/Background";
 import SEOHead from "../components/SEOHead";
+import { getSeoRoute } from "../constants/seo";
 import { projects } from "../constants";
 import { FaExternalLinkAlt, FaGithub, FaCheck } from "react-icons/fa";
 
 const categories = ["All", "Full Stack", "Real Estate", "Restaurant / Cafe", "Fitness", "Business"];
 
 const ProjectsPage = () => {
+  const pageSeo = getSeoRoute("projects");
   const [activeCategory, setActiveCategory] = useState("All");
 
   const filteredProjects = activeCategory === "All"
@@ -23,8 +25,9 @@ const ProjectsPage = () => {
     "@graph": [
       {
         "@type": "CollectionPage",
-        "name": "Web Development Portfolio | Website Projects",
-        "description": "Featured web development projects, case studies, and business website solutions built by Om Prakash Chouhan.",
+        "@id": "https://omchouhan.vercel.app/projects/#webpage",
+        "name": "Web Development Portfolio & Projects | Om Prakash Chouhan",
+        "description": "Explore web development projects by Om Prakash Chouhan, including business websites, restaurant and fitness concepts, and full-stack web experiences built with modern technologies.",
         "url": "https://omchouhan.vercel.app/projects/"
       },
       {
@@ -36,7 +39,7 @@ const ProjectsPage = () => {
           "item": {
             "@type": "CreativeWork",
             "name": p.title,
-            "description": p.description,
+            "description": `${p.projectType}: ${p.description}`,
             "url": p.live || `https://omchouhan.vercel.app/projects/`
           }
         }))
@@ -53,12 +56,7 @@ const ProjectsPage = () => {
 
   return (
     <ReactLenis root options={{ lerp: 0.05, smoothWheel: true }}>
-      <SEOHead
-        title="Web Development Portfolio | Website Projects"
-        description="Explore web development projects and case studies built with React, Next.js, TypeScript, and modern web tools. Real business platforms and technical concept demos."
-        canonicalPath="/projects/"
-        schema={schema}
-      />
+      <SEOHead {...pageSeo} schema={schema} />
       <div className="text-white min-h-screen font-sans bg-transparent selection:bg-primary/30 selection:text-white overflow-x-hidden w-full">
         <Background />
         <Navbar />
@@ -86,7 +84,7 @@ const ProjectsPage = () => {
                 </span>
               </h1>
               <p className="text-lg md:text-xl text-muted-text font-light leading-relaxed max-w-2xl">
-                A transparent collection of production platforms, client solutions, and technical concept projects engineered to solve real user challenges.
+                Explore selected production, demo and concept projects. Each project is labelled by type, with its purpose, features and technologies described so visitors can distinguish demonstrations from production work.
               </p>
             </div>
 
